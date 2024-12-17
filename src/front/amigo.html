@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex justify-center h-screen bg-[#d4dbdc]">
+    <div class="w-full max-w-sm p-0 rounded-lg">
+        <div class="p-6 mb-16">
+            <div class="w-full justify-center flex">
+                <img src="media/friends-svgrepo-com.svg" width="150" class="mb-4">
+            </div>
+
+            <h1 class="text-2xl font-bold text-center mb-6">Friends</h1>
+
+            <!-- Online Friends -->
+            <div id="friends-online" class="mb-6">
+                <h2 class="text-lg font-medium mb-3">Friends Online</h2>
+                <ul class="space-y-3" id="friends-list">
+                    <!-- Friends will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Friend Requests -->
+            <div id="friend-requests" class="mb-6">
+                <h2 class="text-lg font-medium mb-3">Friend Requests</h2>
+                <ul class="space-y-3" id="requests-list">
+                    <!-- Requests will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Add Friend -->
+            <div>
+                <h2 class="text-lg font-medium mb-3">Add a Friend</h2>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="friend-input" placeholder="Enter username"
+                        class="w-full p-3 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-white">
+                    <button id="send-request"
+                        class="px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="bg-blue-600 p-4 shadow-md fixed bottom-0 left-0 w-full">
+            <div class="flex items-center justify-center w-full" style="gap: 33.33%;">
+                <a href="friends.html">
+                    <img src="./media/friends-svgrepo-com.svg" alt="Friends" class="w-8 h-8 hover:opacity-80 transition-all">
+                </a>
+                <a href="goals.html">
+                    <img src="media/goal-svgrepo-com.svg" alt="Goals" class="w-8 h-8 hover:opacity-80 transition-all">
+                </a>
+                <a href="account.html">
+                    <img src="media/user-circle-svgrepo-com.svg" alt="Account" class="w-8 h-8 hover:opacity-80 transition-all">
+                </a>
+            </div>
+        </nav>
+    </div>
+
+
+
+    <script>
+        // Simulated data
+        const friendsOnline = [
+            { name: 'John Doe', avatar: 'media/user1.svg', status: 'Offline' },
+            { name: 'Jane Smith', avatar: 'media/user2.svg', status: 'Online' }
+        ];
+
+        const friendRequests = [
+            { name: 'Alex Brown', avatar: 'media/user3.svg' },
+            { name: 'Emily Davis', avatar: 'media/user4.svg' }
+        ];
+
+        // Populate Online Friends
+        const friendsList = document.getElementById('friends-list');
+        friendsOnline.forEach(friend => {
+            const li = document.createElement('li');
+            const statusColor = friend.status === 'Online' ? 'text-green-500' : 'text-red-500';
+            li.className = 'flex items-center justify-between p-3 bg-white rounded-lg shadow';
+            li.innerHTML = `
+                <div class="flex items-center">
+                    <img src="${friend.avatar}" alt="${friend.name} Avatar" class="w-8 h-8 mr-3">
+                    <span>${friend.name}</span>
+                </div>
+                <span class="${statusColor} text-sm">${friend.status}</span>
+            `;
+            friendsList.appendChild(li);
+        });
+
+        // Populate Friend Requests
+        const requestsList = document.getElementById('requests-list');
+        friendRequests.forEach(request => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between p-3 bg-white rounded-lg shadow';
+            li.innerHTML = `
+                <div class="flex items-center">
+                    <img src="${request.avatar}" alt="${request.name} Avatar" class="w-8 h-8 mr-3">
+                    <span>${request.name}</span>
+                </div>
+                <div class="flex space-x-2">
+                    <button
+                        class="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700">Accept</button>
+                    <button
+                        class="px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700">Decline</button>
+                </div>
+            `;
+            requestsList.appendChild(li);
+        });
+
+        // Add Friend Functionality
+        document.getElementById('send-request').addEventListener('click', () => {
+            const input = document.getElementById('friend-input');
+            const username = input.value.trim();
+            if (username) {
+                alert(`Friend request sent to: ${username}`);
+                input.value = ''; // Clear the input field
+            } else {
+                alert('Please enter a username.');
+            }
+        });
+    </script>
+</body>
+
+</html>

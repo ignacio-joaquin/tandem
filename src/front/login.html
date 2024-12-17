@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex  justify-center h-screen bg-[#d4dbdc]">
+    <div class="w-full max-w-sm p-6  rounded-lg">
+        <div class="w-full justify-center flex">
+            <img src="media/user-circle-svgrepo-com.svg" width="200" class="">
+        </div>
+
+        <h1 class="text-2xl font-bold text-center mb-6">Log In</h1>
+        <form>
+            <div class="mb-4 relative">
+                <label for="email" class="block text-sm font-medium text-black pb-3">Email</label>
+                <div class="relative">
+                    <input type="email" id="email"
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                    <img src="media/email-svgrepo-com.svg" alt="Email Icon"
+                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
+                </div>
+            </div>
+            <div class="mb-6 relative">
+                <label for="password" class="block text-sm font-medium text-black pb-3">Password</label>
+                <div class="relative">
+                    <input type="password" id="password"
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                    <img src="media/password-svgrepo-com.svg" alt="Password Icon"
+                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
+                </div>
+            </div>
+            <button type="submit" class="w-full py-3 bg-[#6299b8] text-white rounded-lg hover:bg-[#6382b7]">Log
+                In</button>
+        </form>
+        <p class="mt-4 text-center text-sm">
+            Don’t have an account? <a href="#" class="text-blue-600">Sign Up</a>
+        </p>
+    </div>
+</body>
