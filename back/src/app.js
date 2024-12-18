@@ -33,7 +33,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/', friendsRoutes);
+app.use('/api/friends', friendsRoutes);
 
 const PORT = process.env.PORT || 5000;
 

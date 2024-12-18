@@ -23,15 +23,12 @@ module.exports = (passport) => {
 
     // Serialize user ID into the session
     passport.serializeUser((user, done) => {
-        console.log('Serializing user:', user);
         done(null, user.id);
     });
     
     passport.deserializeUser(async (id, done) => {
-        console.log('Deserializing user with ID:', id);
         try {
             const user = await prisma.user.findUnique({ where: { id } });
-            console.log('Deserialized user:', user);  // Check what user is being deserialized
             done(null, user);
         } catch (err) {
             done(err);

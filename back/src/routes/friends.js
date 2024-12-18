@@ -4,7 +4,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const passport = require('passport');
 
 
-router.post('/add', authMiddleware ,async (req, res) => {
+router.post('/add', async (req, res) => {
     const { receiverId } = req.body;
     const senderId = req.user.id; // Assuming req.user contains the logged-in user
 
@@ -42,7 +42,7 @@ router.post('/add', authMiddleware ,async (req, res) => {
 });
 
 
-router.patch('/respond', authMiddleware ,async (req, res) => {
+router.patch('/respond', async (req, res) => {
     const { senderId, action } = req.body; // action = "accept" or "reject"
     const receiverId = req.user.id; // Assuming req.user contains the logged-in user
 
@@ -71,7 +71,7 @@ router.patch('/respond', authMiddleware ,async (req, res) => {
     }
 });
 
-router.get('/', authMiddleware ,async (req, res) => {
+router.get('/',async (req, res) => {
     const userId = req.user.id; // Assuming req.user contains the logged-in user
 
     try {
@@ -101,7 +101,7 @@ router.get('/', authMiddleware ,async (req, res) => {
     }
 });
 
-router.delete('/remove',authMiddleware , async (req, res) => {
+router.delete('/remove', async (req, res) => {
     const { friendId } = req.body; // The ID of the friend user to remove
     const userId = req.user.id; // Assuming req.user contains the logged-in user
 
