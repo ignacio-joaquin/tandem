@@ -8,10 +8,25 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  username String   @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  username  String   @unique
   createdAt DateTime @default(now())
+
+  // Define relation fields for sent and received friend requests
+  sentRequests     Friend[] @relation("SentRequests")
+  receivedRequests Friend[] @relation("ReceivedRequests")
 }
 
+model Friend {
+  id         Int      @id @default(autoincrement())
+  senderId   Int // User who sends the friend request
+  receiverId Int // User who receives the friend request
+  status     String   @default("pending") // "pending", "accepted", "rejected"
+  createdAt  DateTime @default(now())
+
+  // Define relations for sender and receiver
+  sender   User @relation("SentRequests", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id])
+}

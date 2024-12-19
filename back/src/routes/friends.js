@@ -2,77 +2,10 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const passport = require('passport');
+const prisma = require('../config/prismaClient');
 
-
-router.post('/add', async (req, res) => {
-    const { receiverId } = req.body;
-    const senderId = req.user.id; // Assuming req.user contains the logged-in user
-
-    if (senderId === receiverId) {
-        return res.status(400).json({ message: "You cannot send a friend request to yourself" });
-    }
-
-    try {
-        const existingRequest = await prisma.friend.findFirst({
-            where: {
-                OR: [
-                    { senderId, receiverId },
-                    { senderId: receiverId, receiverId: senderId }
-                ]
-            }
-        });
-
-        if (existingRequest) {
-            return res.status(400).json({ message: "Friend request already exists or you're already friends" });
-        }
-
-        const friendRequest = await prisma.friend.create({
-            data: {
-                senderId,
-                receiverId,
-                status: "pending"
-            }
-        });
-
-        res.status(201).json({ message: "Friend request sent", friendRequest });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-});
-
-
-router.patch('/respond', async (req, res) => {
-    const { senderId, action } = req.body; // action = "accept" or "reject"
-    const receiverId = req.user.id; // Assuming req.user contains the logged-in user
-
-    if (!["accept", "reject"].includes(action)) {
-        return res.status(400).json({ message: "Invalid action" });
-    }
-
-    try {
-        const friendRequest = await prisma.friend.findFirst({
-            where: { senderId, receiverId, status: "pending" }
-        });
-
-        if (!friendRequest) {
-            return res.status(404).json({ message: "Friend request not found" });
-        }
-
-        const updatedRequest = await prisma.friend.update({
-            where: { id: friendRequest.id },
-            data: { status: action === "accept" ? "accepted" : "rejected" }
-        });
-
-        res.json({ message: `Friend request ${action}ed`, updatedRequest });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-});
-
-router.get('/',async (req, res) => {
-    const userId = req.user.id; // Assuming req.user contains the logged-in user
+router.get('/',authMiddleware, async (req, res) => {
+    const userId = req.user.id;
 
     try {
         const friends = await prisma.friend.findMany({
@@ -90,7 +23,7 @@ router.get('/',async (req, res) => {
 
         const friendList = friends.map(friend => {
             return friend.senderId === userId
-                ? friend.receiver // The other user is the friend
+                ? friend.receiver
                 : friend.sender;
         });
 
@@ -101,26 +34,149 @@ router.get('/',async (req, res) => {
     }
 });
 
-router.delete('/remove', async (req, res) => {
-    const { friendId } = req.body; // The ID of the friend user to remove
-    const userId = req.user.id; // Assuming req.user contains the logged-in user
+router.post('/add', authMiddleware, async (req, res) => {
+    console.log(req.body);
+    const receiverUsername = req.body.receiverUsername; // Expecting receiver's username
+    const senderId = req.user.id; // Sender's ID from authentication middleware
+
+    if (!receiverUsername) {
+        return res.status(400).json({ message: "Receiver username is required" });
+    }
 
     try {
-        const friendship = await prisma.friend.findFirst({
-            where: {
-                OR: [
-                    { senderId: userId, receiverId: friendId, status: "accepted" },
-                    { senderId: friendId, receiverId: userId, status: "accepted" }
-                ]
-            }
+        // Find the receiver's user ID by their username
+        const receiver = await prisma.user.findUnique({
+            where: { username: receiverUsername },
         });
 
-        if (!friendship) {
-            return res.status(404).json({ message: "Friendship not found" });
+        if (!receiver) {
+            return res.status(404).json({ message: "Receiver not found" });
         }
 
-        await prisma.friend.delete({ where: { id: friendship.id } });
-        res.json({ message: "Friend removed" });
+        const receiverId = receiver.id;
+
+        if (senderId === receiverId) {
+            return res.status(400).json({ message: "You cannot send a friend request to yourself" });
+        }
+
+        // Check if a friend request already exists
+        const existingRequest = await prisma.friend.findFirst({
+            where: {
+                OR: [
+                    { senderId, receiverId },
+                    { senderId: receiverId, receiverId: senderId },
+                ],
+            },
+        });
+
+        if (existingRequest) {
+            return res.status(400).json({ message: "Friend request already exists or you're already friends" });
+        }
+
+        // Create a new friend request
+        const friendRequest = await prisma.friend.create({
+            data: {
+                senderId,
+                receiverId,
+                status: "pending",
+            },
+        });
+
+        res.status(201).json({ message: "Friend request sent", friendRequest });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.patch('/respond', async (req, res) => {
+    if (req.isAuthenticated()) {
+        const { senderId, action } = req.body;
+        const receiverId = req.user.id;
+
+        if (!["accept", "reject"].includes(action)) {
+            return res.status(400).json({ message: "Invalid action" });
+        }
+
+        try {
+            console.log(senderId, receiverId);
+            const friendRequest = await prisma.friend.findFirst({
+                where: { senderId, receiverId, status: "pending" }
+            });
+
+            if (!friendRequest) {
+                return res.status(404).json({ message: "Friend request not found" });
+            }
+
+            const updatedRequest = await prisma.friend.update({
+                where: { id: friendRequest.id },
+                data: { status: action === "accept" ? "accepted" : "rejected" }
+            });
+
+            res.json({ message: `Friend request ${action}ed`, updatedRequest });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    } else {
+        res.status(401).json({ message: "Unauthorized" });
+    }
+});
+
+
+
+router.delete('/remove', async (req, res) => {
+    if (req.isAuthenticated()) {
+        const { friendId } = req.body;
+        const userId = req.user.id;
+
+        try {
+            const friendship = await prisma.friend.findFirst({
+                where: {
+                    OR: [
+                        { senderId: userId, receiverId: friendId, status: "accepted" },
+                        { senderId: friendId, receiverId: userId, status: "accepted" }
+                    ]
+                }
+            });
+
+            if (!friendship) {
+                return res.status(404).json({ message: "Friendship not found" });
+            }
+
+            await prisma.friend.delete({ where: { id: friendship.id } });
+            res.json({ message: "Friend removed" });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    } else {
+        res.status(401).json({ message: "Unauthorized" });
+    }
+});
+
+router.get('/incoming', authMiddleware, async (req, res) => {
+    const userId = req.user.id; // The current authenticated user's ID
+
+    try {
+        const incomingRequests = await prisma.friend.findMany({
+            where: {
+                receiverId: userId,
+                status: "pending", // Only fetch pending requests
+            },
+            include: {
+                sender: true, // Include sender details
+            },
+        });
+
+        const requests = incomingRequests.map(request => ({
+            id: request.senderId,
+            senderId: request.senderId,
+            senderUsername: request.sender.username, // Use username for frontend display
+            createdAt: request.createdAt,
+        }));
+
+        res.json({ requests });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });

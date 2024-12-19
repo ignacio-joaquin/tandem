@@ -6,6 +6,7 @@ const friendsRoutes = require('./routes/friends');
 const cors = require('cors');
 require('dotenv').config();
 require('./config/passport')(passport);
+const authMiddleware = require('./middlewares/authMiddleware');
 
 
 const app = express();
@@ -14,16 +15,19 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5500',
+credentials:true
+}));
 // Session
 app.use(session({
-    secret: 'your-secret-key', // Use an actual secret key in production
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: {
+        secure: false, // Set `true` for HTTPS
         httpOnly: true,
-        secure: false,  // Change to true when using HTTPS
-        maxAge: 3600000 // Set cookie expiration to 1 hour
+        sameSite: 'Lax' // Can also use 'none' for cross-origin with `secure: true`
     }
 }));
 
@@ -33,7 +37,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/friends', friendsRoutes);
+app.use('/', friendsRoutes);
 
 const PORT = process.env.PORT || 5000;
 
