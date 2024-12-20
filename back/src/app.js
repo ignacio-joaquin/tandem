@@ -3,6 +3,7 @@ const session = require('express-session');
 const passport = require('passport');
 const authRoutes = require('./routes/auth');
 const friendsRoutes = require('./routes/friends');
+const goalsRoutes = require('./routes/goals');
 const cors = require('cors');
 require('dotenv').config();
 require('./config/passport')(passport);
@@ -37,7 +38,8 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/', friendsRoutes);
+app.use('/api/friends', friendsRoutes);
+app.use('/goals', goalsRoutes);
 
 const PORT = process.env.PORT || 5000;
 

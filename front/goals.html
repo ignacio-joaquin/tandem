@@ -54,69 +54,80 @@
         </div>
     </div>
 
-    <script>
-        // Example of dynamic goal rendering
-        const goals = [
-            {
-                type: "Daily",
-                title: "Go to the gym",
-                deadline: "10:00 PM",
-                friend: "John Doe",
-            },
-            {
-                type: "Weekly",
-                title: "Complete Project A",
-                deadline: "Dec 20",
-                friend: "Jane Smith",
-            },
-            {
-                type: "Daily",
-                title: "Go to the gym",
-                deadline: "10:00 PM",
-                friend: "John Doe",
-            },
-            {
-                type: "Weekly",
-                title: "Complete Project A",
-                deadline: "Dec 20",
-                friend: "Jane Smith",
-            },
-            {
-                type: "Daily",
-                title: "Go to the gym",
-                deadline: "10:00 PM",
-                friend: "John Doe",
-            },
-            {
-                type: "Weekly",
-                title: "Complete Project A",
-                deadline: "Dec 20",
-                friend: "Jane Smith",
-            },
-        ];
+    <!-- Modal for Adding a Goal -->
+    <div id="add-goal-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4">Add New Goal</h2>
+            <form id="goal-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Title</label>
+                    <input type="text" id="goal-title" class="w-full px-3 py-2 border rounded-md" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Type</label>
+                    <select id="goal-type" class="w-full px-3 py-2 border rounded-md">
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Deadline</label>
+                    <input type="datetime-local" id="goal-deadline" class="w-full px-3 py-2 border rounded-md" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Friend ID</label>
+                    <input type="text" id="goal-friend-id" class="w-full px-3 py-2 border rounded-md" required>
+                </div>
+            </form>
+            <div class="mt-4 flex justify-between">
+                <button id="cancel-add-goal"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-add-goal" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Add
+                    Goal</button>
+            </div>
+        </div>
+    </div>
 
+
+    <script>
         const goalsList = document.getElementById("goals-list");
         const confirmModal = document.getElementById("confirm-modal");
         const confirmDeleteButton = document.getElementById("confirm-delete");
         const cancelDeleteButton = document.getElementById("cancel-delete");
 
-        let goalToDeleteIndex = null; // Store which goal to delete
+        let goalToDeleteId = null; // Store the ID of the goal to delete
 
-        function renderGoals() {
+        // Fetch all goals
+        async function fetchGoals() {
+            try {
+                const response = await fetch('http://localhost:5000/goals', { credentials: 'include' }); // Adjust this if the backend uses a different host/port.
+                if (!response.ok) throw new Error("Failed to fetch goals");
+                const data = await response.json();
+                renderGoals(data);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        // Render goals dynamically
+        function renderGoals(goals) {
             goalsList.innerHTML = ""; // Clear previous goals
-            goals.forEach((goal, index) => {
+            goals.forEach(goal => {
                 const goalItem = document.createElement("div");
                 goalItem.className = "p-4 bg-white rounded-lg shadow-md";
                 goalItem.innerHTML = `
                     <div class="flex justify-between items-center">
                         <h2 class="text-lg font-bold">${goal.type}: ${goal.title}</h2>
                     </div>
-                    <p class="text-sm text-gray-600 mt-2">Friend responsible: <span class="font-medium">${goal.friend}</span></p>
+                    <p class="text-sm text-gray-600 mt-2">Friend responsible: <span class="font-medium">${goal.friendName}</span></p>
                     <div class="mt-4 flex justify-between items-center">
                         <button
-                            class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">Verify</button>
+                            class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
+                            ${goal.verified ? "Verified" : "Verify"}
+                        </button>
                         <button
-                            class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-index="${index}">
+                            class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
                             Delete
                         </button>
                     </div>
@@ -124,45 +135,112 @@
                 goalsList.appendChild(goalItem);
             });
 
-            // Attach delete event listeners
+            // Attach event listeners for delete and verify buttons
             document.querySelectorAll('.delete-goal').forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const index = e.target.getAttribute('data-index');
-                    openConfirmModal(index);
+                    const id = e.target.getAttribute('data-id');
+                    openConfirmModal(id);
+                });
+            });
+
+            document.querySelectorAll('.verify-goal').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    verifyGoal(id);
                 });
             });
         }
 
-        function openConfirmModal(index) {
-            goalToDeleteIndex = index; // Store the goal index to delete
+        // Open confirmation modal
+        function openConfirmModal(id) {
+            goalToDeleteId = id; // Store the goal ID to delete
             confirmModal.classList.remove("hidden");
         }
 
+        // Close confirmation modal
         function closeConfirmModal() {
-            goalToDeleteIndex = null; // Reset the goal index
+            goalToDeleteId = null; // Reset the goal ID
             confirmModal.classList.add("hidden");
         }
 
-        function deleteGoal() {
-            if (goalToDeleteIndex !== null) {
-                goals.splice(goalToDeleteIndex, 1); // Remove the goal
-                renderGoals(); // Re-render the list
-                closeConfirmModal();
+        // Delete a goal
+        async function deleteGoal() {
+            if (goalToDeleteId !== null) {
+                try {
+                    const response = await fetch(`http://localhost:5000/goals/${goalToDeleteId}`, { method: 'DELETE' , credentials:"include"});
+                    if (!response.ok) throw new Error("Failed to delete goal");
+                    fetchGoals(); // Re-fetch goals after deletion
+                    closeConfirmModal();
+                } catch (error) {
+                    console.error(error.message);
+                }
             }
         }
+
+        // Verify a goal
+        async function verifyGoal(id) {
+            try {
+                const response = await fetch(`/goals/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ verified: true }),
+                });
+                if (!response.ok) throw new Error("Failed to verify goal");
+                fetchGoals(); // Re-fetch goals after verification
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        // Add a new goal
+        document.getElementById("add-goal").addEventListener("click", () => {
+            document.getElementById("add-goal-modal").classList.remove("hidden");
+        });
+
+        document.getElementById("cancel-add-goal").addEventListener("click", () => {
+            document.getElementById("add-goal-modal").classList.add("hidden");
+        });
+
+        document.getElementById("submit-add-goal").addEventListener("click", async () => {
+            const title = document.getElementById("goal-title").value;
+            const type = document.getElementById("goal-type").value;
+            const deadline = document.getElementById("goal-deadline").value;
+            const friendUsername = document.getElementById("goal-friend-id").value;
+
+            if (!title || !type || !deadline || !friendUsername) {
+                alert("All fields are required!");
+                return;
+            }
+
+            const newGoal = { title, type, deadline, friendUsername };
+
+            try {
+                const response = await fetch("http://localhost:5000/goals", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(newGoal),
+                });
+
+                if (!response.ok) throw new Error("Failed to add goal");
+
+                document.getElementById("add-goal-modal").classList.add("hidden");
+                fetchGoals(); // Re-fetch goals after addition
+            } catch (error) {
+                console.error(error.message);
+                alert("Error adding goal. Please try again.");
+            }
+        });
+
 
         // Add event listeners to modal buttons
         confirmDeleteButton.addEventListener("click", deleteGoal);
         cancelDeleteButton.addEventListener("click", closeConfirmModal);
 
-        // Render goals initially
-        renderGoals();
-
-        // Add Goal Button (placeholder functionality)
-        document.getElementById("add-goal").addEventListener("click", () => {
-            alert("Add Goal functionality coming soon!");
-        });
+        // Fetch and render goals on load
+        fetchGoals();
     </script>
+
 </body>
 
 </html>

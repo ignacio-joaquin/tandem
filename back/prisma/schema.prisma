@@ -17,6 +17,12 @@ model User {
   // Define relation fields for sent and received friend requests
   sentRequests     Friend[] @relation("SentRequests")
   receivedRequests Friend[] @relation("ReceivedRequests")
+
+  // Goals created by the user
+  createdGoals Goal[] @relation("GoalsCreatedByUser")
+
+  // Goals where the user is assigned as a friend
+  assignedGoals Goal[] @relation("FriendGoals")
 }
 
 model Friend {
@@ -29,4 +35,21 @@ model Friend {
   // Define relations for sender and receiver
   sender   User @relation("SentRequests", fields: [senderId], references: [id])
   receiver User @relation("ReceivedRequests", fields: [receiverId], references: [id])
+}
+
+model Goal {
+  id        Int      @id @default(autoincrement())
+  userId    Int // User who created the goal
+  title     String
+  type      String // "Daily", "Weekly", etc.
+  deadline  DateTime
+  friendId  Int // Friend responsible for the goal
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relation to the user who created the goal
+  creator User @relation("GoalsCreatedByUser", fields: [userId], references: [id])
+
+  // Relation to the friend responsible for the goal
+  friend User @relation("FriendGoals", fields: [friendId], references: [id])
 }

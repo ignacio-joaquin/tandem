@@ -66,8 +66,8 @@
 
                 if (response.ok) {
                     // Redirect to a dashboard or home page on success
-                    // window.location.href = 'http://localhost:5500/front/amigo.html';
-                    console.log(response.headers);
+                    window.location.href = 'http://localhost:5500/front/goals.html';
+                    // console.log(response.headers);
                 } else {
                     const result = await response.json();
                     errorMessage.textContent = result.message || 'Login failed';
