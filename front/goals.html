@@ -54,6 +54,7 @@
         </div>
     </div>
 
+
     <!-- Modal for Adding a Goal -->
     <div id="add-goal-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -89,6 +90,21 @@
         </div>
     </div>
 
+    <div id="upload-evidence-modal"
+        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4">Submit Verification Evidence</h2>
+            <form id="upload-evidence-form">
+                <input type="file" id="verification-evidence" class="w-full px-3 py-2 border rounded-md mb-4" required>
+            </form>
+            <div class="flex justify-between">
+                <button id="cancel-upload-evidence"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-upload-evidence"
+                    class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">Submit</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const goalsList = document.getElementById("goals-list");
@@ -99,9 +115,10 @@
         let goalToDeleteId = null; // Store the ID of the goal to delete
 
         // Fetch all goals
+        // Fetch goals and update UI
         async function fetchGoals() {
             try {
-                const response = await fetch('http://localhost:5000/goals', { credentials: 'include' }); // Adjust this if the backend uses a different host/port.
+                const response = await fetch('http://localhost:5000/goals', { credentials: 'include' });
                 if (!response.ok) throw new Error("Failed to fetch goals");
                 const data = await response.json();
                 renderGoals(data);
@@ -110,46 +127,55 @@
             }
         }
 
-        // Render goals dynamically
         function renderGoals(goals) {
+            const goalsList = document.getElementById("goals-list");
             goalsList.innerHTML = ""; // Clear previous goals
             goals.forEach(goal => {
                 const goalItem = document.createElement("div");
                 goalItem.className = "p-4 bg-white rounded-lg shadow-md";
                 goalItem.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-lg font-bold">${goal.type}: ${goal.title}</h2>
-                    </div>
-                    <p class="text-sm text-gray-600 mt-2">Friend responsible: <span class="font-medium">${goal.friendName}</span></p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <button
-                            class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
-                            ${goal.verified ? "Verified" : "Verify"}
-                        </button>
-                        <button
-                            class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
-                            Delete
-                        </button>
-                    </div>
-                `;
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg font-bold">${goal.type}: ${goal.title}</h2>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Friend responsible: <span class="font-medium">${goal.friendName}</span></p>
+            <div class="mt-4 flex justify-between items-center">
+                <button
+                    class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
+                    ${goal.verified ? "Verified" : "Verify"}
+                </button>
+                <button
+                    class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
+                    Delete
+                </button>
+            </div>
+        `;
                 goalsList.appendChild(goalItem);
             });
 
-            // Attach event listeners for delete and verify buttons
-            document.querySelectorAll('.delete-goal').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    openConfirmModal(id);
-                });
-            });
-
+            // Re-attach the event listeners for the verify button
             document.querySelectorAll('.verify-goal').forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const id = e.target.getAttribute('data-id');
-                    verifyGoal(id);
+                    const goalId = e.target.getAttribute('data-id');
+                    document.getElementById("upload-evidence-modal").classList.remove("hidden");
+                    document.getElementById("submit-upload-evidence").setAttribute("data-id", goalId);
                 });
             });
         }
+
+        // Attach event listeners for delete and verify buttons
+        document.querySelectorAll('.delete-goal').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                openConfirmModal(id);
+            });
+        });
+
+        document.querySelectorAll('.verify-goal').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                verifyGoal(id);
+            });
+        });
 
         // Open confirmation modal
         function openConfirmModal(id) {
@@ -180,7 +206,7 @@
         // Verify a goal
         async function verifyGoal(id) {
             try {
-                const response = await fetch(`/goals/${id}`, {
+                const response = await fetch(`http:localhost:5000/goals/${ id }`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ verified: true }),
@@ -236,6 +262,59 @@
         // Add event listeners to modal buttons
         confirmDeleteButton.addEventListener("click", deleteGoal);
         cancelDeleteButton.addEventListener("click", closeConfirmModal);
+
+        // Event Listener for Verify Button (Submit Evidence)
+        document.querySelectorAll('.verify-goal').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const goalId = e.target.getAttribute('data-id');
+                // Open the modal when "Verify" button is clicked
+                document.getElementById("upload-evidence-modal").classList.remove("hidden");
+                document.getElementById("submit-upload-evidence").setAttribute("data-id", goalId);
+            });
+        });
+
+        // Event Listener for Cancel Upload Evidence
+        document.getElementById("cancel-upload-evidence").addEventListener("click", () => {
+            document.getElementById("upload-evidence-modal").classList.add("hidden");
+        });
+
+        // Event Listener for Submit Upload Evidence
+        document.getElementById("submit-upload-evidence").addEventListener("click", async (e) => {
+            const goalId = e.target.getAttribute('data-id');
+            const evidenceInput = document.getElementById("verification-evidence");
+
+            if (!evidenceInput.files[0]) {
+                alert("Please upload a file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('evidence', evidenceInput.files[0]);
+
+            try {
+                // Send the evidence to the backend for verification
+                const response = await fetch(`http://localhost:5000/verify/${goalId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: "include",
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to submit evidence");
+                }
+
+                // Close the modal
+                document.getElementById("upload-evidence-modal").classList.add("hidden");
+
+                // Optionally, re-fetch and render the goals to show the updated verification status
+                fetchGoals();
+
+            } catch (error) {
+                console.error(error.message);
+                alert("Error submitting verification evidence. Please try again.");
+            }
+        });
+
 
         // Fetch and render goals on load
         fetchGoals();

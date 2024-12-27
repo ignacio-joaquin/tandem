@@ -45,6 +45,7 @@ model Goal {
   deadline  DateTime
   friendId  Int // Friend responsible for the goal
   verified  Boolean  @default(false)
+  evidencePath  String
   createdAt DateTime @default(now())
 
   // Relation to the user who created the goal

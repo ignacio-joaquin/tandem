@@ -117,4 +117,20 @@ router.delete('/:goalId', authMiddleware, async (req, res) => {
     }
 });
 
+// GET: Retrieve all goals pending verification
+router.get('/pending', authMiddleware, async (req, res) => {
+    try {
+        const pendingGoals = await prisma.goal.findMany({
+            where: { verified: false },
+            select: { id: true },
+        });
+
+        res.status(200).json(pendingGoals);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 module.exports = router;

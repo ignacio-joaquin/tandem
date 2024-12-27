@@ -4,6 +4,7 @@ const passport = require('passport');
 const authRoutes = require('./routes/auth');
 const friendsRoutes = require('./routes/friends');
 const goalsRoutes = require('./routes/goals');
+const verifyRoutes = require('./routes/verification');
 const cors = require('cors');
 require('dotenv').config();
 require('./config/passport')(passport);
@@ -40,6 +41,8 @@ app.use(passport.session());
 app.use('/api/auth', authRoutes);
 app.use('/api/friends', friendsRoutes);
 app.use('/goals', goalsRoutes);
+app.use('/verify', verifyRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 
