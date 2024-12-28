@@ -24,7 +24,6 @@
     </div>
 
     <!-- Navigation Bar -->
-    <!-- Navigation Bar -->
     <nav class="bg-blue-600 p-4 shadow-md fixed bottom-0 left-0 w-full">
         <div class="flex items-center justify-center w-full" style="gap: 33.33%;">
             <a href="friends.html">
@@ -132,22 +131,37 @@
             goalsList.innerHTML = ""; // Clear previous goals
             goals.forEach(goal => {
                 const goalItem = document.createElement("div");
-                goalItem.className = "p-4 bg-white rounded-lg shadow-md";
+
+                // Apply styles based on the verification status
+                goalItem.className = `p-4 rounded-lg shadow-md ${goal.verified ? 'bg-green-100 border-green-500 border-l-4' : 'bg-red-100 border-red-500 border-l-4'
+                    }`;
                 goalItem.innerHTML = `
             <div class="flex justify-between items-center">
-                <h2 class="text-lg font-bold">${goal.type}: ${goal.title}</h2>
+                <h2 class="text-lg font-bold ${goal.verified ? 'text-green-700' : 'text-red-700'
+                    }">${goal.type}: ${goal.title}</h2>
+                <span class="text-sm font-medium flex items-center">
+                    ${goal.verified
+                        ? `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-green-600 mr-2" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414L8 15.414l-4.707-4.707a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                               </svg> Completed`
+                        : `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-red-600 mr-2" viewBox="0 0 20 20">
+                                <path d="M9 2a7 7 0 100 14 7 7 0 000-14zM7.707 9l-2-2a1 1 0 011.414-1.414L9 7.586l2.293-2.293a1 1 0 011.414 1.414l-2 2 2 2a1 1 0 01-1.414 1.414L9 10.414l-2.293 2.293A1 1 0 015.293 11.293l2-2z"></path>
+                               </svg> Pending`
+                    }
+                </span>
             </div>
-            <p class="text-sm text-gray-600 mt-2">Friend responsible: <span class="font-medium">${goal.friendName}</span></p>
-            <div class="mt-4 flex justify-between items-center">
-                <button
-                    class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
-                    ${goal.verified ? "Verified" : "Verify"}
-                </button>
-                <button
-                    class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
-                    Delete
-                </button>
-            </div>
+            <p class="text-sm text-gray-600">Friend: ${goal.friend.username}</p>
+            <p class="text-sm text-gray-600">Deadline: ${new Date(goal.deadline).toLocaleString()}</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <button
+                            class="${goal.verified ? "hidden" : ""} px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
+                            Verify
+                        </button>
+                        <button
+                            class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
+                            Delete
+                        </button>
+                    </div>
         `;
                 goalsList.appendChild(goalItem);
             });
@@ -160,15 +174,16 @@
                     document.getElementById("submit-upload-evidence").setAttribute("data-id", goalId);
                 });
             });
+            // Attach event listeners for delete and verify buttons
+            document.querySelectorAll('.delete-goal').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    openConfirmModal(id);
+                });
+            });
         }
 
-        // Attach event listeners for delete and verify buttons
-        document.querySelectorAll('.delete-goal').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const id = e.target.getAttribute('data-id');
-                openConfirmModal(id);
-            });
-        });
+
 
         document.querySelectorAll('.verify-goal').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -193,7 +208,7 @@
         async function deleteGoal() {
             if (goalToDeleteId !== null) {
                 try {
-                    const response = await fetch(`http://localhost:5000/goals/${goalToDeleteId}`, { method: 'DELETE' , credentials:"include"});
+                    const response = await fetch(`http://localhost:5000/goals/${goalToDeleteId}`, { method: 'DELETE', credentials: "include" });
                     if (!response.ok) throw new Error("Failed to delete goal");
                     fetchGoals(); // Re-fetch goals after deletion
                     closeConfirmModal();
@@ -206,7 +221,7 @@
         // Verify a goal
         async function verifyGoal(id) {
             try {
-                const response = await fetch(`http:localhost:5000/goals/${ id }`, {
+                const response = await fetch(`http:localhost:5000/goals/${id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ verified: true }),
