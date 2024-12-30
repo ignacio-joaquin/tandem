@@ -123,8 +123,6 @@ router.patch('/respond', async (req, res) => {
     }
 });
 
-
-
 router.delete('/remove', async (req, res) => {
     if (req.isAuthenticated()) {
         const { friendId } = req.body;
@@ -144,8 +142,18 @@ router.delete('/remove', async (req, res) => {
                 return res.status(404).json({ message: "Friendship not found" });
             }
 
+            // Remove all goals associated with this friendship
+            await prisma.goal.deleteMany({
+                where: {
+                    OR: [
+                        { userId: userId, friendId },
+                        { userId: friendId, friendId: userId }
+                    ]
+                }
+            });
+
             await prisma.friend.delete({ where: { id: friendship.id } });
-            res.json({ message: "Friend removed" });
+            res.json({ message: "Friend and associated goals removed" });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Internal server error" });

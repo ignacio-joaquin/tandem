@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+
+    <div class=" max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5  w-full">
+        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">My Goals</h1>
+
+        <!-- Button to Add New Goal -->
+        <div class="flex justify-end mb-4">
+            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="add-goal">
+                + Add Goal
+            </button>
+        </div>
+
+        <!-- Goal List -->
+        <div id="goals-list" class="space-y-6 mb-16"></div>
+        <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">You have no goals yet. Add a new goal to get
+            started!</p>
+    </div>
+    <video id="camera" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
+        <div class="flex items-center justify-center w-full" style="gap: 33.33%;">
+            <a href=" amigo.html">
+                <img src="../media/friends-svgrepo-com.svg" alt="Friends"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="goals.html">
+                <img src="../media/goal-svgrepo-com.svg" alt="Goals"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="account.html">
+                <img src="../media/user-circle-svgrepo-com.svg" alt="Account"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+        </div>
+    </nav>
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Confirm Deletion</h2>
+            <p class="text-sm text-[#d4dbdc] text-center mb-6">Are you sure you want to delete this goal?</p>
+            <div class="flex justify-between">
+                <button id="cancel-delete"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="confirm-delete"
+                    class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding a Goal -->
+    <div id="add-goal-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Add New Goal</h2>
+            <form id="goal-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">Title</label>
+                    <input type="text" id="goal-title"
+                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">Type</label>
+                    <select id="goal-type" class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white">
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">Friend ID</label>
+                    <input type="text" id="goal-friend-id"
+                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+                </div>
+            </form>
+            <div class="mt-4 flex justify-between">
+                <button id="cancel-add-goal"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-add-goal"
+                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Add
+                    Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="upload-evidence-modal"
+        class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Submit Verification Evidence</h2>
+            <form id="upload-evidence-form">
+                <input type="file" id="verification-evidence"
+                    class="w-full px-3 py-2 border rounded-md mb-4 bg-[#1a2332] text-white" required>
+            </form>
+            <div class="flex justify-between">
+                <button id="cancel-upload-evidence"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-upload-evidence"
+                    class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#ff4c4c]">Error</h2>
+            <p id="error-message" class="text-sm text-[#d4dbdc] text-center mb-6"></p>
+            <div class="flex justify-center">
+                <button id="close-error-modal"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const goalsList = document.getElementById("goals-list");
+        const noGoalsMessage = document.getElementById("no-goals-message");
+        const confirmModal = document.getElementById("confirm-modal");
+        const confirmDeleteButton = document.getElementById("confirm-delete");
+        const cancelDeleteButton = document.getElementById("cancel-delete");
+
+        let goalToDeleteId = null; // Store the ID of the goal to delete
+
+        // Fetch all goals
+        // Fetch goals and update UI
+        async function fetchGoals() {
+            try {
+                const response = await fetch(' /goals', { credentials: 'include' });
+                if (!response.ok) throw new Error("Failed to fetch goals");
+                const data = await response.json();
+                renderGoals(data);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        function renderGoals(goals) {
+            const goalsList = document.getElementById("goals-list");
+            goalsList.innerHTML = ""; // Clear previous goals
+            if (goals.length === 0) {
+                noGoalsMessage.classList.remove("hidden");
+            } else {
+                noGoalsMessage.classList.add("hidden");
+                goals.forEach(goal => {
+                    const goalItem = document.createElement("div");
+
+                    // Apply styles based on the verification status
+                    goalItem.className = `p-4 rounded-lg shadow-md ${goal.verified ? 'bg-green-100 border-green-500 border-l-4' : 'bg-red-100 border-red-500 border-l-4'
+                        }`;
+                    goalItem.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-lg font-bold ${goal.verified ? 'text-green-700' : 'text-red-700'
+                        }">${goal.type}: ${goal.title}</h2>
+                            <span class="text-sm font-medium flex items-center">
+                                ${goal.verified
+                            ? `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-green-600 mr-2" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414L8 15.414l-4.707-4.707a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
+                                </svg> Completed`
+                            : `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-red-600 mr-2" viewBox="0 0 20 20">
+                                    <path d="M9 2a7 7 0 100 14 7 7 0 000-14zM7.707 9l-2-2a1 1 0 011.414-1.414L9 7.586l2.293-2.293a1 1 0 011.414 1.414l-2 2 2 2a1 1 0 01-1.414 1.414L9 10.414l-2.293 2.293A1 1 0 015.293 11.293l2-2z"></path>
+                                </svg> Pending`
+                        }
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600">Friend: ${goal.friend.username}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button
+                                class="${goal.verified ? "hidden" : ""} px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
+                                Verify
+                            </button>
+                            <button
+                                class="px-2 py-1 text-sm text-gray-500 hover:text-red-600 focus:outline-none delete-goal" data-id="${goal.id}">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                    goalsList.appendChild(goalItem);
+                });
+
+                // Re-attach the event listeners for the verify button
+                document.querySelectorAll('.verify-goal').forEach(async button => {
+                    const video = document.getElementById("camera");
+                    const canvas = document.getElementById("canvas");
+                    const context = canvas.getContext("2d");
+
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        video.srcObject = stream;
+
+                        // Capture photo after 3 seconds
+                        setTimeout(() => {
+                            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            const dataUrl = canvas.toDataURL("image/png");
+
+                            // Stop the video stream
+                            stream.getTracks().forEach(track => track.stop());
+
+                            // Submit the photo
+                            submitPhoto(dataUrl);
+                        }, 3000);
+                    } catch (error) {
+                        console.error("Error accessing camera: ", error);
+                    }
+                });
+                // Attach event listeners for delete and verify buttons
+                document.querySelectorAll('.delete-goal').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        openConfirmModal(id);
+                    });
+                });
+            }
+        }
+
+        document.querySelectorAll('.verify-goal').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                verifyGoal(id);
+            });
+        });
+
+        // Open confirmation modal
+        function openConfirmModal(id) {
+            goalToDeleteId = id; // Store the goal ID to delete
+            confirmModal.classList.remove("hidden");
+        }
+
+        // Close confirmation modal
+        function closeConfirmModal() {
+            goalToDeleteId = null; // Reset the goal ID
+            confirmModal.classList.add("hidden");
+        }
+
+        // Delete a goal
+        async function deleteGoal() {
+            if (goalToDeleteId !== null) {
+                try {
+                    const response = await fetch(` /goals/${goalToDeleteId}`, { method: 'DELETE', credentials: "include" });
+                    if (!response.ok) throw new Error("Failed to delete goal");
+                    fetchGoals(); // Re-fetch goals after deletion
+                    closeConfirmModal();
+                } catch (error) {
+                    console.error(error.message);
+                }
+            }
+        }
+
+        // Verify a goal
+        async function verifyGoal(id) {
+            try {
+                const response = await fetch(`http:localhost:5000/goals/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ verified: true }),
+                });
+                if (!response.ok) throw new Error("Failed to verify goal");
+                fetchGoals(); // Re-fetch goals after verification
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        // Add a new goal
+        document.getElementById("add-goal").addEventListener("click", () => {
+            document.getElementById("add-goal-modal").classList.remove("hidden");
+        });
+
+        document.getElementById("cancel-add-goal").addEventListener("click", () => {
+            document.getElementById("add-goal-modal").classList.add("hidden");
+        });
+
+        document.getElementById("submit-add-goal").addEventListener("click", async () => {
+            const title = document.getElementById("goal-title").value;
+            const type = document.getElementById("goal-type").value;
+            const friendUsername = document.getElementById("goal-friend-id").value;
+
+            if (!title || !type || !friendUsername) {
+                showErrorModal("All fields are required!");
+                return;
+            }
+
+            const newGoal = { title, type, friendUsername };
+
+            try {
+                const response = await fetch(" /goals", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify(newGoal),
+                });
+
+                if (!response.ok) throw new Error("Failed to add goal");
+
+                document.getElementById("add-goal-modal").classList.add("hidden");
+                fetchGoals(); // Re-fetch goals after addition
+            } catch (error) {
+                console.error(error.message);
+                showErrorModal("Error adding goal. Please try again.");
+            }
+        });
+
+        // Add event listeners to modal buttons
+        confirmDeleteButton.addEventListener("click", deleteGoal);
+        cancelDeleteButton.addEventListener("click", closeConfirmModal);
+
+        // Event Listener for Verify Button (Submit Evidence)
+
+
+        async function submitPhoto(dataUrl) {
+            try {
+                const response = await fetch(' /goals/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ photo: dataUrl }),
+                });
+                if (!response.ok) throw new Error("Failed to submit photo");
+                fetchGoals(); // Re-fetch goals after submission
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        // Event Listener for Cancel Upload Evidence
+        document.getElementById("cancel-upload-evidence").addEventListener("click", () => {
+            document.getElementById("upload-evidence-modal").classList.add("hidden");
+        });
+
+        // Event Listener for Submit Upload Evidence
+        document.getElementById("submit-upload-evidence").addEventListener("click", async (e) => {
+            const goalId = e.target.getAttribute('data-id');
+            const evidenceInput = document.getElementById("verification-evidence");
+
+            if (!evidenceInput.files[0]) {
+                showErrorModal("Please upload a file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('evidence', evidenceInput.files[0]);
+
+            try {
+                // Send the evidence to the backend for verification
+                const response = await fetch(` /verify/${goalId}/`, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: "include",
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to submit evidence");
+                }
+
+                // Close the modal
+                document.getElementById("upload-evidence-modal").classList.add("hidden");
+
+                // Optionally, re-fetch and render the goals to show the updated verification status
+                fetchGoals();
+
+            } catch (error) {
+                console.error(error.message);
+                showErrorModal("Error submitting verification evidence. Please try again.");
+            }
+        });
+
+        // Function to show error modal
+        function showErrorModal(message) {
+            document.getElementById("error-message").textContent = message;
+            document.getElementById("error-modal").classList.remove("hidden");
+        }
+
+        // Close error modal
+        document.getElementById("close-error-modal").addEventListener("click", () => {
+            document.getElementById("error-modal").classList.add("hidden");
+        });
+
+        // Fetch and render goals on load
+        fetchGoals();
+    </script>
+
+</body>
+
+</html>

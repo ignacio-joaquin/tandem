@@ -3,7 +3,7 @@ const prisma = require('../config/prismaClient');
 module.exports = async (req, res, next) => {
         try {
             if (!req.isAuthenticated()) {
-                return res.status(401).json({ message: "Unauthorized" });
+                return res.redirect('/login.html');
             }
             const user = await prisma.user.findUnique({
                 where: { id: req.user.id }, // Assuming `req.user.id` comes from passport

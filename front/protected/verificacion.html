@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+    <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
+        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Verification Panel</h1>
+        <div id="goals-container" class="space-y-6"></div>
+    </div>
+
+    <script>
+        const goalsContainer = document.getElementById('goals-container');
+
+        async function fetchGoals() {
+            const response = await fetch('/goals/pending', { credentials: 'include' });
+            const goals = await response.json();
+            goalsContainer.innerHTML = '';
+
+            goals.forEach(goal => {
+                const goalDiv = document.createElement('div');
+                goalDiv.className = 'p-4 rounded-lg shadow-md bg-[#1a2332] border-l-4 border-[#00ff9c]';
+
+                const img = document.createElement('img');
+                img.src = `/verify/evidence/${goal.id}/`;
+                img.alt = 'Verification Evidence';
+                img.className = 'max-w-full max-h-96 mb-4';
+
+                const approveButton = document.createElement('button');
+                approveButton.className = 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 mr-2';
+                approveButton.innerText = 'Approve';
+                approveButton.onclick = () => submitDecision(goal.id, 'verified');
+
+                const rejectButton = document.createElement('button');
+                rejectButton.className = 'px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700';
+                rejectButton.innerText = 'Reject';
+                rejectButton.onclick = () => submitDecision(goal.id, 'rejected');
+
+                goalDiv.appendChild(img);
+                goalDiv.appendChild(approveButton);
+                goalDiv.appendChild(rejectButton);
+                goalsContainer.appendChild(goalDiv);
+            });
+        }
+
+        async function submitDecision(id, decision) {
+            const response = await fetch(`/verify/respond-verification/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ decision }),
+                credentials: "include"
+            });
+
+            if (response.ok) {
+                alert(`Goal ${id} has been ${decision}`);
+                fetchGoals();
+            } else {
+                const error = await response.json();
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // Fetch goals on load
+        fetchGoals();
+    </script>
+</body>
+
+</html>

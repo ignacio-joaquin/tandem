@@ -7,37 +7,77 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex  justify-center h-screen bg-[#d4dbdc]">
-    <div class="w-full max-w-sm p-6  rounded-lg">
+<body class="flex justify-center h-screen bg-[#1a2332] font-roboto w-full max-w-sm">
+    <div class="w-full mx-5  p-6 rounded-lg shadow-lg bg-[#2a3b4c] my-5">
         <div class="w-full justify-center flex">
-            <img src="media/user-circle-svgrepo-com.svg" width="200" class="">
+            <img src="media/user-circle-svgrepo-com.svg" width="200" class="filter neon-green">
         </div>
 
-        <h1 class="text-2xl font-bold text-center mb-6">Log In</h1>
-        <form>
+        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Log In</h1>
+        <!-- Add a method and action to send a POST request -->
+        <form id="login-form" method="POST" action="/login">
             <div class="mb-4 relative">
-                <label for="email" class="block text-sm font-medium text-black pb-3">Email</label>
+                <label for="usernameOrEmail" class="block text-sm font-medium text-[#d4dbdc] pb-3">Username or Email</label>
                 <div class="relative">
-                    <input type="email" id="email"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
-                    <img src="media/email-svgrepo-com.svg" alt="Email Icon"
-                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
+                    <input type="text" name="email" id="email" required
+                        class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2">
+                    <img src="media/email-svgrepo-com.svg" alt="Username or Email Icon"
+                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green">
                 </div>
             </div>
             <div class="mb-6 relative">
-                <label for="password" class="block text-sm font-medium text-black pb-3">Password</label>
+                <label for="password" class="block text-sm font-medium text-[#d4dbdc] pb-3">Password</label>
                 <div class="relative">
-                    <input type="password" id="password"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                    <input type="password" name="password" id="password" required
+                        class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2">
                     <img src="media/password-svgrepo-com.svg" alt="Password Icon"
-                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
+                        class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green">
                 </div>
             </div>
-            <button type="submit" class="w-full py-3 bg-[#6299b8] text-white rounded-lg hover:bg-[#6382b7]">Log
-                In</button>
+            <button type="submit" class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Log In</button>
         </form>
-        <p class="mt-4 text-center text-sm">
-            Don’t have an account? <a href="#" class="text-blue-600">Sign Up</a>
+        <p class="mt-4 text-center text-sm text-[#d4dbdc]">
+            Don’t have an account? <a href="#" class="text-[#00ff9c]">Sign Up</a>
         </p>
+        <!-- Placeholder for error messages -->
+        <p id="error-message" class="text-red-500 text-center mt-4 hidden"></p>
     </div>
+
+    <script>
+        // Handle the login process with fetch for better UX (optional)
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(' /api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    withCredentials: true,
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    // Redirect to a dashboard or home page on success
+                    window.location.href = '/protected/goals.html';
+                    // console.log(response.headers);
+                } else {
+                    const result = await response.json();
+                    errorMessage.textContent = result.message || 'Login failed';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
+
+</html>

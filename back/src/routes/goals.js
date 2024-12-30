@@ -5,9 +5,9 @@ const passport = require('passport');
 const prisma = require('../config/prismaClient');
 
 router.post('/', authMiddleware, async (req, res) => {
-    const { title, type, deadline, friendUsername } = req.body;
+    const { title, type, friendUsername } = req.body;
 
-    if (!title || !type || !deadline || !friendUsername) {
+    if (!title || !type || !friendUsername) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -52,7 +52,6 @@ router.post('/', authMiddleware, async (req, res) => {
                 userId: req.user.id, // Replace with the actual user ID
                 title,
                 type,
-                deadline: new Date(deadline),
                 friendId: friend.id, // Use the resolved friend's ID
             },
         });

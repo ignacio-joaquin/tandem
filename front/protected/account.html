@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+
+    <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
+        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">My Account</h1>
+
+        <!-- Username Section -->
+        <div class="mb-4">
+            <h2 class="text-lg font-bold text-[#d4dbdc]">Username</h2>
+            <p id="username" class="text-sm text-[#d4dbdc] mb-2">current_username</p>
+            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-username">
+                Change Username
+            </button>
+        </div>
+
+        <!-- Email Section -->
+        <div class="mb-4">
+            <h2 class="text-lg font-bold text-[#d4dbdc]">Email</h2>
+            <p id="email" class="text-sm text-[#d4dbdc] mb-2">current_email@example.com</p>
+            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-email">
+                Change Email
+            </button>
+        </div>
+
+        <!-- Password Section -->
+        <div class="mb-4">
+            <h2 class="text-lg font-bold text-[#d4dbdc]">Password</h2>
+            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-password">
+                Change Password
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
+        <div class="flex items-center justify-center w-full" style="gap: 33.33%;">
+            <a href="amigo.html">
+                <img src="../media/friends-svgrepo-com.svg" alt="Friends"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="goals.html">
+                <img src="../media/goal-svgrepo-com.svg" alt="Goals"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="account.html">
+                <img src="../media/user-circle-svgrepo-com.svg" alt="Account"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+        </div>
+    </nav>
+
+    <!-- Modals for Changing Username, Email, and Password -->
+    <div id="change-username-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Username</h2>
+            <form id="username-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Username</label>
+                    <input type="text" id="new-username"
+                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+                </div>
+            </form>
+            <div class="mt-4 flex justify-between">
+                <button id="cancel-change-username"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-change-username"
+                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-email-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Email</h2>
+            <form id="email-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Email</label>
+                    <input type="email" id="new-email"
+                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+                </div>
+            </form>
+            <div class="mt-4 flex justify-between">
+                <button id="cancel-change-email"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-change-email"
+                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="change-password-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Password</h2>
+            <form id="password-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Password</label>
+                    <input type="password" id="new-password"
+                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+                </div>
+            </form>
+            <div class="mt-4 flex justify-between">
+                <button id="cancel-change-password"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="submit-change-password"
+                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch user data and update UI
+        async function fetchUserData() {
+            try {
+                const response = await fetch('/account/user-data', { credentials: 'include' });
+                if (!response.ok) throw new Error("Failed to fetch user data");
+                const data = await response.json();
+                document.getElementById("username").textContent = data.username;
+                document.getElementById("email").textContent = data.email;
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+        // Call fetchUserData on page load
+        document.addEventListener("DOMContentLoaded", fetchUserData);
+
+        // Event listeners for opening modals
+        document.getElementById("change-username").addEventListener("click", () => {
+            document.getElementById("change-username-modal").classList.remove("hidden");
+        });
+
+        document.getElementById("change-email").addEventListener("click", () => {
+            document.getElementById("change-email-modal").classList.remove("hidden");
+        });
+
+        document.getElementById("change-password").addEventListener("click", () => {
+            document.getElementById("change-password-modal").classList.remove("hidden");
+        });
+
+        // Event listeners for closing modals
+        document.getElementById("cancel-change-username").addEventListener("click", () => {
+            document.getElementById("change-username-modal").classList.add("hidden");
+        });
+
+        document.getElementById("cancel-change-email").addEventListener("click", () => {
+            document.getElementById("change-email-modal").classList.add("hidden");
+        });
+
+        document.getElementById("cancel-change-password").addEventListener("click", () => {
+            document.getElementById("change-password-modal").classList.add("hidden");
+        });
+
+        // Event listeners for submitting changes
+        document.getElementById("submit-change-username").addEventListener("click", async () => {
+            const newUsername = document.getElementById("new-username").value;
+            if (!newUsername) return;
+
+            try {
+                const response = await fetch("/change-username", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: newUsername }),
+                });
+
+                if (!response.ok) throw new Error("Failed to change username");
+
+                document.getElementById("username").textContent = newUsername;
+                document.getElementById("change-username-modal").classList.add("hidden");
+            } catch (error) {
+                console.error(error.message);
+            }
+        });
+
+        document.getElementById("submit-change-email").addEventListener("click", async () => {
+            const newEmail = document.getElementById("new-email").value;
+            if (!newEmail) return;
+
+            try {
+                const response = await fetch("/change-email", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: newEmail }),
+                });
+
+                if (!response.ok) throw new Error("Failed to change email");
+
+                document.getElementById("email").textContent = newEmail;
+                document.getElementById("change-email-modal").classList.add("hidden");
+            } catch (error) {
+                console.error(error.message);
+            }
+        });
+
+        document.getElementById("submit-change-password").addEventListener("click", async () => {
+            const newPassword = document.getElementById("new-password").value;
+            if (!newPassword) return;
+
+            try {
+                const response = await fetch("/change-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password: newPassword }),
+                });
+
+                if (!response.ok) throw new Error("Failed to change password");
+
+                document.getElementById("change-password-modal").classList.add("hidden");
+            } catch (error) {
+                console.error(error.message);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

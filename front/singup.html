@@ -7,20 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex justify-center h-screen bg-[#d4dbdc]">
-    <div class="w-full max-w-sm p-2 rounded-lg pb-6">
+<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+    <div class="w-full max-w-sm px-6 pb-2 rounded-lg bg-[#2a3b4c] shadow-lg my-4">
         <div class="w-full justify-center flex">
             <img src="media/user-circle-svgrepo-com.svg" width="200" class="">
         </div>
 
-        <h1 class="text-2xl font-bold text-center mb-6">Sign Up</h1>
-        <form>
+        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Sign Up</h1>
+        <form id="sign-up-form">
             <!-- Full Name -->
             <div class="mb-4 relative">
-                <label for="name" class="block text-sm font-medium text-black pb-3">Full Name</label>
+                <label for="name" class="block text-sm font-medium text-[#d4dbdc] pb-3">Username</label>
                 <div class="relative">
                     <input type="text" id="name"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
                     <img src="media/user-identity-svgrepo-com.svg" alt="Name Icon"
                         class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
                 </div>
@@ -28,10 +28,10 @@
 
             <!-- Email -->
             <div class="mb-4 relative">
-                <label for="email" class="block text-sm font-medium text-black pb-3">Email</label>
+                <label for="email" class="block text-sm font-medium text-[#d4dbdc] pb-3">Email</label>
                 <div class="relative">
                     <input type="email" id="email"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
                     <img src="media/email-svgrepo-com.svg" alt="Email Icon"
                         class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
                 </div>
@@ -39,10 +39,10 @@
 
             <!-- Password -->
             <div class="mb-4 relative">
-                <label for="password" class="block text-sm font-medium text-black pb-3">Password</label>
+                <label for="password" class="block text-sm font-medium text-[#d4dbdc] pb-3">Password</label>
                 <div class="relative">
                     <input type="password" id="password"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
                     <img src="media/password-svgrepo-com.svg" alt="Password Icon"
                         class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
                 </div>
@@ -50,25 +50,78 @@
 
             <!-- Confirm Password -->
             <div class="mb-6 relative">
-                <label for="confirm-password" class="block text-sm font-medium text-black pb-3">Confirm Password</label>
+                <label for="confirm-password" class="block text-sm font-medium text-[#d4dbdc] pb-3">Confirm Password</label>
                 <div class="relative">
                     <input type="password" id="confirm-password"
-                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-gradient-to-r from-[#d4dbdc] via-[#d4dbdc] via-70% to-[#6e8da5] shadow-[0px_0px_25px_1px_rgba(0,_0,_0,_1)]">
+                        class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
                     <img src="media/lock-svgrepo-com.svg" alt="Confirm Password Icon"
                         class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none">
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="w-full py-3 bg-[#6299b8] text-white rounded-lg hover:bg-[#6382b7]">
+            <button type="submit" class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
                 Sign Up
             </button>
         </form>
 
-        <p class="mt-4 text-center text-sm">
-            Already have an account? <a href="#" class="text-blue-600">Log In</a>
+        <p class="mt-4 text-center text-sm text-[#d4dbdc]">
+            Already have an account? <a href="login.html" class="text-blue-600">Log In</a>
         </p>
     </div>
+
+    <script>
+        // Ensure the DOM is loaded before executing the script
+        document.addEventListener("DOMContentLoaded", function() {
+            // Replace with your actual URL
+            const url = "http://localhost:5000/api/auth/register"; 
+
+            const form = document.getElementById('sign-up-form');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent default form submission
+
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                // Basic form validation
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                const userData = {
+                    username: name,
+                    email: email,
+                    password: password
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    if (response.ok) {
+                        // Redirect to login or success page
+                        alert('Sign Up Successful!');
+                        window.location.href = '/login'; // Adjust to your login page URL
+                    } else {
+                        const result = await response.json();
+                        alert(result.message || 'Sign Up failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

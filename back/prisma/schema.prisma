@@ -42,7 +42,6 @@ model Goal {
   userId    Int // User who created the goal
   title     String
   type      String // "Daily", "Weekly", etc.
-  deadline  DateTime
   friendId  Int // Friend responsible for the goal
   verified  Boolean  @default(false)
   evidencePath  String?
