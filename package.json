@@ -1,5 +1,31 @@
 {
+  "name": "back",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "build": " mkdir /var/task/uploads && echo 'tengo el pene pequeño' && ls",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "node-cron": "^3.0.3"
+    "@prisma/client": "^6.1.0",
+    "@supabase/supabase-js": "^2.47.10",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.5",
+    "node-cron": "^3.0.3",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "prisma": "^6.1.0"
   }
 }

@@ -25,7 +25,7 @@ app.use(cors({
     credentials: true
 }));
 
-// Serve static files from the front directory
+// Serve static files from the public directory
 
 // Session
 app.use(session({
@@ -43,14 +43,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/protected', authMiddleware, express.static(path.join(__dirname, '../../front/protected')));
-app.use(express.static(path.join(__dirname, '../../front/')));
+app.use('/protected', authMiddleware, express.static(path.join(__dirname, '../public/protected')));
+app.use(express.static(path.join(__dirname, '../public/')));
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/friends', friendsRoutes);
 app.use('/goals', goalsRoutes);
-app.use('/verify', verifyRoutes);
+// app.use('/verify', verifyRoutes);
 app.use('/account', accountRoutes);
 
 // Setup cron jobs
