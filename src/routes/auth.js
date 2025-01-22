@@ -20,7 +20,6 @@ router.post('/register', async (req, res) => {
 
 // Login route
 router.post('/login', (req, res, next) => {
-    console.log("MI PENE PAPAAAAA")
     passport.authenticate('local', (err, user, info) => {
         if (err) return res.status(500).json({ message: 'Internal server error' });
         if (!user) return res.status(401).json({ message: info.message });

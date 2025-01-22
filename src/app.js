@@ -8,6 +8,7 @@ const goalsRoutes = require('./routes/goals');
 const verifyRoutes = require('./routes/verification');
 const setupCronJobs = require('./cronjobs/goals');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const accountRoutes = require('./routes/account');
 require('dotenv').config();
 require('./config/passport')(passport);
@@ -15,6 +16,9 @@ const authMiddleware = require('./middlewares/authMiddleware');
 
 
 const app = express();
+
+app.use(bodyParser.json({ limit: '500mb' })); // Add this line
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true })); // Add this line
 
 // Middlewares
 app.use(express.json());
@@ -24,6 +28,9 @@ app.use(cors({
     origin: ['http://192.168.0.22:5000', 'http://192.168.0.10:5000'],
     credentials: true
 }));
+
+// Increase payload size limit
+
 
 // Serve static files from the public directory
 
@@ -50,7 +57,7 @@ app.use(express.static(path.join(__dirname, '../public/')));
 app.use('/api/auth', authRoutes);
 app.use('/api/friends', friendsRoutes);
 app.use('/goals', goalsRoutes);
-// app.use('/verify', verifyRoutes);
+app.use('/verify', verifyRoutes);
 app.use('/account', accountRoutes);
 
 // Setup cron jobs

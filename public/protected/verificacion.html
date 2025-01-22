@@ -4,32 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Panel</title>
+    <title id="verification-panel-title">Verification Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
     <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
-        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Verification Panel</h1>
+        <h1 id="verification-panel-header" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Verification Panel</h1>
+        
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="flex justify-center items-center space-x-2 mb-4 hidden">
+            <div class="w-8 h-8 border-t-4 border-b-4 border-[#00ff9c] rounded-full animate-spin"></div>
+        </div>
+        
         <div id="goals-container" class="space-y-6"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 id="modal-title" class="text-xl font-bold mb-4"></h2>
+            <p id="modal-message" class="mb-4"></p>
+            <button id="modal-close" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Close</button>
+        </div>
     </div>
 
     <script>
         const goalsContainer = document.getElementById('goals-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalClose = document.getElementById('modal-close');
 
+        modalClose.onclick = () => {
+            modal.classList.add('hidden');
+        };
+
+        function showModal(title, message) {
+            modalTitle.innerText = title;
+            modalMessage.innerText = message;
+            modal.classList.remove('hidden');
+        }
+
+        // Show the spinner while fetching data
         async function fetchGoals() {
-            const response = await fetch('/goals/pending', { credentials: 'include' });
+            loadingSpinner.classList.remove('hidden'); // Show the spinner
+            const response = await fetch('/verify/pending', { credentials: 'include' });
             const goals = await response.json();
             goalsContainer.innerHTML = '';
+            loadingSpinner.classList.add('hidden'); // Hide the spinner once data is loaded
 
             goals.forEach(goal => {
                 const goalDiv = document.createElement('div');
                 goalDiv.className = 'p-4 rounded-lg shadow-md bg-[#1a2332] border-l-4 border-[#00ff9c]';
+                goalDiv.id = `goal-${goal.id}`;
+
+                const name = document.createElement('p');
+                name.className = 'mb-2 text-white font-bold';
+                name.innerText = `Goal: ${goal.title}`;
 
                 const img = document.createElement('img');
                 img.src = `/verify/evidence/${goal.id}/`;
                 img.alt = 'Verification Evidence';
-                img.className = 'max-w-full max-h-96 mb-4';
+                img.className = 'mb-4 object-contain max-h-screen max-w-full'; // Ensure image is top priority and fits within bounds
 
                 const approveButton = document.createElement('button');
                 approveButton.className = 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 mr-2';
@@ -41,6 +79,7 @@
                 rejectButton.innerText = 'Reject';
                 rejectButton.onclick = () => submitDecision(goal.id, 'rejected');
 
+                goalDiv.appendChild(name);
                 goalDiv.appendChild(img);
                 goalDiv.appendChild(approveButton);
                 goalDiv.appendChild(rejectButton);
@@ -48,7 +87,9 @@
             });
         }
 
+        // Show spinner while submitting the decision
         async function submitDecision(id, decision) {
+            loadingSpinner.classList.remove('hidden'); // Show the spinner
             const response = await fetch(`/verify/respond-verification/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -57,13 +98,42 @@
             });
 
             if (response.ok) {
-                alert(`Goal ${id} has been ${decision}`);
-                fetchGoals();
+                showModal('Success', `Goal ${id} has been ${decision}`);
+                if (decision === 'rejected') {
+                    document.getElementById(`goal-${id}`).remove();
+                } else {
+                    fetchGoals();
+                }
             } else {
                 const error = await response.json();
-                alert(`Error: ${error.message}`);
+                showModal('Error', `Error: ${error.message}`);
+            }
+            loadingSpinner.classList.add('hidden'); // Hide the spinner
+        }
+
+        let translations = {};
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`/locales/${lang}.json`);
+                translations = await response.json();
+                updateTextContent();
+            } catch (error) {
+                console.error("Failed to load translations:", error);
             }
         }
+
+        function updateTextContent() {
+            document.getElementById("verification-panel-title").textContent = translations.verification_panel;
+            document.getElementById("verification-panel-header").textContent = translations.verification_panel;
+            document.getElementById("modal-close").textContent = translations.close;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const userLang = navigator.language || navigator.userLanguage;
+            const lang = userLang.startsWith("es") ? "es" : "en";
+            loadTranslations(lang);
+        });
 
         // Fetch goals on load
         fetchGoals();

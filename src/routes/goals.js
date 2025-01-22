@@ -53,6 +53,7 @@ router.post('/', authMiddleware, async (req, res) => {
                 title,
                 type,
                 friendId: friend.id, // Use the resolved friend's ID
+                status: 'pending verification' // Set initial status
             },
         });
 
@@ -120,7 +121,7 @@ router.delete('/:goalId', authMiddleware, async (req, res) => {
 router.get('/pending', authMiddleware, async (req, res) => {
     try {
         const pendingGoals = await prisma.goal.findMany({
-            where: { verified: false },
+            where: { status: 'pending verification' },
             select: { id: true },
         });
 

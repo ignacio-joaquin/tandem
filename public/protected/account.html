@@ -1,224 +1,582 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+    <style>
+      .sk-chase {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        animation: sk-chase 2.5s infinite linear both;
+      }
 
-<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+      .sk-chase-dot {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        animation: sk-chase-dot 2s infinite ease-in-out both;
+      }
 
+      .sk-chase-dot:before {
+        content: "";
+        display: block;
+        width: 25%;
+        height: 25%;
+        background-color: #fff;
+        border-radius: 100%;
+        animation: sk-chase-dot-before 2s infinite ease-in-out both;
+      }
+
+      .sk-chase-dot:nth-child(1) {
+        animation-delay: -1.1s;
+      }
+
+      .sk-chase-dot:nth-child(2) {
+        animation-delay: -1s;
+      }
+
+      .sk-chase-dot:nth-child(3) {
+        animation-delay: -0.9s;
+      }
+
+      .sk-chase-dot:nth-child(4) {
+        animation-delay: -0.8s;
+      }
+
+      .sk-chase-dot:nth-child(5) {
+        animation-delay: -0.7s;
+      }
+
+      .sk-chase-dot:nth-child(6) {
+        animation-delay: -0.6s;
+      }
+
+      .sk-chase-dot:nth-child(1):before {
+        animation-delay: -1.1s;
+      }
+
+      .sk-chase-dot:nth-child(2):before {
+        animation-delay: -1s;
+      }
+
+      .sk-chase-dot:nth-child(3):before {
+        animation-delay: -0.9s;
+      }
+
+      .sk-chase-dot:nth-child(4):before {
+        animation-delay: -0.8s;
+      }
+
+      .sk-chase-dot:nth-child(5):before {
+        animation-delay: -0.7s;
+      }
+
+      .sk-chase-dot:nth-child(6):before {
+        animation-delay: -0.6s;
+      }
+
+      @keyframes sk-chase {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes sk-chase-dot {
+        80%,
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes sk-chase-dot-before {
+        50% {
+          transform: scale(0.4);
+        }
+
+        100%,
+        0% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5"
+  >
     <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
-        <h1 class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">My Account</h1>
+      <h1 id="my-account-title" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">
+        My Account
+      </h1>
 
-        <!-- Username Section -->
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-[#d4dbdc]">Username</h2>
-            <p id="username" class="text-sm text-[#d4dbdc] mb-2">current_username</p>
-            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-username">
-                Change Username
-            </button>
-        </div>
+      <!-- Username Section -->
+      <div class="mb-4">
+        <h2 id="username-label" class="text-lg font-bold text-[#d4dbdc]">Username</h2>
+        <p id="username" class="text-sm text-[#d4dbdc] mb-2">
+          current_username
+        </p>
+        <button
+          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
+          id="change-username"
+        >
+          Change Username
+        </button>
+      </div>
 
-        <!-- Email Section -->
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-[#d4dbdc]">Email</h2>
-            <p id="email" class="text-sm text-[#d4dbdc] mb-2">current_email@example.com</p>
-            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-email">
-                Change Email
-            </button>
-        </div>
+      <!-- Email Section -->
+      <div class="mb-4">
+        <h2 id="email-label" class="text-lg font-bold text-[#d4dbdc]">Email</h2>
+        <p id="email" class="text-sm text-[#d4dbdc] mb-2">
+          current_email@example.com
+        </p>
+        <button
+          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
+          id="change-email"
+        >
+          Change Email
+        </button>
+      </div>
 
-        <!-- Password Section -->
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-[#d4dbdc]">Password</h2>
-            <button class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm" id="change-password">
-                Change Password
-            </button>
-        </div>
+      <!-- Password Section -->
+      <div class="mb-4">
+        <h2 id="password-label" class="text-lg font-bold text-[#d4dbdc]">Password</h2>
+        <button
+          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
+          id="change-password"
+        >
+          Change Password
+        </button>
+      </div>
+
+      <!-- Profile Picture Section -->
+      <div class="mb-4">
+        <h2 id="profile-picture-label" class="text-lg font-bold text-[#d4dbdc]">Profile Picture</h2>
+        <img
+          id="profile-pic"
+          src="../media/user-circle-svgrepo-com.svg"
+          alt="Profile Picture"
+          class="w-24 h-24 rounded-full mb-2"
+        />
+        <input
+          type="file"
+          id="profile-pic-input"
+          accept="image/*"
+          class="hidden"
+        />
+        <button
+          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
+          id="change-profile-pic"
+        >
+          Change Profile Picture
+        </button>
+      </div>
     </div>
 
     <!-- Navigation Bar -->
     <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
-        <div class="flex items-center justify-center w-full" style="gap: 33.33%;">
-            <a href="amigo.html">
-                <img src="../media/friends-svgrepo-com.svg" alt="Friends"
-                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
-            </a>
-            <a href="goals.html">
-                <img src="../media/goal-svgrepo-com.svg" alt="Goals"
-                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
-            </a>
-            <a href="account.html">
-                <img src="../media/user-circle-svgrepo-com.svg" alt="Account"
-                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
-            </a>
-        </div>
+      <div class="flex items-center justify-center w-full" style="gap: 33.33%">
+        <a href="amigo.html">
+          <img
+            src="../media/friends-svgrepo-com.svg"
+            alt="Friends"
+            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
+          />
+        </a>
+        <a href="goals.html">
+          <img
+            src="../media/goal-svgrepo-com.svg"
+            alt="Goals"
+            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
+          />
+        </a>
+        <a href="account.html">
+          <img
+            src="../media/user-circle-svgrepo-com.svg"
+            alt="Account"
+            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
+          />
+        </a>
+      </div>
     </nav>
 
     <!-- Modals for Changing Username, Email, and Password -->
-    <div id="change-username-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Username</h2>
-            <form id="username-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Username</label>
-                    <input type="text" id="new-username"
-                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
-                </div>
-            </form>
-            <div class="mt-4 flex justify-between">
-                <button id="cancel-change-username"
-                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
-                <button id="submit-change-username"
-                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
-            </div>
+    <div
+      id="change-username-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
+          Change Username
+        </h2>
+        <form id="username-form" class="space-y-4">
+          <div>
+            <label id="new-username-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+              >New Username</label
+            >
+            <input
+              type="text"
+              id="new-username"
+              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
+              required
+            />
+          </div>
+        </form>
+        <div class="mt-4 flex justify-between">
+          <button
+            id="cancel-change-username"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            id="submit-change-username"
+            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            Change
+          </button>
         </div>
+      </div>
     </div>
 
-    <div id="change-email-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Email</h2>
-            <form id="email-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Email</label>
-                    <input type="email" id="new-email"
-                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
-                </div>
-            </form>
-            <div class="mt-4 flex justify-between">
-                <button id="cancel-change-email"
-                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
-                <button id="submit-change-email"
-                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
-            </div>
+    <div
+      id="change-email-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
+          Change Email
+        </h2>
+        <form id="email-form" class="space-y-4">
+          <div>
+            <label id="new-email-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+              >New Email</label
+            >
+            <input
+              type="email"
+              id="new-email"
+              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
+              required
+            />
+          </div>
+        </form>
+        <div class="mt-4 flex justify-between">
+          <button
+            id="cancel-change-email"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            id="submit-change-email"
+            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            Change
+          </button>
         </div>
+      </div>
     </div>
 
-    <div id="change-password-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-            <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">Change Password</h2>
-            <form id="password-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1 text-[#d4dbdc]">New Password</label>
-                    <input type="password" id="new-password"
-                        class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
-                </div>
-            </form>
-            <div class="mt-4 flex justify-between">
-                <button id="cancel-change-password"
-                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
-                <button id="submit-change-password"
-                    class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Change</button>
-            </div>
+    <div
+      id="change-password-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
+          Change Password
+        </h2>
+        <form id="password-form" class="space-y-4">
+          <div>
+            <label id="new-password-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+              >New Password</label
+            >
+            <input
+              type="password"
+              id="new-password"
+              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
+              required
+            />
+          </div>
+        </form>
+        <div class="mt-4 flex justify-between">
+          <button
+            id="cancel-change-password"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            id="submit-change-password"
+            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            Change
+          </button>
         </div>
+      </div>
+    </div>
+
+    <div
+      id="loading-spinner"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="sk-chase">
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+      </div>
     </div>
 
     <script>
-        // Fetch user data and update UI
-        async function fetchUserData() {
-            try {
-                const response = await fetch('/account/user-data', { credentials: 'include' });
-                if (!response.ok) throw new Error("Failed to fetch user data");
-                const data = await response.json();
-                document.getElementById("username").textContent = data.username;
-                document.getElementById("email").textContent = data.email;
-            } catch (error) {
-                console.error(error.message);
-            }
+      let data; // Declare data as a public variable
+
+      const loadingSpinner = document.getElementById("loading-spinner");
+
+      function showLoadingSpinner() {
+        loadingSpinner.classList.remove("hidden");
+      }
+
+      function hideLoadingSpinner() {
+        loadingSpinner.classList.add("hidden");
+      }
+
+      // Fetch user data and update UI
+      async function fetchUserData() {
+        showLoadingSpinner();
+        try {
+          const response = await fetch("/account/user-data", {
+            credentials: "include",
+          });
+          if (!response.ok) throw new Error("Failed to fetch user data");
+          data = await response.json(); // Assign fetched data to the public variable
+          document.getElementById("username").textContent = data.username;
+          document.getElementById("email").textContent = data.email;
+          document.getElementById("profile-pic").src = data.profilePic
+            ? await fetch(`/account/profile-pic/${data.id}`)
+                .then((response) => response.blob())
+                .then((data) => {
+                  return URL.createObjectURL(data);
+                })
+            : "../media/user-circle-svgrepo-com.svg";
+        } catch (error) {
+          console.error(error.message);
+        } finally {
+          hideLoadingSpinner();
         }
+      }
 
-        // Call fetchUserData on page load
-        document.addEventListener("DOMContentLoaded", fetchUserData);
+      // Call fetchUserData on page load
+      document.addEventListener("DOMContentLoaded", fetchUserData);
 
-        // Event listeners for opening modals
-        document.getElementById("change-username").addEventListener("click", () => {
-            document.getElementById("change-username-modal").classList.remove("hidden");
+      // Event listeners for opening modals
+      document
+        .getElementById("change-username")
+        .addEventListener("click", () => {
+          document
+            .getElementById("change-username-modal")
+            .classList.remove("hidden");
         });
 
-        document.getElementById("change-email").addEventListener("click", () => {
-            document.getElementById("change-email-modal").classList.remove("hidden");
+      document.getElementById("change-email").addEventListener("click", () => {
+        document
+          .getElementById("change-email-modal")
+          .classList.remove("hidden");
+      });
+
+      document
+        .getElementById("change-password")
+        .addEventListener("click", () => {
+          document
+            .getElementById("change-password-modal")
+            .classList.remove("hidden");
         });
 
-        document.getElementById("change-password").addEventListener("click", () => {
-            document.getElementById("change-password-modal").classList.remove("hidden");
+      // Event listeners for closing modals
+      document
+        .getElementById("cancel-change-username")
+        .addEventListener("click", () => {
+          document
+            .getElementById("change-username-modal")
+            .classList.add("hidden");
         });
 
-        // Event listeners for closing modals
-        document.getElementById("cancel-change-username").addEventListener("click", () => {
-            document.getElementById("change-username-modal").classList.add("hidden");
+      document
+        .getElementById("cancel-change-email")
+        .addEventListener("click", () => {
+          document.getElementById("change-email-modal").classList.add("hidden");
         });
 
-        document.getElementById("cancel-change-email").addEventListener("click", () => {
-            document.getElementById("change-email-modal").classList.add("hidden");
+      document
+        .getElementById("cancel-change-password")
+        .addEventListener("click", () => {
+          document
+            .getElementById("change-password-modal")
+            .classList.add("hidden");
         });
 
-        document.getElementById("cancel-change-password").addEventListener("click", () => {
-            document.getElementById("change-password-modal").classList.add("hidden");
+      // Event listeners for submitting changes
+      document
+        .getElementById("submit-change-username")
+        .addEventListener("click", async () => {
+          const newUsername = document.getElementById("new-username").value;
+          if (!newUsername) return;
+
+          showLoadingSpinner();
+          try {
+            const response = await fetch("/change-username", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username: newUsername }),
+            });
+
+            if (!response.ok) throw new Error("Failed to change username");
+
+            document.getElementById("username").textContent = newUsername;
+            document
+              .getElementById("change-username-modal")
+              .classList.add("hidden");
+          } catch (error) {
+            console.error(error.message);
+          } finally {
+            hideLoadingSpinner();
+          }
         });
 
-        // Event listeners for submitting changes
-        document.getElementById("submit-change-username").addEventListener("click", async () => {
-            const newUsername = document.getElementById("new-username").value;
-            if (!newUsername) return;
+      document
+        .getElementById("submit-change-email")
+        .addEventListener("click", async () => {
+          const newEmail = document.getElementById("new-email").value;
+          if (!newEmail) return;
 
-            try {
-                const response = await fetch("/change-username", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username: newUsername }),
-                });
+          showLoadingSpinner();
+          try {
+            const response = await fetch("/change-email", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: newEmail }),
+            });
 
-                if (!response.ok) throw new Error("Failed to change username");
+            if (!response.ok) throw new Error("Failed to change email");
 
-                document.getElementById("username").textContent = newUsername;
-                document.getElementById("change-username-modal").classList.add("hidden");
-            } catch (error) {
-                console.error(error.message);
-            }
+            document.getElementById("email").textContent = newEmail;
+            document
+              .getElementById("change-email-modal")
+              .classList.add("hidden");
+          } catch (error) {
+            console.error(error.message);
+          } finally {
+            hideLoadingSpinner();
+          }
         });
 
-        document.getElementById("submit-change-email").addEventListener("click", async () => {
-            const newEmail = document.getElementById("new-email").value;
-            if (!newEmail) return;
+      document
+        .getElementById("submit-change-password")
+        .addEventListener("click", async () => {
+          const newPassword = document.getElementById("new-password").value;
+          if (!newPassword) return;
 
-            try {
-                const response = await fetch("/change-email", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email: newEmail }),
-                });
+          showLoadingSpinner();
+          try {
+            const response = await fetch("/change-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ password: newPassword }),
+            });
 
-                if (!response.ok) throw new Error("Failed to change email");
+            if (!response.ok) throw new Error("Failed to change password");
 
-                document.getElementById("email").textContent = newEmail;
-                document.getElementById("change-email-modal").classList.add("hidden");
-            } catch (error) {
-                console.error(error.message);
-            }
+            document
+              .getElementById("change-password-modal")
+              .classList.add("hidden");
+          } catch (error) {
+            console.error(error.message);
+          } finally {
+            hideLoadingSpinner();
+          }
         });
 
-        document.getElementById("submit-change-password").addEventListener("click", async () => {
-            const newPassword = document.getElementById("new-password").value;
-            if (!newPassword) return;
-
-            try {
-                const response = await fetch("/change-password", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ password: newPassword }),
-                });
-
-                if (!response.ok) throw new Error("Failed to change password");
-
-                document.getElementById("change-password-modal").classList.add("hidden");
-            } catch (error) {
-                console.error(error.message);
-            }
+      document
+        .getElementById("change-profile-pic")
+        .addEventListener("click", () => {
+          document.getElementById("profile-pic-input").click();
         });
+
+      document
+        .getElementById("profile-pic-input")
+        .addEventListener("change", async (event) => {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          const formData = new FormData();
+          formData.append("profile_pic", file);
+
+          showLoadingSpinner();
+          try {
+            const response = await fetch("/account/upload-profile-pic", {
+              method: "POST",
+              body: formData,
+              credentials: "include",
+            });
+
+            if (!response.ok)
+              throw new Error("Failed to upload profile picture");
+
+            document.getElementById("profile-pic").src = await fetch(`/account/profile-pic/${data.id}`)
+                .then((response) => response.blob())
+                .then((data) => {
+                  return URL.createObjectURL(data);
+                })
+                || "../media/user-circle-svgrepo-com.svg";
+          } catch (error) {
+            console.error(error.message);
+          } finally {
+            hideLoadingSpinner();
+          }
+        });
+
+      let translations = {};
+
+      async function loadTranslations(lang) {
+        try {
+          const response = await fetch(`/locales/${lang}.json`);
+          translations = await response.json();
+          updateTextContent();
+        } catch (error) {
+          console.error("Failed to load translations:", error);
+        }
+      }
+
+      function updateTextContent() {
+        document.getElementById("my-account-title").textContent = translations.my_account;
+        document.getElementById("username-label").textContent = translations.username;
+        document.getElementById("email-label").textContent = translations.email;
+        document.getElementById("password-label").textContent = translations.password;
+        document.getElementById("change-username").textContent = translations.change_username;
+        document.getElementById("change-email").textContent = translations.change_email;
+        document.getElementById("change-password").textContent = translations.change_password;
+        document.getElementById("profile-picture-label").textContent = translations.profile_picture;
+        document.getElementById("change-profile-pic").textContent = translations.change_profile_picture;
+        document.getElementById("cancel-change-username").textContent = translations.cancel;
+        document.getElementById("submit-change-username").textContent = translations.change;
+        document.getElementById("cancel-change-email").textContent = translations.cancel;
+        document.getElementById("submit-change-email").textContent = translations.change;
+        document.getElementById("cancel-change-password").textContent = translations.cancel;
+        document.getElementById("submit-change-password").textContent = translations.change;
+        document.getElementById("new-username-label").textContent = translations.new_username;
+        document.getElementById("new-email-label").textContent = translations.new_email;
+        document.getElementById("new-password-label").textContent = translations.new_password;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const userLang = navigator.language || navigator.userLanguage;
+        const lang = userLang.startsWith("es") ? "es" : "en";
+        loadTranslations(lang);
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

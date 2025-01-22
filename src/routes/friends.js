@@ -4,35 +4,37 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const passport = require('passport');
 const prisma = require('../config/prismaClient');
 
-router.get('/',authMiddleware, async (req, res) => {
-    const userId = req.user.id;
+    router.get('/', authMiddleware, async (req, res) => {
+        const userId = req.user.id;
 
-    try {
-        const friends = await prisma.friend.findMany({
-            where: {
-                OR: [
-                    { senderId: userId, status: "accepted" },
-                    { receiverId: userId, status: "accepted" }
-                ]
-            },
-            include: {
-                sender: true,
-                receiver: true
-            }
-        });
+        try {
+            const friends = await prisma.friend.findMany({
+                where: {
+                    OR: [
+                        { senderId: userId, status: "accepted" },
+                        { receiverId: userId, status: "accepted" }
+                    ]
+                },
+                include: {
+                    sender: true,
+                    receiver: true
+                }
+            });
 
-        const friendList = friends.map(friend => {
-            return friend.senderId === userId
-                ? friend.receiver
-                : friend.sender;
-        });
+            const friendList = friends.map(friend => {
+                const friendData = friend.senderId === userId ? friend.receiver : friend.sender;
+                return {
+                    id: friendData.id,
+                    username: friendData.username
+                };
+            });
 
-        res.json({ friends: friendList });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-});
+            res.json({ friends: friendList });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    });
 
 router.post('/add', authMiddleware, async (req, res) => {
     console.log(req.body);
