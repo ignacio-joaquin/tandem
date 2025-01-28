@@ -6,14 +6,15 @@ const authRoutes = require('./routes/auth');
 const friendsRoutes = require('./routes/friends');
 const goalsRoutes = require('./routes/goals');
 const verifyRoutes = require('./routes/verification');
+const notificationsRoutes = require('./routes/notifications'); // Ensure this line is present
 const setupCronJobs = require('./cronjobs/goals');
+const setupNotificationCronJob = require('./cronjobs/notifications'); // Correctly import the function
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const accountRoutes = require('./routes/account');
 require('dotenv').config();
 require('./config/passport')(passport);
 const authMiddleware = require('./middlewares/authMiddleware');
-
 
 const app = express();
 
@@ -30,7 +31,6 @@ app.use(cors({
 }));
 
 // Increase payload size limit
-
 
 // Serve static files from the public directory
 
@@ -58,10 +58,22 @@ app.use('/api/auth', authRoutes);
 app.use('/api/friends', friendsRoutes);
 app.use('/goals', goalsRoutes);
 app.use('/verify', verifyRoutes);
+app.use('/notifications', notificationsRoutes); // Ensure this line is present
 app.use('/account', accountRoutes);
+
+// Serve service worker
+app.get('/service-worker.js', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../public/service-worker.js'));
+});
+
+// Serve manifest
+app.get('/manifest.json', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../public/manifest.json'));
+});
 
 // Setup cron jobs
 setupCronJobs();
+setupNotificationCronJob(); // Add this line
 
 const PORT = process.env.PORT || 5000;
 

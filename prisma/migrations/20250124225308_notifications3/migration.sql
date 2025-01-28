@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `pushAuth` VARCHAR(191) NULL,
+    ADD COLUMN `pushP256dh` VARCHAR(191) NULL,
+    MODIFY `pushToken` VARCHAR(191) NULL;

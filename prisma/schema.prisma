@@ -15,6 +15,9 @@ model User {
   username  String   @unique
   createdAt DateTime @default(now())
   profilePic String? // Add this line to include profile picture
+  isVerified Boolean @default(false) // Add this line to track email verification status
+  resetPasswordToken String? // Add this line to store the password reset token
+  resetPasswordTokenExpiry DateTime? // Add this line to store the token expiry time
 
   // Define relation fields for sent and received friend requests
   sentRequests     Friend[] @relation("SentRequests")
@@ -25,6 +28,9 @@ model User {
 
   // Goals where the user is assigned as a friend
   assignedGoals Goal[] @relation("FriendGoals")
+
+  // Push subscriptions for the user
+  pushSubscriptions PushSubscription[]
 }
 
 model Friend {
@@ -47,6 +53,7 @@ model Goal {
   friendId  Int // Friend responsible for the goal
   status    String   @default("pending verification") // "pending verification", "rejected", "verified"
   evidencePath  String?
+  lastReminder DateTime @default(now())
   createdAt DateTime @default(now())
 
   // Relation to the user who created the goal
@@ -54,4 +61,16 @@ model Goal {
 
   // Relation to the friend responsible for the goal
   friend User @relation("FriendGoals", fields: [friendId], references: [id])
+}
+
+model PushSubscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  endpoint  String   @db.VarChar(500)
+  auth      String
+  p256dh    String
+  createdAt DateTime @default(now())
+
+  // Relation to the user who owns the subscription
+  user User @relation(fields: [userId], references: [id])
 }

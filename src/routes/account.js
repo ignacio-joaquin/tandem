@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+const Mailjet = require('node-mailjet');
+
+const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
 // Configure multer for profile picture uploads
 const storage = multer.diskStorage({
@@ -49,20 +53,86 @@ router.post('/change-email', async (req, res) => {
     }
 });
 
-// Change Password
-router.post('/change-password', async (req, res) => {
-    const { password } = req.body;
-    const userId = req.user.id;
+// Request password change route
+router.post('/request-password-change', async (req, res) => {
+    const { email } = req.body;
 
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await prisma.user.update({
-            where: { id: userId },
-            data: { password: hashedPassword },
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const tokenExpiry = new Date(Date.now() + 3600000); // Token valid for 1 hour
+
+        await prisma.user.update({
+            where: { email },
+            data: { resetPasswordToken: token, resetPasswordTokenExpiry: tokenExpiry }
         });
-        res.status(200).json({ message: 'Password updated successfully', user });
+
+        // Send password reset email
+        const request = mailjet.post("send", { 'version': 'v3.1' }).request({
+            "Messages": [{
+                "From": {
+                    "Email": "chequeadoapp@gmail.com",
+                    "Name": "Chequeado"
+                },
+                "To": [{
+                    "Email": email,
+                    "Name": user.username
+                }],
+                "Subject": "Password Change Request",
+                "TextPart": "Please change your password by clicking the link below.",
+                "HTMLPart": `
+                    <div style="background-color: #1a2332; color: #d4dbdc; padding: 20px; font-family: Arial, sans-serif;">
+                        <h3 style="color: #00ff9c;">Dear ${user.username},</h3>
+                        <p>Please change your password by clicking the link below:</p>
+                        <a href="http://localhost:5000/change-password.html?token=${token}" style="color: #00ff9c;">Change Password</a>
+                        <p>Thank you!</p>
+                    </div>`
+            }]
+        });
+
+        request.then((result) => {
+            console.log('Mailjet response:', result.body);
+        }).catch((err) => {
+            console.error('Mailjet error:', err.statusCode, err.response.text);
+        });
+
+        res.status(200).json({ message: 'Password change email sent.' });
     } catch (err) {
-        res.status(400).json({ error: 'Error updating password' });
+        console.error(err);
+        res.status(500).json({ error: 'Error requesting password change' });
+    }
+});
+
+// Change Password
+router.post('/change-password', async (req, res) => {
+    const { token, newPassword } = req.body;
+
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                resetPasswordToken: token,
+                resetPasswordTokenExpiry: { gte: new Date() }
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { password: hashedPassword, resetPasswordToken: null, resetPasswordTokenExpiry: null }
+        });
+
+        res.status(200).json({ message: 'Password updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error updating password' });
     }
 });
 

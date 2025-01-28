@@ -31,6 +31,8 @@
   "submit": "Submit",
   "error_message": "Error adding goal. Please try again.",
   "verification_panel": "Verification Panel",
+  "no_goals_to_verify": "No goals to verify.",
+  "verification": "Verification",
   "close": "Close",
   "login": "Log In",
   "username_or_email": "Username or Email",

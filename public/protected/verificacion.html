@@ -18,6 +18,7 @@
         </div>
         
         <div id="goals-container" class="space-y-6"></div>
+        <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">No goals to verify.</p>
     </div>
 
     <!-- Modal -->
@@ -52,39 +53,47 @@
             loadingSpinner.classList.remove('hidden'); // Show the spinner
             const response = await fetch('/verify/pending', { credentials: 'include' });
             const goals = await response.json();
-            goalsContainer.innerHTML = '';
+            renderGoals(goals);
             loadingSpinner.classList.add('hidden'); // Hide the spinner once data is loaded
+        }
 
-            goals.forEach(goal => {
-                const goalDiv = document.createElement('div');
-                goalDiv.className = 'p-4 rounded-lg shadow-md bg-[#1a2332] border-l-4 border-[#00ff9c]';
-                goalDiv.id = `goal-${goal.id}`;
+        function renderGoals(goals) {
+            goalsContainer.innerHTML = ''; // Clear previous goals
+            if (goals.length === 0) {
+                document.getElementById('no-goals-message').classList.remove('hidden');
+            } else {
+                document.getElementById('no-goals-message').classList.add('hidden');
+                goals.forEach(goal => {
+                    const goalDiv = document.createElement('div');
+                    goalDiv.className = 'p-4 rounded-lg shadow-md bg-[#1a2332] border-l-4 border-[#00ff9c]';
+                    goalDiv.id = `goal-${goal.id}`;
 
-                const name = document.createElement('p');
-                name.className = 'mb-2 text-white font-bold';
-                name.innerText = `Goal: ${goal.title}`;
+                    const name = document.createElement('p');
+                    name.className = 'mb-2 text-white font-bold';
+                    name.innerText = `Goal: ${goal.title}`;
 
-                const img = document.createElement('img');
-                img.src = `/verify/evidence/${goal.id}/`;
-                img.alt = 'Verification Evidence';
-                img.className = 'mb-4 object-contain max-h-screen max-w-full'; // Ensure image is top priority and fits within bounds
+                    const img = document.createElement('img');
+                    img.src = `/verify/evidence/${goal.id}/`;
+                    img.alt = 'Verification Evidence';
+                    img.className = 'mb-4 object-contain max-h-screen max-w-full'; // Ensure image is top priority and fits within bounds
 
-                const approveButton = document.createElement('button');
-                approveButton.className = 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 mr-2';
-                approveButton.innerText = 'Approve';
-                approveButton.onclick = () => submitDecision(goal.id, 'verified');
+                    const approveButton = document.createElement('button');
+                    approveButton.className = 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 mr-2';
+                    approveButton.innerText = 'Approve';
+                    approveButton.onclick = () => submitDecision(goal.id, 'verified');
 
-                const rejectButton = document.createElement('button');
-                rejectButton.className = 'px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700';
-                rejectButton.innerText = 'Reject';
-                rejectButton.onclick = () => submitDecision(goal.id, 'rejected');
+                    const rejectButton = document.createElement('button');
+                    rejectButton.className = 'px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700';
+                    rejectButton.innerText = 'Reject';
+                    rejectButton.onclick = () => submitDecision(goal.id, 'rejected');
 
-                goalDiv.appendChild(name);
-                goalDiv.appendChild(img);
-                goalDiv.appendChild(approveButton);
-                goalDiv.appendChild(rejectButton);
-                goalsContainer.appendChild(goalDiv);
-            });
+                    goalDiv.appendChild(name);
+                    goalDiv.appendChild(img);
+                    goalDiv.appendChild(approveButton);
+                    goalDiv.appendChild(rejectButton);
+                    goalsContainer.appendChild(goalDiv);
+                });
+            }
         }
 
         // Show spinner while submitting the decision
@@ -138,6 +147,23 @@
         // Fetch goals on load
         fetchGoals();
     </script>
+
+    <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
+        <div class="flex items-center justify-center w-full" style="gap: 25%;">
+            <a href="amigo.html">
+                <img src="../media/friends-svgrepo-com.svg" alt="Friends" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="goals.html">
+                <img src="../media/goal-svgrepo-com.svg" alt="Goals" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="verificacion.html">
+                <img src="../media/verification-square-button-svgrepo-com.svg" alt="Verification" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+            <a href="account.html">
+                <img src="../media/user-circle-svgrepo-com.svg" alt="Account" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+            </a>
+        </div>
+    </nav>
 </body>
 
 </html>

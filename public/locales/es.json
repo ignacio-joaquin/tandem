@@ -40,5 +40,7 @@
   "sign_up": "Regístrate",
   "confirm_password": "Confirmar Contraseña",
   "already_have_account": "¿Ya tienes una cuenta?",
-  "dont_have_account": "¿No tienes una cuenta?"
+  "dont_have_account": "¿No tienes una cuenta?",
+  "no_goals_to_verify": "No hay metas para verificar.",
+  "verification": "Verificación"
 }
