@@ -27,6 +27,24 @@
             </div>
         </div>
 
+        <!-- Add the error modal here, hidden by default -->
+        <div id="error-modal" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg text-center">
+                <h2 class="text-xl font-bold text-[#ff4d4d] mb-4">Error</h2>
+                <p id="error-message" class="text-[#d4dbdc] mb-4"></p>
+                <button id="error-modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
+            </div>
+        </div>
+
+        <!-- Add the success modal here, hidden by default -->
+        <div id="success-modal" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg text-center">
+                <h2 class="text-xl font-bold text-[#00ff9c] mb-4">Success</h2>
+                <p id="success-message" class="text-[#d4dbdc] mb-4"></p>
+                <button id="success-modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
+            </div>
+        </div>
+
         <form id="sign-up-form">
             <!-- Full Name -->
             <div class="mb-4 relative">
@@ -91,6 +109,21 @@
 
             const form = document.getElementById('sign-up-form');
             const spinner = document.getElementById('spinner'); // Spinner modal
+            const errorModal = document.getElementById('error-modal');
+            const errorMessage = document.getElementById('error-message');
+            const errorModalClose = document.getElementById('error-modal-close');
+            const successModal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
+            const successModalClose = document.getElementById('success-modal-close');
+
+            errorModalClose.addEventListener('click', () => {
+                errorModal.classList.add('hidden');
+            });
+
+            successModalClose.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                window.location.href = '/login.html'; // Adjust to your login page URL
+            });
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault(); // Prevent default form submission
@@ -102,7 +135,8 @@
 
                 // Basic form validation
                 if (password !== confirmPassword) {
-                    alert('Passwords do not match');
+                    errorMessage.textContent = 'Passwords do not match';
+                    errorModal.classList.remove('hidden');
                     return;
                 }
 
@@ -124,16 +158,17 @@
                     });
 
                     if (response.ok) {
-                        // Redirect to login or success page
-                        alert('Sign Up Successful!');
-                        window.location.href = '/login.html'; // Adjust to your login page URL
+                        successMessage.textContent = 'Sign Up Successful!';
+                        successModal.classList.remove('hidden');
                     } else {
                         const result = await response.json();
-                        alert(result.message || 'Sign Up failed');
+                        errorMessage.textContent = result.message || 'Sign Up failed';
+                        errorModal.classList.remove('hidden');
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again later.');
+                    errorMessage.textContent = 'An error occurred. Please try again later.';
+                    errorModal.classList.remove('hidden');
                 } finally {
                     spinner.classList.add('hidden'); // Hide the spinner modal after the response
                 }

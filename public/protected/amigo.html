@@ -242,6 +242,15 @@
       </div>
     </div>
 
+    <!-- Add the install button -->
+    <button id="installButton" style="display: none;">Install App</button>
+
+    <!-- Add the install reminder popup -->
+    <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
+      <p>Install our app for a better experience!</p>
+      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
+    </div>
+
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
         showLoadingSpinner();
@@ -371,13 +380,14 @@
               noRequestsMessage.classList.remove("hidden");
             } else {
               noRequestsMessage.classList.add("hidden");
-              data.requests.forEach((request) => {
+              data.requests.forEach(async (request) => {
+                const profilepic = await fetchProfilePic(request.senderId);
                 const li = document.createElement("li");
                 li.className =
                   "flex items-center justify-between p-3 bg-[#1a2332] rounded-lg shadow";
                 li.innerHTML = `
                               <div class="flex items-center">
-                                  <img src="../media/user2.svg" alt="${request.senderUsername} Avatar" class="w-8 h-8 mr-3">
+                                  <img src="${profilepic}" alt="${request.senderUsername} Avatar" class="w-8 h-8 mr-3 rounded-full">
                                   <span class="text-white">${request.senderUsername}</span>
                               </div>
                               <div class="flex space-x-2">
@@ -536,6 +546,28 @@
         const userLang = navigator.language || navigator.userLanguage;
         const lang = userLang.startsWith("es") ? "es" : "en";
         loadTranslations(lang);
+      });
+
+      let deferredPrompt;
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+        document.getElementById("installButton").style.display = "block";
+        document.getElementById("installReminder").classList.remove("hidden");
+      });
+
+      document.getElementById("installButton").addEventListener("click", () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choice) => {
+            console.log(choice.outcome);
+            deferredPrompt = null;
+          });
+        }
+      });
+
+      document.getElementById("dismissReminder").addEventListener("click", () => {
+        document.getElementById("installReminder").classList.add("hidden");
       });
     </script>
   </body>

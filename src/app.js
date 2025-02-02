@@ -75,6 +75,8 @@ app.get('/manifest.json', (req, res) => {
 setupCronJobs();
 setupNotificationCronJob(); // Add this line
 
+
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

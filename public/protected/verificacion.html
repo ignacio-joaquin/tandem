@@ -22,12 +22,21 @@
     </div>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 id="modal-title" class="text-xl font-bold mb-4"></h2>
-            <p id="modal-message" class="mb-4"></p>
-            <button id="modal-close" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Close</button>
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-[#1a2332] bg-opacity-50 hidden">
+        <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h2 id="modal-title" class="text-xl font-bold text-[#00ff9c] mb-4"></h2>
+            <p id="modal-message" class="text-[#d4dbdc] mb-4"></p>
+            <button id="modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
         </div>
+    </div>
+
+    <!-- Add the install button -->
+    <button id="installButton" style="display: none;">Install App</button>
+
+    <!-- Add the install reminder popup -->
+    <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
+        <p>Install our app for a better experience!</p>
+        <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
     </div>
 
     <script>
@@ -146,6 +155,29 @@
 
         // Fetch goals on load
         fetchGoals();
+
+        let deferredPrompt;
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            document.getElementById("installButton").style.display = "block";
+            document.getElementById("installReminder").classList.remove("hidden");
+        });
+
+        document.getElementById("installButton").addEventListener("click", () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    console.log(choice.outcome);
+                    deferredPrompt = null;
+                });
+            }
+        });
+
+        document.getElementById("dismissReminder").addEventListener("click", () => {
+            document.getElementById("installReminder").classList.add("hidden");
+        });
+
     </script>
 
     <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">

@@ -210,8 +210,14 @@
         const userLang = navigator.language || navigator.userLanguage;
         const lang = userLang.startsWith("es") ? "es" : "en";
         loadTranslations(lang);
+        if ('serviceWorker' in navigator) {
+          regWorker();
+        }
       });
     </script>
+
+    <link rel="manifest" href="/manifest.json">
+  
 
     <style>
       /* Spinner styles */

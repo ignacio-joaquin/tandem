@@ -16,7 +16,7 @@ router.post('/', authMiddleware, async (req, res) => {
     try {
         // Look up the friend's ID by their username
         const friend = await prisma.user.findUnique({
-            where: { username: friendUsername },
+            where: { id: parseInt(friendUsername) },
             select: { id: true, pushSubscriptions: true }, // Add pushSubscriptions field
         });
 

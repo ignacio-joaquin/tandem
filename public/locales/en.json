@@ -39,5 +39,7 @@
   "sign_up": "Sign Up",
   "confirm_password": "Confirm Password",
   "already_have_account": "Already have an account?",
-  "dont_have_account": "Don’t have an account?"
+  "dont_have_account": "Don’t have an account?",
+  "password_change_info_title": "Password Change Requested",
+  "password_change_info_message": "An email with instructions to change your password has been sent. Please check your email."
 }

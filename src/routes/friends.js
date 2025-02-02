@@ -38,6 +38,38 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 });
 
+router.get('/list', authMiddleware, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const friends = await prisma.friend.findMany({
+            where: {
+                OR: [
+                    { senderId: userId, status: "accepted" },
+                    { receiverId: userId, status: "accepted" }
+                ]
+            },
+            include: {
+                sender: true,
+                receiver: true
+            }
+        });
+
+        const friendList = friends.map(friend => {
+            const friendData = friend.senderId === userId ? friend.receiver : friend.sender;
+            return {
+                id: friendData.id,
+                username: friendData.username
+            };
+        });
+
+        res.json({ friends: friendList });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 router.post('/add', authMiddleware, async (req, res) => {
     console.log(req.body);
     const receiverUsername = req.body.receiverUsername; // Expecting receiver's username
@@ -91,16 +123,6 @@ router.post('/add', authMiddleware, async (req, res) => {
             },
         });
 
-        // Create notification for the receiver
-        await prisma.notification.create({
-            data: {
-                userId: receiverId,
-                message: `You have a new friend request from ${req.user.username}.`,
-                type: 'friend_request',
-                friendRequestId: friendRequest.id
-            }
-        });
-
         // Send push notification to the receiver
         if (receiver.pushToken) {
             sendPushNotification(receiver.pushToken, {
@@ -147,14 +169,6 @@ router.patch('/respond', async (req, res) => {
             });
 
             // Create notification for the sender
-            await prisma.notification.create({
-                data: {
-                    userId: senderId,
-                    message: `Your friend request has been ${action}ed by ${req.user.username}.`,
-                    type: 'friend_request_response',
-                    friendRequestId: friendRequest.id
-                }
-            });
 
             // Send push notification to the sender
             const sender = await prisma.user.findUnique({ where: { id: senderId } });
@@ -172,14 +186,6 @@ router.patch('/respond', async (req, res) => {
 
             // Create notification for the receiver if the request is accepted
             if (action === "accept") {
-                await prisma.notification.create({
-                    data: {
-                        userId: receiverId,
-                        message: `You are now friends with ${friendRequest.sender.username}.`,
-                        type: 'friend_request_accepted',
-                        friendRequestId: friendRequest.id
-                    }
-                });
 
                 // Send push notification to the receiver
                 if (req.user.pushToken) {

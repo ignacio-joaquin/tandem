@@ -42,5 +42,7 @@
   "already_have_account": "¿Ya tienes una cuenta?",
   "dont_have_account": "¿No tienes una cuenta?",
   "no_goals_to_verify": "No hay metas para verificar.",
-  "verification": "Verificación"
+  "verification": "Verificación",
+  "password_change_info_title": "Cambio de Contraseña Solicitado",
+  "password_change_info_message": "Se ha enviado un correo electrónico con instrucciones para cambiar su contraseña. Por favor, revise su correo."
 }

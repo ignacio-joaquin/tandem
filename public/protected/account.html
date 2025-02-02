@@ -109,13 +109,18 @@
     class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5"
   >
     <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
-      <h1 id="my-account-title" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">
+      <h1
+        id="my-account-title"
+        class="text-2xl font-bold text-center mb-6 text-[#00ff9c]"
+      >
         My Account
       </h1>
 
       <!-- Username Section -->
       <div class="mb-4">
-        <h2 id="username-label" class="text-lg font-bold text-[#d4dbdc]">Username</h2>
+        <h2 id="username-label" class="text-lg font-bold text-[#d4dbdc]">
+          Username
+        </h2>
         <p id="username" class="text-sm text-[#d4dbdc] mb-2">
           current_username
         </p>
@@ -143,7 +148,9 @@
 
       <!-- Password Section -->
       <div class="mb-4">
-        <h2 id="password-label" class="text-lg font-bold text-[#d4dbdc]">Password</h2>
+        <h2 id="password-label" class="text-lg font-bold text-[#d4dbdc]">
+          Password
+        </h2>
         <button
           class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
           id="change-password"
@@ -154,7 +161,9 @@
 
       <!-- Profile Picture Section -->
       <div class="mb-4">
-        <h2 id="profile-picture-label" class="text-lg font-bold text-[#d4dbdc]">Profile Picture</h2>
+        <h2 id="profile-picture-label" class="text-lg font-bold text-[#d4dbdc]">
+          Profile Picture
+        </h2>
         <img
           id="profile-pic"
           src="../media/user-circle-svgrepo-com.svg"
@@ -176,9 +185,18 @@
       </div>
     </div>
 
+    <!-- Add the install button -->
+    <button id="installButton" style="display: none;">Install App</button>
+
+    <!-- Add the install reminder popup -->
+    <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
+      <p>Install our app for a better experience!</p>
+      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
+    </div>
+
     <!-- Navigation Bar -->
     <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
-      <div class="flex items-center justify-center w-full" style="gap: 25%;">
+      <div class="flex items-center justify-center w-full" style="gap: 25%">
         <a href="amigo.html">
           <img
             src="../media/friends-svgrepo-com.svg"
@@ -221,7 +239,9 @@
         </h2>
         <form id="username-form" class="space-y-4">
           <div>
-            <label id="new-username-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+            <label
+              id="new-username-label"
+              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
               >New Username</label
             >
             <input
@@ -259,7 +279,9 @@
         </h2>
         <form id="email-form" class="space-y-4">
           <div>
-            <label id="new-email-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+            <label
+              id="new-email-label"
+              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
               >New Email</label
             >
             <input
@@ -297,7 +319,9 @@
         </h2>
         <form id="password-form" class="space-y-4">
           <div>
-            <label id="current-password-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+            <label
+              id="current-password-label"
+              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
               >Current Password</label
             >
             <input
@@ -308,7 +332,9 @@
             />
           </div>
           <div>
-            <label id="new-password-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]"
+            <label
+              id="new-password-label"
+              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
               >New Password</label
             >
             <input
@@ -331,6 +357,34 @@
             class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
           >
             Change
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="password-change-info-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2
+          id="password-change-info-title"
+          class="text-lg font-bold text-center mb-4 text-[#00ff9c]"
+        >
+          <!-- Translation key: password_change_info_title -->
+        </h2>
+        <p
+          id="password-change-info-message"
+          class="text-sm text-center text-[#d4dbdc] mb-4"
+        >
+          <!-- Translation key: password_change_info_message -->
+        </p>
+        <div class="mt-4 flex justify-center">
+          <button
+            id="close-password-change-info"
+            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            <!-- Translation key: close -->
           </button>
         </div>
       </div>
@@ -405,14 +459,6 @@
           .getElementById("change-email-modal")
           .classList.remove("hidden");
       });
-
-      document
-        .getElementById("change-password")
-        .addEventListener("click", () => {
-          document
-            .getElementById("change-password-modal")
-            .classList.remove("hidden");
-        });
 
       // Event listeners for closing modals
       document
@@ -495,9 +541,6 @@
       document
         .getElementById("submit-change-password")
         .addEventListener("click", async () => {
-          const newPassword = document.getElementById("new-password").value;
-          if (!newPassword) return;
-
           showLoadingSpinner();
           try {
             const response = await fetch("/account/request-password-change", {
@@ -511,11 +554,22 @@
             document
               .getElementById("change-password-modal")
               .classList.add("hidden");
+            document
+              .getElementById("password-change-info-modal")
+              .classList.remove("hidden");
           } catch (error) {
             console.error(error.message);
           } finally {
             hideLoadingSpinner();
           }
+        });
+
+      document
+        .getElementById("close-password-change-info")
+        .addEventListener("click", () => {
+          document
+            .getElementById("password-change-info-modal")
+            .classList.add("hidden");
         });
 
       document
@@ -557,6 +611,28 @@
           }
         });
 
+      let deferredPrompt;
+      window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+        document.getElementById("installButton").style.display = "block";
+        document.getElementById("installReminder").classList.remove("hidden");
+      });
+
+      document.getElementById("installButton").addEventListener("click", () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choice) => {
+            console.log(choice.outcome);
+            deferredPrompt = null;
+          });
+        }
+      });
+
+      document.getElementById("dismissReminder").addEventListener("click", () => {
+        document.getElementById("installReminder").classList.add("hidden");
+      });
+
       let translations = {};
 
       async function loadTranslations(lang) {
@@ -590,9 +666,169 @@
         document.getElementById("new-password-label").textContent = translations.new_password;
         document.getElementById("new-password-label").textContent = translations.new_password;
         document.getElementById("current-password-label").textContent = translations.current_password;
+        document.getElementById("password-change-info-title").textContent = translations.password_change_info_title;
+        document.getElementById("password-change-info-message").textContent = translations.password_change_info_message;
+        document.getElementById("close-password-change-info").textContent = translations.close;
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
+        await fetchUserData(); // Ensure data is fetched before adding event listeners
+
+        // Event listeners for opening modals
+        document
+          .getElementById("change-username")
+          .addEventListener("click", () => {
+            document
+              .getElementById("change-username-modal")
+              .classList.remove("hidden");
+          });
+
+        document.getElementById("change-email").addEventListener("click", () => {
+          document
+            .getElementById("change-email-modal")
+            .classList.remove("hidden");
+        });
+
+
+        // Event listeners for closing modals
+        document
+          .getElementById("cancel-change-username")
+          .addEventListener("click", () => {
+            document
+              .getElementById("change-username-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("cancel-change-email")
+          .addEventListener("click", () => {
+            document.getElementById("change-email-modal").classList.add("hidden");
+          });
+
+
+
+        // Event listeners for submitting changes
+        document
+          .getElementById("submit-change-username")
+          .addEventListener("click", async () => {
+            const newUsername = document.getElementById("new-username").value;
+            if (!newUsername) return;
+
+            showLoadingSpinner();
+            try {
+              const response = await fetch("/change-username", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: newUsername }),
+              });
+
+              if (!response.ok) throw new Error("Failed to change username");
+
+              document.getElementById("username").textContent = newUsername;
+              document
+                .getElementById("change-username-modal")
+                .classList.add("hidden");
+            } catch (error) {
+              console.error(error.message);
+            } finally {
+              hideLoadingSpinner();
+            }
+          });
+
+        document
+          .getElementById("submit-change-email")
+          .addEventListener("click", async () => {
+            const newEmail = document.getElementById("new-email").value;
+            if (!newEmail) return;
+
+            showLoadingSpinner();
+            try {
+              const response = await fetch("/change-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: newEmail }),
+              });
+
+              if (!response.ok) throw new Error("Failed to change email");
+
+              document.getElementById("email").textContent = newEmail;
+              document
+                .getElementById("change-email-modal")
+                .classList.add("hidden");
+            } catch (error) {
+              console.error(error.message);
+            } finally {
+              hideLoadingSpinner();
+            }
+          });
+
+          document.getElementById("change-password").addEventListener("click", async () => {
+            showLoadingSpinner();
+            try {
+              const response = await fetch("/account/request-password-change", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: data.email }),
+              });
+
+              if (!response.ok) throw new Error("Failed to request password change");
+              document
+                .getElementById("password-change-info-modal")
+                .classList.remove("hidden");
+            } catch (error) {
+              console.error(error.message);
+            } finally {
+              hideLoadingSpinner();
+            }
+          });
+
+        document
+          .getElementById("close-password-change-info")
+          .addEventListener("click", () => {
+            document
+              .getElementById("password-change-info-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("change-profile-pic")
+          .addEventListener("click", () => {
+            document.getElementById("profile-pic-input").click();
+          });
+
+        document
+          .getElementById("profile-pic-input")
+          .addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("profile_pic", file);
+
+            showLoadingSpinner();
+            try {
+              const response = await fetch("/account/upload-profile-pic", {
+                method: "POST",
+                body: formData,
+                credentials: "include",
+              });
+
+              if (!response.ok)
+                throw new Error("Failed to upload profile picture");
+
+              document.getElementById("profile-pic").src = await fetch(`/account/profile-pic/${data.id}`)
+                  .then((response) => response.blob())
+                  .then((data) => {
+                    return URL.createObjectURL(data);
+                  })
+                  || "../media/user-circle-svgrepo-com.svg";
+            } catch (error) {
+              console.error(error.message);
+            } finally {
+              hideLoadingSpinner();
+            }
+          });
+
         const userLang = navigator.language || navigator.userLanguage;
         const lang = userLang.startsWith("es") ? "es" : "en";
         loadTranslations(lang);
