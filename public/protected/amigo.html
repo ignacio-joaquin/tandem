@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="../output.css">
     <style>
       .sk-chase {
         width: 40px;
@@ -119,38 +121,40 @@
         </div>
 
         <h1 id="friends-title" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">
-          Friends
+          <!-- Translation key: friends -->
         </h1>
 
         <!-- Online Friends -->
         <div id="friends-online" class="mb-6">
           <h2 id="friends-online-label" class="text-lg font-medium mb-3 text-[#d4dbdc]">
-            Friends Online
+            <!-- Translation key: friends_online -->
           </h2>
           <ul class="space-y-3" id="friends-list">
             <!-- Friends will be dynamically added here -->
           </ul>
           <p id="no-friends-message" class="text-center text-[#d4dbdc] hidden">
-            You have no friends online.
+            <!-- Translation key: no_friends_online -->
           </p>
         </div>
 
         <!-- Friend Requests -->
         <div id="friend-requests" class="mb-6">
           <h2 id="friend-requests-label" class="text-lg font-medium mb-3 text-[#d4dbdc]">
-            Friend Requests
+            <!-- Translation key: friend_requests -->
           </h2>
           <ul class="space-y-3" id="requests-list">
             <!-- Requests will be dynamically added here -->
           </ul>
           <p id="no-requests-message" class="text-center text-[#d4dbdc] hidden">
-            You have no friend requests.
+            <!-- Translation key: no_friend_requests -->
           </p>
         </div>
 
         <!-- Add Friend -->
         <div>
-          <h2 id="add-friend-label" class="text-lg font-medium mb-3 text-[#d4dbdc]">Add a Friend</h2>
+          <h2 id="add-friend-label" class="text-lg font-medium mb-3 text-[#d4dbdc]">
+            <!-- Translation key: add_friend -->
+          </h2>
           <div class="flex items-center space-x-2">
             <input
               type="text"
@@ -162,7 +166,7 @@
               id="send-request"
               class="px-3 py-2 bg-[#00ff9c] text-[#1a2332] text-sm rounded-lg hover:bg-[#00e68a]"
             >
-              Send
+              <!-- Translation key: send -->
             </button>
           </div>
         </div>
@@ -222,7 +226,7 @@
             id="modal-close"
             class="px-3 py-2 bg-[#00ff9c] text-[#1a2332] text-sm rounded-lg hover:bg-[#00e68a]"
           >
-            Close
+            <!-- Translation key: close -->
           </button>
         </div>
       </div>
@@ -243,12 +247,16 @@
     </div>
 
     <!-- Add the install button -->
-    <button id="installButton" style="display: none;">Install App</button>
+    <button id="installButton" style="display: none;">
+      <!-- Translation key: install_app -->
+    </button>
 
     <!-- Add the install reminder popup -->
     <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
-      <p>Install our app for a better experience!</p>
-      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
+      <p><!-- Translation key: install_reminder_message --></p>
+      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+        <!-- Translation key: dismiss -->
+      </button>
     </div>
 
     <script>
@@ -335,7 +343,7 @@
                               </div>
                               <div class="flex items-center space-x-2">
                                   <button class="px-2 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 remove-friend" data-id="${friend.username}">
-                                      Remove
+                                      <!-- Translation key: remove -->
                                   </button>
                               </div>
                           `;
@@ -384,19 +392,23 @@
                 const profilepic = await fetchProfilePic(request.senderId);
                 const li = document.createElement("li");
                 li.className =
-                  "flex items-center justify-between p-3 bg-[#1a2332] rounded-lg shadow";
+                  "flex flex-col items-start justify-between p-3 bg-[#1a2332] rounded-lg shadow";
                 li.innerHTML = `
-                              <div class="flex items-center">
-                                  <img src="${profilepic}" alt="${request.senderUsername} Avatar" class="w-8 h-8 mr-3 rounded-full">
-                                  <span class="text-white">${request.senderUsername}</span>
-                              </div>
-                              <div class="flex space-x-2">
-                                  <button class="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
-                                      onclick="respondToRequest(${request.id}, 'accept')">Accept</button>
-                                  <button class="px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
-                                      onclick="respondToRequest(${request.id}, 'reject')">Decline</button>
-                              </div>
-                          `;
+              <div class="flex items-center mb-2">
+                <img src="${profilepic}" alt="${request.senderUsername} Avatar" class="w-8 h-8 mr-3 rounded-full">
+                <span class="text-white">${request.senderUsername}</span>
+              </div>
+              <div class="flex flex-wrap space-x-2">
+                <button class="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
+                    onclick="respondToRequest(${request.id}, 'accept')">
+                    <!-- Translation key: accept -->
+                </button>
+                <button class="px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
+                    onclick="respondToRequest(${request.id}, 'reject')">
+                    <!-- Translation key: decline -->
+                </button>
+              </div>
+            `;
                 requestsList.appendChild(li);
               });
             }
@@ -540,6 +552,9 @@
         document.getElementById("send-request").textContent = translations.send;
         document.getElementById("no-friends-message").textContent = translations.no_friends_online;
         document.getElementById("no-requests-message").textContent = translations.no_friend_requests;
+        document.getElementById("modal-close").textContent = translations.close;
+        document.getElementById("installButton").textContent = translations.install_app;
+        document.getElementById("dismissReminder").textContent = translations.dismiss;
       }
 
       document.addEventListener("DOMContentLoaded", () => {
@@ -569,6 +584,16 @@
       document.getElementById("dismissReminder").addEventListener("click", () => {
         document.getElementById("installReminder").classList.add("hidden");
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      }
     </script>
   </body>
 </html>

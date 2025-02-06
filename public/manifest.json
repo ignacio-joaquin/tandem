@@ -1,30 +1,169 @@
 {
-  "name": "My PWA",
-  "short_name": "PWA",
-  "start_url": "/login.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
-  "description": "This is a Progressive Web App.",
-  "categories": ["utilities", "productivity"],
+  "name": "Tandem",
+  "short_name": "Tandem",
+  "description": "Asigna metas, verifica su cumplimiento con fotos revisadas por amigos.",
+  "start_url": "/protected/goals.html",
+  "display": "fullscreen",
+  "background_color": "#1a2332",
+  "theme_color": "#1a2332",
+  "lang": "es",
+  "orientation": "natural",
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "permissions": [
+    "notifications"
+  ],
+  "scope": "ngrok-free.app",
+  "scope_extensions": [
+    {
+      "origin": "*.ngrok-free.app"
+    }
+  ],
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/logos/ios/100.png",
+      "sizes": "100x100",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/114.png",
+      "sizes": "114x114",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/167.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/logos/ios/20.png",
+      "sizes": "20x20",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/29.png",
+      "sizes": "29x29",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/40.png",
+      "sizes": "40x40",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/50.png",
+      "sizes": "50x50",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/512.png",
       "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/57.png",
+      "sizes": "57x57",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/58.png",
+      "sizes": "58x58",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/60.png",
+      "sizes": "60x60",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/76.png",
+      "sizes": "76x76",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/80.png",
+      "sizes": "80x80",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/ios/87.png",
+      "sizes": "87x87",
       "type": "image/png"
     }
   ],
-  "file_handlers": [
-    {
-      "action": "/",
-      "accept": {
-        "text/*": [".txt"]
-      }
-    }
+  "id": "chequeado.ig",
+  "dir": "auto",
+  "display_override": [
+    "fullscreen",
+    "minimal-ui",
+    "standalone",
+    "browser",
+    "window-controls-overlay"
+  ],
+  "categories": [
+    "lifestyle",
+    "productivity",
+    "social"
   ]
 }

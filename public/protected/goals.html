@@ -1,445 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="../manifest.json" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      .sk-chase {
-        width: 40px;
-        height: 40px;
-        position: relative;
-        animation: sk-chase 2.5s infinite linear both;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="../manifest.json" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../output.css">
+  <style>
+    .sk-chase {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      animation: sk-chase 2.5s infinite linear both;
+    }
+
+    .sk-chase-dot {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: sk-chase-dot 2s infinite ease-in-out both;
+    }
+
+    .sk-chase-dot:before {
+      content: "";
+      display: block;
+      width: 25%;
+      height: 25%;
+      background-color: #fff;
+      border-radius: 100%;
+      animation: sk-chase-dot-before 2s infinite ease-in-out both;
+    }
+
+    .sk-chase-dot:nth-child(1) {
+      animation-delay: -1.1s;
+    }
+
+    .sk-chase-dot:nth-child(2) {
+      animation-delay: -1s;
+    }
+
+    .sk-chase-dot:nth-child(3) {
+      animation-delay: -0.9s;
+    }
+
+    .sk-chase-dot:nth-child(4) {
+      animation-delay: -0.8s;
+    }
+
+    .sk-chase-dot:nth-child(5) {
+      animation-delay: -0.7s;
+    }
+
+    .sk-chase-dot:nth-child(6) {
+      animation-delay: -0.6s;
+    }
+
+    .sk-chase-dot:nth-child(1):before {
+      animation-delay: -1.1s;
+    }
+
+    .sk-chase-dot:nth-child(2):before {
+      animation-delay: -1s;
+    }
+
+    .sk-chase-dot:nth-child(3):before {
+      animation-delay: -0.9s;
+    }
+
+    .sk-chase-dot:nth-child(4):before {
+      animation-delay: -0.8s;
+    }
+
+    .sk-chase-dot:nth-child(5):before {
+      animation-delay: -0.7s;
+    }
+
+    .sk-chase-dot:nth-child(6):before {
+      animation-delay: -0.6s;
+    }
+
+    @keyframes sk-chase {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes sk-chase-dot {
+
+      80%,
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes sk-chase-dot-before {
+      50% {
+        transform: scale(0.4);
       }
 
-      .sk-chase-dot {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        animation: sk-chase-dot 2s infinite ease-in-out both;
+      100%,
+      0% {
+        transform: scale(1);
       }
+    }
+  </style>
+</head>
 
-      .sk-chase-dot:before {
-        content: "";
-        display: block;
-        width: 25%;
-        height: 25%;
-        background-color: #fff;
-        border-radius: 100%;
-        animation: sk-chase-dot-before 2s infinite ease-in-out both;
-      }
+<body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
+  <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
+    <h1 id="my-goals-title" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">
+      My Goals
+    </h1>
 
-      .sk-chase-dot:nth-child(1) {
-        animation-delay: -1.1s;
-      }
+    <!-- Button to Add New Goal -->
+    <div class="flex justify-end mb-4">
+      <button id="add-goal-button" class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm">
+        + Add Goal
+      </button>
+    </div>
 
-      .sk-chase-dot:nth-child(2) {
-        animation-delay: -1s;
-      }
+    <!-- Goal List -->
+    <div id="goals-list" class="space-y-6 mb-16"></div>
+    <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">
+      You have no goals yet. Add a new goal to get started!
+    </p>
+  </div>
+  <canvas id="canvas" style="display: none"></canvas>
 
-      .sk-chase-dot:nth-child(3) {
-        animation-delay: -0.9s;
-      }
-
-      .sk-chase-dot:nth-child(4) {
-        animation-delay: -0.8s;
-      }
-
-      .sk-chase-dot:nth-child(5) {
-        animation-delay: -0.7s;
-      }
-
-      .sk-chase-dot:nth-child(6) {
-        animation-delay: -0.6s;
-      }
-
-      .sk-chase-dot:nth-child(1):before {
-        animation-delay: -1.1s;
-      }
-
-      .sk-chase-dot:nth-child(2):before {
-        animation-delay: -1s;
-      }
-
-      .sk-chase-dot:nth-child(3):before {
-        animation-delay: -0.9s;
-      }
-
-      .sk-chase-dot:nth-child(4):before {
-        animation-delay: -0.8s;
-      }
-
-      .sk-chase-dot:nth-child(5):before {
-        animation-delay: -0.7s;
-      }
-
-      .sk-chase-dot:nth-child(6):before {
-        animation-delay: -0.6s;
-      }
-
-      @keyframes sk-chase {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes sk-chase-dot {
-        80%,
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes sk-chase-dot-before {
-        50% {
-          transform: scale(0.4);
-        }
-
-        100%,
-        0% {
-          transform: scale(1);
-        }
-      }
-    </style>
-  </head>
-
-  <body
-    class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5"
-  >
-    <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
-      <h1
-        id="my-goals-title"
-        class="text-2xl font-bold text-center mb-6 text-[#00ff9c]"
-      >
-        My Goals
-      </h1>
-
-      <!-- Button to Add New Goal -->
-      <div class="flex justify-end mb-4">
-        <button
-          id="add-goal-button"
-          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
-        >
-          + Add Goal
+  <!-- Navigation Bar -->
+  <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
+    <div class="flex items-center justify-center w-full" style="gap: 25%">
+      <a href="amigo.html">
+        <img src="../media/friends-svgrepo-com.svg" alt="Friends"
+          class="w-8 h-8 hover:opacity-80 transition-all filter neon-green" />
+      </a>
+      <a href="goals.html">
+        <img src="../media/goal-svgrepo-com.svg" alt="Goals"
+          class="w-8 h-8 hover:opacity-80 transition-all filter neon-green" />
+      </a>
+      <a href="verificacion.html">
+        <img src="../media/verification-square-button-svgrepo-com.svg" alt="Verification"
+          class="w-8 h-8 hover:opacity-80 transition-all filter neon-green" />
+      </a>
+      <a href="account.html">
+        <img src="../media/user-circle-svgrepo-com.svg" alt="Account"
+          class="w-8 h-8 hover:opacity-80 transition-all filter neon-green" />
+      </a>
+    </div>
+  </nav>
+  <!-- Confirmation Modal -->
+  <div id="confirm-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+      <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]" id="confirm-deletion-title">
+        Confirm Deletion
+      </h2>
+      <p class="text-sm text-[#d4dbdc] text-center mb-6" id="confirm-deletion-message">
+        Are you sure you want to delete this goal?
+      </p>
+      <div class="flex justify-between">
+        <button id="cancel-delete" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+          Cancel
+        </button>
+        <button id="confirm-delete" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          Delete
         </button>
       </div>
+    </div>
+  </div>
 
-      <!-- Goal List -->
-      <div id="goals-list" class="space-y-6 mb-16"></div>
-      <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">
-        You have no goals yet. Add a new goal to get started!
+  <!-- Modal for Adding a Goal -->
+  <div id="add-goal-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+      <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]" id="add-new-goal-title">
+        Add New Goal
+      </h2>
+      <form id="goal-form" class="space-y-4">
+        <div>
+          <label id="goal-title-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]">Title</label>
+          <input type="text" id="goal-title" class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
+            required />
+        </div>
+        <div>
+          <label id="goal-type-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]">Type</label>
+          <select id="goal-type" class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white">
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+          </select>
+        </div>
+        <div>
+          <label id="goal-friend-id-label" class="block text-sm font-medium mb-1 text-[#d4dbdc]">Friend</label>
+          <select id="goal-friend-id" class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white" required>
+            <!-- Options will be populated dynamically -->
+          </select>
+        </div>
+      </form>
+      <div class="mt-4 flex justify-between">
+        <button id="cancel-add-goal" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+          Cancel
+        </button>
+        <button id="submit-add-goal" class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+          Add Goal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="upload-evidence-modal"
+    class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+      <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]" id="submit-verification-evidence-title">
+        Submit Verification Evidence
+      </h2>
+      <video id="camera" autoplay class="w-full rounded-md mb-4"></video>
+      <canvas id="canvas" style="display: none"></canvas>
+      <div class="flex justify-between">
+        <button id="cancel-upload-evidence" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+          Cancel
+        </button>
+        <button id="submit-upload-evidence" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Opt-In Modal -->
+  <div id="notification-opt-in-modal"
+    class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+      <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
+        Enable Notifications
+      </h2>
+      <p class="text-sm text-[#d4dbdc] text-center mb-6">
+        Would you like to enable notifications for updates?
       </p>
-    </div>
-    <canvas id="canvas" style="display: none"></canvas>
-
-    <!-- Navigation Bar -->
-    <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
-      <div class="flex items-center justify-center w-full" style="gap: 25%">
-        <a href="amigo.html">
-          <img
-            src="../media/friends-svgrepo-com.svg"
-            alt="Friends"
-            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
-          />
-        </a>
-        <a href="goals.html">
-          <img
-            src="../media/goal-svgrepo-com.svg"
-            alt="Goals"
-            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
-          />
-        </a>
-        <a href="verificacion.html">
-          <img
-            src="../media/verification-square-button-svgrepo-com.svg"
-            alt="Verification"
-            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
-          />
-        </a>
-        <a href="account.html">
-          <img
-            src="../media/user-circle-svgrepo-com.svg"
-            alt="Account"
-            class="w-8 h-8 hover:opacity-80 transition-all filter neon-green"
-          />
-        </a>
-      </div>
-    </nav>
-    <!-- Confirmation Modal -->
-    <div
-      id="confirm-modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Confirm Deletion
-        </h2>
-        <p class="text-sm text-[#d4dbdc] text-center mb-6">
-          Are you sure you want to delete this goal?
-        </p>
-        <div class="flex justify-between">
-          <button
-            id="cancel-delete"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            id="confirm-delete"
-            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-          >
-            Delete
-          </button>
-        </div>
+      <div class="flex justify-between">
+        <button id="cancel-notification-opt-in"
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+          Cancel
+        </button>
+        <button id="confirm-notification-opt-in"
+          class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+          Enable
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- Modal for Adding a Goal -->
-    <div
-      id="add-goal-modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Add New Goal
-        </h2>
-        <form id="goal-form" class="space-y-4">
-          <div>
-            <label
-              id="goal-title-label"
-              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >Title</label
-            >
-            <input
-              type="text"
-              id="goal-title"
-              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
-              required
-            />
-          </div>
-          <div>
-            <label
-              id="goal-type-label"
-              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >Type</label
-            >
-            <select
-              id="goal-type"
-              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
-            >
-              <option value="Daily">Daily</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Monthly">Monthly</option>
-            </select>
-          </div>
-          <div>
-            <label
-              id="goal-friend-id-label"
-              class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >Friend</label
-            >
-            <select
-              id="goal-friend-id"
-              class="w-full px-3 py-2 border rounded-md bg-[#1a2332] text-white"
-              required
-            >
-              <!-- Options will be populated dynamically -->
-            </select>
-          </div>
-        </form>
-        <div class="mt-4 flex justify-between">
-          <button
-            id="cancel-add-goal"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            id="submit-add-goal"
-            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
-          >
-            Add Goal
-          </button>
-        </div>
+  <!-- Error Modal -->
+  <div id="error-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+      <h2 class="text-lg font-bold text-center mb-4 text-[#ff4c4c]">Error</h2>
+      <p id="error-message" class="text-sm text-[#d4dbdc] text-center mb-6"></p>
+      <div class="flex justify-center">
+        <button id="close-error-modal" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+          Close
+        </button>
       </div>
     </div>
+  </div>
 
-    <div
-      id="upload-evidence-modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Submit Verification Evidence
-        </h2>
-        <video id="camera" autoplay class="w-full rounded-md mb-4"></video>
-        <canvas id="canvas" style="display: none"></canvas>
-        <div class="flex justify-between">
-          <button
-            id="cancel-upload-evidence"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            id="submit-upload-evidence"
-            class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
-          >
-            Submit
-          </button>
-        </div>
-      </div>
+  <div id="loading-spinner" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="sk-chase">
+      <div class="sk-chase-dot"></div>
+      <div class="sk-chase-dot"></div>
+      <div class="sk-chase-dot"></div>
+      <div class="sk-chase-dot"></div>
+      <div class="sk-chase-dot"></div>
+      <div class="sk-chase-dot"></div>
     </div>
+  </div>
 
-    <!-- Notification Opt-In Modal -->
-    <div
-      id="notification-opt-in-modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Enable Notifications
-        </h2>
-        <p class="text-sm text-[#d4dbdc] text-center mb-6">
-          Would you like to enable notifications for updates?
-        </p>
-        <div class="flex justify-between">
-          <button
-            id="cancel-notification-opt-in"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            id="confirm-notification-opt-in"
-            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
-          >
-            Enable
-          </button>
-        </div>
-      </div>
+
+
+  <!-- Add the install reminder popup -->
+  <div id="installReminder"
+    class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
+    <p class="text-center mb-2" id="install-reminder-message">Install our app for a better experience!</p>
+    <div class="flex justify-center items-center space-x-2">
+      <button id="installButton"
+        class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]" id="install-button">Install</button>
+      <button id="dismissReminder" class="text-sm text-[#d4dbdc] hover:underline" id="dismiss-reminder">Dismiss</button>
     </div>
+  </div>
 
-    <!-- Error Modal -->
-    <div
-      id="error-modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
-        <h2 class="text-lg font-bold text-center mb-4 text-[#ff4c4c]">Error</h2>
-        <p
-          id="error-message"
-          class="text-sm text-[#d4dbdc] text-center mb-6"
-        ></p>
-        <div class="flex justify-center">
-          <button
-            id="close-error-modal"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+  <script>
+    const goalsList = document.getElementById("goals-list");
+    const noGoalsMessage = document.getElementById("no-goals-message");
+    const confirmModal = document.getElementById("confirm-modal");
+    const confirmDeleteButton = document.getElementById("confirm-delete");
+    const cancelDeleteButton = document.getElementById("cancel-delete");
+    const loadingSpinner = document.getElementById("loading-spinner");
 
-    <div
-      id="loading-spinner"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
-    >
-      <div class="sk-chase">
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-      </div>
-    </div>
+    let goalToDeleteId = null; // Store the ID of the goal to delete
 
-    <!-- Add the install button -->
-    <button id="installButton" style="display: none;">Install App</button>
-
-    <!-- Add the install reminder popup -->
-    <div id="installReminder" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
-      <p class="text-center mb-2">Install our app for a better experience!</p>
-      <div class="flex justify-center items-center space-x-2">
-        <button id="installReminderButton" class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Install</button>
-        <button id="dismissReminder" class="text-sm text-[#d4dbdc] hover:underline">Dismiss</button>
-      </div>
-    </div>
-
-    <script>
-      const goalsList = document.getElementById("goals-list");
-      const noGoalsMessage = document.getElementById("no-goals-message");
-      const confirmModal = document.getElementById("confirm-modal");
-      const confirmDeleteButton = document.getElementById("confirm-delete");
-      const cancelDeleteButton = document.getElementById("cancel-delete");
-      const loadingSpinner = document.getElementById("loading-spinner");
-
-      let goalToDeleteId = null; // Store the ID of the goal to delete
-
-      // Fetch all goals
-      async function fetchGoals() {
-        showLoadingSpinner();
-        try {
-          const response = await fetch("/goals", { credentials: "include" });
-          if (!response.ok) throw new Error("Failed to fetch goals");
-          const data = await response.json();
-          renderGoals(data);
-        } catch (error) {
-          console.error(error.message);
-        } finally {
-          hideLoadingSpinner();
-        }
+    // Fetch all goals
+    async function fetchGoals() {
+      showLoadingSpinner();
+      try {
+        const response = await fetch("/goals", { credentials: "include" });
+        if (!response.ok) throw new Error("Failed to fetch goals");
+        const data = await response.json();
+        renderGoals(data);
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        hideLoadingSpinner();
       }
+    }
 
-      function renderGoals(goals) {
-        goalsList.innerHTML = ""; // Clear previous goals
-        if (goals.length === 0) {
-          noGoalsMessage.classList.remove("hidden");
-        } else {
-          noGoalsMessage.classList.add("hidden");
-          goals.forEach((goal) => {
-            const goalItem = document.createElement("div");
+    function renderGoals(goals) {
+      goalsList.innerHTML = ""; // Clear previous goals
+      if (goals.length === 0) {
+        noGoalsMessage.classList.remove("hidden");
+      } else {
+        noGoalsMessage.classList.add("hidden");
+        goals.forEach((goal) => {
+          const goalItem = document.createElement("div");
 
-            // Apply styles based on the verification status
-            goalItem.className = `p-4 rounded-lg shadow-md ${
-              goal.status === "verified"
-                ? "bg-green-100 border-green-500 border-l-4"
-                : "bg-red-100 border-red-500 border-l-4"
+          // Apply styles based on the verification status
+          goalItem.className = `p-4 rounded-lg shadow-md ${goal.status === "verified"
+            ? "bg-green-100 border-green-500 border-l-4"
+            : "bg-red-100 border-red-500 border-l-4"
             }`;
-            goalItem.innerHTML = `
+          goalItem.innerHTML = `
               <div class="flex justify-between items-center">
-                <h2 class="text-lg font-bold ${
-                  goal.status === "verified"
-                    ? "text-green-700"
-                    : "text-red-700"
-                }">${goal.type}: ${goal.title}</h2>
+                <h2 class="text-lg font-bold ${goal.status === "verified"
+              ? "text-green-700"
+              : "text-red-700"
+            }">${goal.type}: ${goal.title}</h2>
                 <span class="text-sm font-medium flex items-center">
-                  ${
-                    goal.status === "verified"
-                      ? `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-green-600 mr-2" viewBox="0 0 20 20">
+                  ${goal.status === "verified"
+              ? `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-green-600 mr-2" viewBox="0 0 20 20">
                           <path d="M16.707 5.293a1 1 0 010 1.414L8 15.414l-4.707-4.707a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path>
                         </svg> Completed`
-                      : `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-red-600 mr-2" viewBox="0 0 20 20">
+              : `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-red-600 mr-2" viewBox="0 0 20 20">
                           <path d="M9 2a7 7 0 100 14 7 7 0 000-14zM7.707 9l-2-2a1 1 0 011.414-1.414L9 7.586l2.293-2.293a1 1 0 011.414 1.414l-2 2 2 2a1 1 0 01-1.414 1.414L9 10.414l-2.293 2.293A1 1 0 015.293 11.293l2-2z"></path>
-                        </svg> ${
-                          goal.status === "rejected"
-                            ? "Rejected"
-                            : "Pending Verification"
-                        }`
-                  }
+                        </svg> ${goal.status === "rejected"
+                ? "Rejected"
+                : "Pending Verification"
+              }`
+            }
                 </span>
               </div>
               <p class="text-sm text-gray-600">Friend: ${goal.friend.username}</p>
               <div class="mt-4 flex justify-between items-center">
                 <button
-                  class="${
-                    goal.status === "verified" ? "hidden" : ""
-                  } px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
+                  class="${goal.status === "verified" ? "hidden" : ""
+            } px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm verify-goal" data-id="${goal.id}">
                   Verify
                 </button>
                 <button
@@ -448,418 +360,458 @@
                 </button>
               </div>
             `;
-            goalsList.appendChild(goalItem);
+          goalsList.appendChild(goalItem);
+        });
+
+        // Re-attach the event listeners for the verify button
+        document.querySelectorAll(".verify-goal").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            const id = e.target.getAttribute("data-id");
+            openUploadEvidenceModal(id);
           });
-
-          // Re-attach the event listeners for the verify button
-          document.querySelectorAll(".verify-goal").forEach((button) => {
-            button.addEventListener("click", (e) => {
-              const id = e.target.getAttribute("data-id");
-              openUploadEvidenceModal(id);
-            });
+        });
+        // Attach event listeners for delete and verify buttons
+        document.querySelectorAll(".delete-goal").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            const id = e.target.getAttribute("data-id");
+            openConfirmModal(id);
           });
-          // Attach event listeners for delete and verify buttons
-          document.querySelectorAll(".delete-goal").forEach((button) => {
-            button.addEventListener("click", (e) => {
-              const id = e.target.getAttribute("data-id");
-              openConfirmModal(id);
-            });
-          });
-        }
+        });
       }
+    }
 
-      // Open confirmation modal
-      function openConfirmModal(id) {
-        goalToDeleteId = id; // Store the goal ID to delete
-        confirmModal.classList.remove("hidden");
-      }
+    // Open confirmation modal
+    function openConfirmModal(id) {
+      goalToDeleteId = id; // Store the goal ID to delete
+      confirmModal.classList.remove("hidden");
+    }
 
-      // Close confirmation modal
-      function closeConfirmModal() {
-        goalToDeleteId = null; // Reset the goal ID
-        confirmModal.classList.add("hidden");
-      }
+    // Close confirmation modal
+    function closeConfirmModal() {
+      goalToDeleteId = null; // Reset the goal ID
+      confirmModal.classList.add("hidden");
+    }
 
-      // Delete a goal
-      async function deleteGoal() {
-        if (goalToDeleteId !== null) {
-          showLoadingSpinner();
-          try {
-            const response = await fetch(`/goals/${goalToDeleteId}`, {
-              method: "DELETE",
-              credentials: "include",
-            });
-            if (!response.ok) throw new Error("Failed to delete goal");
-            fetchGoals(); // Re-fetch goals after deletion
-            closeConfirmModal();
-          } catch (error) {
-            console.error(error.message);
-          } finally {
-            hideLoadingSpinner();
-          }
-        }
-      }
-
-      // Verify a goal
-      async function verifyGoal(id, dataUrl) {
+    // Delete a goal
+    async function deleteGoal() {
+      if (goalToDeleteId !== null) {
         showLoadingSpinner();
         try {
-          const response = await fetch(dataUrl);
-          const blob = await response.blob();
-          const formData = new FormData();
-          formData.append("evidence", blob, "evidence.png");
-
-          const verifyResponse = await fetch(`/verify/${id}/`, {
-            method: "POST",
-            body: formData,
+          const response = await fetch(`/goals/${goalToDeleteId}`, {
+            method: "DELETE",
             credentials: "include",
           });
-
-          if (!verifyResponse.ok) throw new Error("Failed to verify goal");
-          fetchGoals(); // Re-fetch goals after verification
+          if (!response.ok) throw new Error("Failed to delete goal");
+          fetchGoals(); // Re-fetch goals after deletion
+          closeConfirmModal();
         } catch (error) {
           console.error(error.message);
         } finally {
           hideLoadingSpinner();
         }
       }
+    }
 
-      // Add a new goal
-      document
-        .getElementById("add-goal-button")
-        .addEventListener("click", () => {
-          document.getElementById("add-goal-modal").classList.remove("hidden");
+    // Verify a goal
+    async function verifyGoal(id, dataUrl) {
+      showLoadingSpinner();
+      try {
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const formData = new FormData();
+        formData.append("evidence", blob, "evidence.png");
+
+        const verifyResponse = await fetch(`/verify/${id}/`, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
         });
 
-      document
-        .getElementById("cancel-add-goal")
-        .addEventListener("click", () => {
-          document.getElementById("add-goal-modal").classList.add("hidden");
-        });
+        if (!verifyResponse.ok) throw new Error("Failed to verify goal");
+        fetchGoals(); // Re-fetch goals after verification
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        hideLoadingSpinner();
+      }
+    }
 
-      document
-        .getElementById("submit-add-goal")
-        .addEventListener("click", async () => {
-          const title = document.getElementById("goal-title").value;
-          const type = document.getElementById("goal-type").value;
-          const friendUsername =
-            document.getElementById("goal-friend-id").value;
+    // Add a new goal
+    document
+      .getElementById("add-goal-button")
+      .addEventListener("click", () => {
+        document.getElementById("add-goal-modal").classList.remove("hidden");
+      });
 
-          if (!title || !type || !friendUsername) {
-            showErrorModal("All fields are required!");
-            return;
-          }
+    document
+      .getElementById("cancel-add-goal")
+      .addEventListener("click", () => {
+        document.getElementById("add-goal-modal").classList.add("hidden");
+      });
 
-          const newGoal = { title, type, friendUsername };
+    document
+      .getElementById("submit-add-goal")
+      .addEventListener("click", async () => {
+        const title = document.getElementById("goal-title").value;
+        const type = document.getElementById("goal-type").value;
+        const friendUsername =
+          document.getElementById("goal-friend-id").value;
 
-          showLoadingSpinner();
-          try {
-            const response = await fetch("/goals", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify(newGoal),
-            });
+        if (!title || !type || !friendUsername) {
+          showErrorModal("All fields are required!");
+          return;
+        }
 
-            if (!response.ok) throw new Error("Failed to add goal");
+        const newGoal = { title, type, friendUsername };
 
-            document.getElementById("add-goal-modal").classList.add("hidden");
-            fetchGoals(); // Re-fetch goals after addition
-          } catch (error) {
-            console.error(error.message);
-            showErrorModal("Error adding goal. Please try again.");
-          } finally {
-            hideLoadingSpinner();
-          }
-        });
-
-      // Add event listeners to modal buttons
-      confirmDeleteButton.addEventListener("click", deleteGoal);
-      cancelDeleteButton.addEventListener("click", closeConfirmModal);
-
-      // Event Listener for Verify Button (Submit Evidence)
-      async function submitPhoto(dataUrl) {
         showLoadingSpinner();
         try {
-          const response = await fetch("/goals/verify", {
+          const response = await fetch("/goals", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ photo: dataUrl }),
+            credentials: "include",
+            body: JSON.stringify(newGoal),
           });
-          if (!response.ok) throw new Error("Failed to submit photo");
-          fetchGoals(); // Re-fetch goals after submission
+
+          if (!response.ok) throw new Error("Failed to add goal");
+
+          document.getElementById("add-goal-modal").classList.add("hidden");
+          fetchGoals(); // Re-fetch goals after addition
         } catch (error) {
           console.error(error.message);
+          showErrorModal("Error adding goal. Please try again.");
         } finally {
           hideLoadingSpinner();
         }
-      }
+      });
 
-      // Event Listener for Cancel Upload Evidence
-      document
-        .getElementById("cancel-upload-evidence")
-        .addEventListener("click", () => {
-          document
-            .getElementById("upload-evidence-modal")
-            .classList.add("hidden");
-          stopCamera();
+    // Add event listeners to modal buttons
+    confirmDeleteButton.addEventListener("click", deleteGoal);
+    cancelDeleteButton.addEventListener("click", closeConfirmModal);
+
+    // Event Listener for Verify Button (Submit Evidence)
+    async function submitPhoto(dataUrl) {
+      showLoadingSpinner();
+      try {
+        const response = await fetch("/goals/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ photo: dataUrl }),
         });
-
-      // Event Listener for Submit Upload Evidence
-      document
-        .getElementById("submit-upload-evidence")
-        .addEventListener("click", async (e) => {
-          const goalId = e.target.getAttribute("data-id");
-          const canvas = document.getElementById("canvas");
-          const context = canvas.getContext("2d");
-          const video = document.getElementById("camera");
-
-          // Set canvas dimensions to match video stream
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const dataUrl = canvas.toDataURL("image/png");
-
-          verifyGoal(goalId, dataUrl);
-          document
-            .getElementById("upload-evidence-modal")
-            .classList.add("hidden");
-          stopCamera();
-        });
-
-      // Function to show error modal
-      function showErrorModal(message) {
-        document.getElementById("error-message").textContent = message;
-        document.getElementById("error-modal").classList.remove("hidden");
+        if (!response.ok) throw new Error("Failed to submit photo");
+        fetchGoals(); // Re-fetch goals after submission
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        hideLoadingSpinner();
       }
+    }
 
-      // Close error modal
-      document
-        .getElementById("close-error-modal")
-        .addEventListener("click", () => {
-          document.getElementById("error-modal").classList.add("hidden");
-        });
-
-      function showLoadingSpinner() {
-        loadingSpinner.classList.remove("hidden");
-      }
-
-      function hideLoadingSpinner() {
-        loadingSpinner.classList.add("hidden");
-      }
-
-      // Start camera
-      async function startCamera() {
-        const video = document.getElementById("camera");
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-          });
-          video.srcObject = stream;
-        } catch (error) {
-          console.error("Error accessing camera: ", error);
-        }
-      }
-
-      // Stop camera
-      function stopCamera() {
-        const video = document.getElementById("camera");
-        const stream = video.srcObject;
-        if (stream) {
-          const tracks = stream.getTracks();
-          tracks.forEach((track) => track.stop());
-          video.srcObject = null;
-        }
-      }
-
-      // Open upload evidence modal
-      function openUploadEvidenceModal(id) {
+    // Event Listener for Cancel Upload Evidence
+    document
+      .getElementById("cancel-upload-evidence")
+      .addEventListener("click", () => {
         document
           .getElementById("upload-evidence-modal")
-          .classList.remove("hidden");
-        document
-          .getElementById("submit-upload-evidence")
-          .setAttribute("data-id", id);
-        startCamera();
-      }
-
-      let translations = {};
-
-      async function loadTranslations(lang) {
-        try {
-          const response = await fetch(`/locales/${lang}.json`);
-          translations = await response.json();
-          updateTextContent();
-        } catch (error) {
-          console.error("Failed to load translations:", error);
-        }
-      }
-
-      function updateTextContent() {
-        document.getElementById("my-goals-title").textContent =
-          translations.my_goals;
-        document.getElementById("add-goal-button").textContent =
-          translations.add_goal;
-        document.getElementById("no-goals-message").textContent =
-          translations.no_goals_message;
-        document.getElementById("confirm-delete").textContent =
-          translations.delete;
-        document.getElementById("cancel-delete").textContent =
-          translations.cancel;
-        document.getElementById("submit-add-goal").textContent =
-          translations.add_goal;
-        document.getElementById("cancel-add-goal").textContent =
-          translations.cancel;
-        document.getElementById("goal-title-label").textContent =
-          translations.goal_title;
-        document.getElementById("goal-type-label").textContent =
-          translations.goal_type;
-        document.getElementById("goal-friend-id-label").textContent =
-          translations.goal_friend_id;
-        document.getElementById("submit-upload-evidence").textContent =
-          translations.submit;
-        document.getElementById("cancel-upload-evidence").textContent =
-          translations.cancel;
-        document.getElementById("error-message").textContent =
-          translations.error_message;
-
-        // Update goal type options
-        document.querySelector("#goal-type option[value='Daily']").textContent =
-          translations.daily;
-        document.querySelector(
-          "#goal-type option[value='Weekly']"
-        ).textContent = translations.weekly;
-        document.querySelector(
-          "#goal-type option[value='Monthly']"
-        ).textContent = translations.monthly;
-      }
-
-      async function fetchFriends() {
-        try {
-          const response = await fetch("/api/friends/list", { credentials: "include" });
-          if (!response.ok) throw new Error("Failed to fetch friends");
-          const data = await response.json();
-          populateFriendDropdown(data.friends);
-        } catch (error) {
-          console.error(error.message);
-        }
-      }
-
-      function populateFriendDropdown(friends) {
-        const friendDropdown = document.getElementById("goal-friend-id");
-        friendDropdown.innerHTML = ""; // Clear previous options
-        friends.forEach(friend => {
-          const option = document.createElement("option");
-          option.value = friend.id;
-          option.textContent = friend.username;
-          friendDropdown.appendChild(option);
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        fetchGoals();
-        fetchFriends(); // Fetch friends when the page loads
-        showInstallReminder();
+          .classList.add("hidden");
+        stopCamera();
       });
 
-      async function regWorker() {
-        const publicKey =
-          "BF23M7KJl7QwnifFtvFXOtVgeTCLw9ik0TiNuQk2FdCrhIWcVRAKHbW2W9OGcStipTNRm10gn38XtyaO7oJThzw";
+    // Event Listener for Submit Upload Evidence
+    document
+      .getElementById("submit-upload-evidence")
+      .addEventListener("click", async (e) => {
+        const goalId = e.target.getAttribute("data-id");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+        const video = document.getElementById("camera");
 
-        try {
-          const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
-          console.log('Service Worker registered with scope:', registration.scope);
+        // Set canvas dimensions to match video stream
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
 
-          const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: publicKey,
-          });
-          console.log('Push subscription:', subscription);
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/png");
 
-          const response = await fetch("/notifications/mypush", {
-            method: "POST",
-            body: JSON.stringify(subscription),
-            headers: { "content-type": "application/json" },
-          });
-          if (response.ok) {
-            console.log('Push subscription sent to server');
-          } else {
-            console.error('Failed to send push subscription to server:', await response.text());
-          }
-        } catch (error) {
-          console.error('Service Worker registration or push subscription failed:', error);
-        }
-      }
+        verifyGoal(goalId, dataUrl);
+        document
+          .getElementById("upload-evidence-modal")
+          .classList.add("hidden");
+        stopCamera();
+      });
 
-      // Fetch and render goals on load
-      fetchGoals();
+    // Function to show error modal
+    function showErrorModal(message) {
+      document.getElementById("error-message").textContent = message;
+      document.getElementById("error-modal").classList.remove("hidden");
+    }
 
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-              console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-              console.error('Service Worker registration failed:', error);
-            });
+    // Close error modal
+    document
+      .getElementById("close-error-modal")
+      .addEventListener("click", () => {
+        document.getElementById("error-modal").classList.add("hidden");
+      });
+
+    function showLoadingSpinner() {
+      loadingSpinner.classList.remove("hidden");
+    }
+
+    function hideLoadingSpinner() {
+      loadingSpinner.classList.add("hidden");
+    }
+
+    // Start camera
+    async function startCamera() {
+      const video = document.getElementById("camera");
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
         });
+        video.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing camera: ", error);
       }
+    }
 
-      let deferredPrompt;
-      let reminderShown = false;
+    // Stop camera
+    function stopCamera() {
+      const video = document.getElementById("camera");
+      const stream = video.srcObject;
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+        video.srcObject = null;
+      }
+    }
 
-      window.addEventListener("beforeinstallprompt", (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
+    // Open upload evidence modal
+    function openUploadEvidenceModal(id) {
+      document
+        .getElementById("upload-evidence-modal")
+        .classList.remove("hidden");
+      document
+        .getElementById("submit-upload-evidence")
+        .setAttribute("data-id", id);
+      startCamera();
+    }
+
+    let translations = {};
+
+    async function loadTranslations(lang) {
+      try {
+        const response = await fetch(`/locales/${lang}.json`);
+        translations = await response.json();
+        updateTextContent();
+      } catch (error) {
+        console.error("Failed to load translations:", error);
+      }
+    }
+
+    function updateTextContent() {
+      document.getElementById("my-goals-title").textContent =
+        translations.my_goals;
+      document.getElementById("add-goal-button").textContent =
+        translations.add_goal;
+      document.getElementById("no-goals-message").textContent =
+        translations.no_goals_message;
+      document.getElementById("confirm-delete").textContent =
+        translations.delete;
+      document.getElementById("cancel-delete").textContent =
+        translations.cancel;
+      document.getElementById("submit-add-goal").textContent =
+        translations.add_goal;
+      document.getElementById("cancel-add-goal").textContent =
+        translations.cancel;
+      document.getElementById("goal-title-label").textContent =
+        translations.goal_title;
+      document.getElementById("goal-type-label").textContent =
+        translations.goal_type;
+      document.getElementById("goal-friend-id-label").textContent =
+        translations.goal_friend_id;
+      document.getElementById("submit-upload-evidence").textContent =
+        translations.submit;
+      document.getElementById("cancel-upload-evidence").textContent =
+        translations.cancel;
+      document.getElementById("error-message").textContent =
+        translations.error_message;
+      document.getElementById("confirm-deletion-title").textContent = translations.confirm_deletion_title;
+      document.getElementById("confirm-deletion-message").textContent = translations.confirm_deletion_message;
+      document.getElementById("add-new-goal-title").textContent = translations.add_new_goal_title;
+      document.getElementById("submit-verification-evidence-title").textContent = translations.submit_verification_evidence_title;
+      document.getElementById("install-reminder-message").textContent = translations.install_reminder_message;
+      document.getElementById("install-button").textContent = translations.install;
+      document.getElementById("dismiss-reminder").textContent = translations.dismiss;
+
+      // Update goal type options
+      document.querySelector("#goal-type option[value='Daily']").textContent =
+        translations.daily;
+      document.querySelector(
+        "#goal-type option[value='Weekly']"
+      ).textContent = translations.weekly;
+      document.querySelector(
+        "#goal-type option[value='Monthly']"
+      ).textContent = translations.monthly;
+    }
+
+    async function fetchFriends() {
+      try {
+        const response = await fetch("/api/friends/list", { credentials: "include" });
+        if (!response.ok) throw new Error("Failed to fetch friends");
+        const data = await response.json();
+        populateFriendDropdown(data.friends);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    function populateFriendDropdown(friends) {
+      const friendDropdown = document.getElementById("goal-friend-id");
+      friendDropdown.innerHTML = ""; // Clear previous options
+      friends.forEach(friend => {
+        const option = document.createElement("option");
+        option.value = friend.id;
+        option.textContent = friend.username;
+        friendDropdown.appendChild(option);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const userLang = navigator.language || navigator.userLanguage;
+      const lang = userLang.startsWith("es") ? "es" : "en";
+      loadTranslations(lang);
+      fetchGoals();
+      fetchFriends(); // Fetch friends when the page loads
+      showInstallReminder();
+    });
+
+    document.getElementById("dismissReminder").addEventListener("click", () => {
+      document.getElementById("installReminder").classList.add("hidden");
+      reminderShown = true;
+    });
+
+    async function regWorker() {
+      const publicKey =
+        "BF23M7KJl7QwnifFtvFXOtVgeTCLw9ik0TiNuQk2FdCrhIWcVRAKHbW2W9OGcStipTNRm10gn38XtyaO7oJThzw";
+
+      try {
+        const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
+        console.log('Service Worker registered with scope:', registration.scope);
+
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKey,
+        });
+        console.log('Push subscription:', subscription);
+
+        const response = await fetch("/notifications/mypush", {
+          method: "POST",
+          body: JSON.stringify(subscription),
+          headers: { "content-type": "application/json" },
+        });
+        if (response.ok) {
+          console.log('Push subscription sent to server');
+        } else {
+          console.error('Failed to send push subscription to server:', await response.text());
+        }
+      } catch (error) {
+        console.error('Service Worker registration or push subscription failed:', error);
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        regWorker().catch(error => console.error('Service Worker registration failed:', error));
+      });
+    }
+
+    // Fetch and render goals on load
+    fetchGoals();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered wition.scope+')
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    let deferredPrompt;
+    let reminderShown = false;
+
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferredPrompt = event;
+      if (!window.matchMedia('(display-mode: fullscreen)').matches) {
         document.getElementById("installButton").style.display = "block";
         setTimeout(showInstallReminder, 5000); // Show reminder after 5 seconds
-      });
+      }
+    });
 
-      document.getElementById("installButton").addEventListener("click", () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choice) => {
-            console.log(choice.outcome);
-            deferredPrompt = null;
-          });
+    document.getElementById("installButton").addEventListener("click", () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choice) => {
+          console.log(choice.outcome);
+          deferredPrompt = null;
+        });
+      }
+    });
+
+    document.getElementById("installReminderButton").addEventListener("click", () => {
+      console.log("Install button clicked");
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
         }
+        deferredPrompt = null;
       });
+      document.getElementById("installReminder").classList.add("hidden");
+      reminderShown = true;
+    });
 
-      document.getElementById("installReminderButton").addEventListener("click", () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choice) => {
-            console.log(choice.outcome);
-            deferredPrompt = null;
-          });
-        }
-        document.getElementById("installReminder").classList.add("hidden");
-        reminderShown = true;
-      });
+    document.getElementById("dismissReminder").addEventListener("click", () => {
+      document.getElementById("installReminder").classList.add("hidden");
+      reminderShown = true;
+    });
 
-      document.getElementById("dismissReminder").addEventListener("click", () => {
-        document.getElementById("installReminder").classList.add("hidden");
-        reminderShown = true;
-      });
+    window.addEventListener("scroll", () => {
+      if (!reminderShown) {
+        showInstallReminder();
+      }
+    });
 
-      window.addEventListener("scroll", () => {
-        if (!reminderShown) {
-          showInstallReminder();
-        }
-      });
+    window.addEventListener("mouseout", (event) => {
+      if (!reminderShown && event.clientY < 0) {
+        showInstallReminder();
+      }
+    });
 
-      window.addEventListener("mouseout", (event) => {
-        if (!reminderShown && event.clientY < 0) {
-          showInstallReminder();
-        }
-      });
-
-      function showInstallReminder() {
+    function showInstallReminder() {
+      if (!window.matchMedia('(display-mode: fullscreen)').matches) {
         document.getElementById("installReminder").classList.remove("hidden");
         reminderShown = true;
       }
-    </script>
-  </body>
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function (registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function (error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+</body>
+
 </html>

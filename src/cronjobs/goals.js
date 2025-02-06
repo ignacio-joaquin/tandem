@@ -4,14 +4,18 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const setupCronJobs = () => {
-    // Reset daily tasks
+    // Reset daily tasks at midnight
     cron.schedule('0 0 * * *', async () => {
         await prisma.goal.updateMany({
             where: { type: 'Daily' },
             data: { verified: false }
         });
         console.log('Daily tasks reset');
-    });
+    },
+    {
+        timezone:'America/Argentina/Buenos_Aires'
+    }
+);
 
     // Reset weekly tasks
     cron.schedule('0 0 * * 1', async () => {
@@ -20,6 +24,9 @@ const setupCronJobs = () => {
             data: { verified: false }
         });
         console.log('Weekly tasks reset');
+    },
+    {
+        timezone:'America/Argentina/Buenos_Aires'
     });
 
     // Reset monthly tasks
@@ -29,6 +36,9 @@ const setupCronJobs = () => {
             data: { verified: false }
         });
         console.log('Monthly tasks reset');
+    },
+    {
+        timezone:'America/Argentina/Buenos_Aires'
     });
     console.log('Cron jobs set up');
 };

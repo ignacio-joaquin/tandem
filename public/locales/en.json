@@ -41,5 +41,14 @@
   "already_have_account": "Already have an account?",
   "dont_have_account": "Don’t have an account?",
   "password_change_info_title": "Password Change Requested",
-  "password_change_info_message": "An email with instructions to change your password has been sent. Please check your email."
+  "password_change_info_message": "An email with instructions to change your password has been sent. Please check your email.",
+  "install_app": "Install App",
+  "install_reminder_message": "Install our app for a better experience!",
+  "dismiss": "Dismiss",
+  "username_change_success": "Username Changed Successfully",
+  "confirm_deletion_title": "Confirm Deletion",
+  "confirm_deletion_message": "Are you sure you want to delete this goal?",
+  "add_new_goal_title": "Add New Goal",
+  "submit_verification_evidence_title": "Submit Verification Evidence",
+  "install": "Install"
 }

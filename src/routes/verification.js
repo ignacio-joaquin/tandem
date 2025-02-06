@@ -57,16 +57,6 @@ router.post(
         data: { status: "pending verification", evidencePath: filePath },
       });
 
-      // Create notification for the friend
-      await prisma.notification.create({
-        data: {
-          userId: goal.friendId,
-          message: `Your friend ${user.username} has submitted verification evidence for a goal.`,
-          type: "verification_submission",
-          goalId: goal.id,
-        },
-      });
-
       // Send push notification to the friend
       const friend = await prisma.user.findUnique({
         where: { id: goal.friendId },
@@ -153,6 +143,8 @@ router.get("/pending", authMiddleware, async (req, res) => {
     const goals = await prisma.goal.findMany({
       where: {
         status: "pending verification",
+        friendId: req.user.id,
+        evidencePath: { not: null}
       },
     });
     res.status(200).json(goals);

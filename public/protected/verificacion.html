@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="verification-panel-title">Verification Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="../output.css">
 </head>
 
 <body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
@@ -18,7 +20,9 @@
         </div>
         
         <div id="goals-container" class="space-y-6"></div>
-        <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">No goals to verify.</p>
+        <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">
+            <!-- Translation key: no_goals_to_verify -->
+        </p>
     </div>
 
     <!-- Modal -->
@@ -26,17 +30,23 @@
         <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
             <h2 id="modal-title" class="text-xl font-bold text-[#00ff9c] mb-4"></h2>
             <p id="modal-message" class="text-[#d4dbdc] mb-4"></p>
-            <button id="modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
+            <button id="modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+                <!-- Translation key: close -->
+            </button>
         </div>
     </div>
 
     <!-- Add the install button -->
-    <button id="installButton" style="display: none;">Install App</button>
+    <button id="installButton" style="display: none;">
+        <!-- Translation key: install_app -->
+    </button>
 
     <!-- Add the install reminder popup -->
     <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
-        <p>Install our app for a better experience!</p>
-        <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
+        <p> <!-- Translation key: install_reminder_message --> </p>
+        <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+            <!-- Translation key: dismiss -->
+        </button>
     </div>
 
     <script>
@@ -177,6 +187,16 @@
         document.getElementById("dismissReminder").addEventListener("click", () => {
             document.getElementById("installReminder").classList.add("hidden");
         });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
 
     </script>
 

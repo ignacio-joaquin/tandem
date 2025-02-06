@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="../output.css">
     <style>
       .sk-chase {
         width: 40px;
@@ -113,13 +115,13 @@
         id="my-account-title"
         class="text-2xl font-bold text-center mb-6 text-[#00ff9c]"
       >
-        My Account
+        <!-- Translation key: my_account -->
       </h1>
 
       <!-- Username Section -->
       <div class="mb-4">
         <h2 id="username-label" class="text-lg font-bold text-[#d4dbdc]">
-          Username
+          <!-- Translation key: username -->
         </h2>
         <p id="username" class="text-sm text-[#d4dbdc] mb-2">
           current_username
@@ -128,13 +130,15 @@
           class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
           id="change-username"
         >
-          Change Username
+          <!-- Translation key: change_username -->
         </button>
       </div>
 
       <!-- Email Section -->
       <div class="mb-4">
-        <h2 id="email-label" class="text-lg font-bold text-[#d4dbdc]">Email</h2>
+        <h2 id="email-label" class="text-lg font-bold text-[#d4dbdc]">
+          <!-- Translation key: email -->
+        </h2>
         <p id="email" class="text-sm text-[#d4dbdc] mb-2">
           current_email@example.com
         </p>
@@ -142,27 +146,27 @@
           class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
           id="change-email"
         >
-          Change Email
+          <!-- Translation key: change_email -->
         </button>
       </div>
 
       <!-- Password Section -->
       <div class="mb-4">
         <h2 id="password-label" class="text-lg font-bold text-[#d4dbdc]">
-          Password
+          <!-- Translation key: password -->
         </h2>
         <button
           class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
           id="change-password"
         >
-          Change Password
+          <!-- Translation key: change_password -->
         </button>
       </div>
 
       <!-- Profile Picture Section -->
       <div class="mb-4">
         <h2 id="profile-picture-label" class="text-lg font-bold text-[#d4dbdc]">
-          Profile Picture
+          <!-- Translation key: profile_picture -->
         </h2>
         <img
           id="profile-pic"
@@ -180,18 +184,22 @@
           class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a] text-sm"
           id="change-profile-pic"
         >
-          Change Profile Picture
+          <!-- Translation key: change_profile_picture -->
         </button>
       </div>
     </div>
 
     <!-- Add the install button -->
-    <button id="installButton" style="display: none;">Install App</button>
+    <button id="installButton" style="display: none;">
+      <!-- Translation key: install_app -->
+    </button>
 
     <!-- Add the install reminder popup -->
     <div id="installReminder" class="fixed bottom-4 right-4 bg-[#2a3b4c] text-white p-4 rounded-lg shadow-lg hidden">
-      <p>Install our app for a better experience!</p>
-      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Dismiss</button>
+      <p><!-- Translation key: install_reminder_message --></p>
+      <button id="dismissReminder" class="mt-2 px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+        <!-- Translation key: dismiss -->
+      </button>
     </div>
 
     <!-- Navigation Bar -->
@@ -235,14 +243,14 @@
     >
       <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
         <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Change Username
+          <!-- Translation key: change_username -->
         </h2>
         <form id="username-form" class="space-y-4">
           <div>
             <label
               id="new-username-label"
               class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >New Username</label
+              ><!-- Translation key: new_username --></label
             >
             <input
               type="text"
@@ -257,13 +265,13 @@
             id="cancel-change-username"
             class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
           >
-            Cancel
+            <!-- Translation key: cancel -->
           </button>
           <button
             id="submit-change-username"
             class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
           >
-            Change
+            <!-- Translation key: change -->
           </button>
         </div>
       </div>
@@ -275,14 +283,14 @@
     >
       <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
         <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Change Email
+          <!-- Translation key: change_email -->
         </h2>
         <form id="email-form" class="space-y-4">
           <div>
             <label
               id="new-email-label"
               class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >New Email</label
+              ><!-- Translation key: new_email --></label
             >
             <input
               type="email"
@@ -297,13 +305,13 @@
             id="cancel-change-email"
             class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
           >
-            Cancel
+            <!-- Translation key: cancel -->
           </button>
           <button
             id="submit-change-email"
             class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
           >
-            Change
+            <!-- Translation key: change -->
           </button>
         </div>
       </div>
@@ -315,14 +323,14 @@
     >
       <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
         <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
-          Change Password
+          <!-- Translation key: change_password -->
         </h2>
         <form id="password-form" class="space-y-4">
           <div>
             <label
               id="current-password-label"
               class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >Current Password</label
+              ><!-- Translation key: current_password --></label
             >
             <input
               type="password"
@@ -335,7 +343,7 @@
             <label
               id="new-password-label"
               class="block text-sm font-medium mb-1 text-[#d4dbdc]"
-              >New Password</label
+              ><!-- Translation key: new_password --></label
             >
             <input
               type="password"
@@ -350,13 +358,32 @@
             id="cancel-change-password"
             class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
           >
-            Cancel
+            <!-- Translation key: cancel -->
           </button>
           <button
             id="submit-change-password"
             class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
           >
-            Change
+            <!-- Translation key: change -->
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="username-change-success-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2 class="text-lg font-bold text-center mb-4 text-[#00ff9c]">
+          <!-- Translation key: username_change_success -->
+        </h2>
+        <div class="mt-4 flex justify-center">
+          <button
+            id="close-username-change-success"
+            class="px-4 py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            <!-- Translation key: close -->
           </button>
         </div>
       </div>
@@ -492,7 +519,7 @@
 
           showLoadingSpinner();
           try {
-            const response = await fetch("/change-username", {
+            const response = await fetch("/account/change-username", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username: newUsername }),
@@ -504,6 +531,9 @@
             document
               .getElementById("change-username-modal")
               .classList.add("hidden");
+            document
+              .getElementById("username-change-success-modal")
+              .classList.remove("hidden");
           } catch (error) {
             console.error(error.message);
           } finally {
@@ -569,6 +599,14 @@
         .addEventListener("click", () => {
           document
             .getElementById("password-change-info-modal")
+            .classList.add("hidden");
+        });
+
+      document
+        .getElementById("close-username-change-success")
+        .addEventListener("click", () => {
+          document
+            .getElementById("username-change-success-modal")
             .classList.add("hidden");
         });
 
@@ -669,6 +707,8 @@
         document.getElementById("password-change-info-title").textContent = translations.password_change_info_title;
         document.getElementById("password-change-info-message").textContent = translations.password_change_info_message;
         document.getElementById("close-password-change-info").textContent = translations.close;
+        document.getElementById("installButton").textContent = translations.install_app;
+        document.getElementById("dismissReminder").textContent = translations.dismiss;
       }
 
       document.addEventListener("DOMContentLoaded", async () => {
@@ -728,6 +768,9 @@
               document
                 .getElementById("change-username-modal")
                 .classList.add("hidden");
+              document
+                .getElementById("username-change-success-modal")
+                .classList.remove("hidden");
             } catch (error) {
               console.error(error.message);
             } finally {
@@ -833,6 +876,16 @@
         const lang = userLang.startsWith("es") ? "es" : "en";
         loadTranslations(lang);
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      }
     </script>
   </body>
 </html>

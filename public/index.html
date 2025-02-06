@@ -5,9 +5,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>App Landing Page</title>
-	<meta name="description" content="">
-	<meta name="keywords" content="">
+	<title>
+		<!-- Translation key: app_landing_page -->
+	</title>
+	<meta name="description" content="<!-- Translation key: meta_description -->">
+	<meta name="keywords" content="<!-- Translation key: meta_keywords -->">
 	
     <!-- Font Awesome if you need it
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
@@ -17,6 +19,8 @@
 	<!--Replace with your tailwind.css once created-->
 
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="manifest" href="/manifest.json">
+	<link rel="stylesheet" href="output.css">
 
 	<!-- Animation CSS-->
 	<style>		
@@ -42,7 +46,7 @@
 			background-color: #1a2332;
 		}	
 		.bg-custom-green {
-			background-color: #00ff9c;
+			background-color: #007146;
 		}
 		.hover-bg-custom-green:hover {
 			background-color: #00e68a;
@@ -53,9 +57,7 @@
 </head>
 
 
-<body class="leading-normal tracking-normal text-custom-green bg-custom-dark font-roboto" style="background-image:url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDEwODBWMEgxOTIwVjEwODBIMFoiIGZpbGw9IiMxYTIzMzIiLz48Y2lyY2xlIGN4PSI0MDAiIGN5PSI0MDAiIHI9IjMwMCIgc3Ryb2tlPSIjMDBmZjljIiBzdHJva2Utd2lkdGg9IjEwIi8+PGNpcmNsZSBjeD0iMTIwMCIgY3k9IjgwMCIgcj0iMjAwIiBzdHJva2U9IiMwMGZmOWMiIHN0cm9rZS13aWR0aD0iMTAiLz48L3N2Zz4=');">
-
-
+<body class="leading-normal tracking-normal text-custom-green bg-custom-dark font-roboto" style="background-image:url('data:image/svg+xml;utf8,%3Csvg%20width%3D%221920%22%20height%3D%221080%22%20viewBox%3D%220%200%201920%201080%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%201080V0H1920V1080H0Z%22%20fill%3D%22%231a2332%22%2F%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22400%22%20r%3D%22300%22%20stroke%3D%22%23007146%22%20stroke-width%3D%2210%22%2F%3E%3Ccircle%20cx%3D%221200%22%20cy%3D%22800%22%20r%3D%22200%22%20stroke%3D%22%23007146%22%20stroke-width%3D%2210%22%2F%3E%3C%2Fsvg%3E');">
 
 <div class="h-screen pb-14 bg-right bg-cover bg-no-repeat md:bg-center" >
 	<!--Nav-->
@@ -84,10 +86,20 @@
 		
 		<!--Left Col-->
 		<div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-			<h1 class="my-4 text-3xl md:text-5xl text-[#00e68a] font-bold leading-tight text-center md:text-left slide-in-bottom-h1">Cumple tus metas con el apoyo de tus amigos.</h1>
-			<p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">Sub-hero message, not too long and not too short. Make it just right!</p>
-		
-			<p class="text-custom-green font-bold pb-8 lg:pb-6 text-center md:text-left fade-in">Download our app:</p>
+				
+			<h1 class="my-4 text-3xl md:text-5xl text-[#00e68a] font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+				<!-- Translation key: hero_message -->
+			</h1>
+			<p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">
+				<!-- Translation key: sub_hero_message -->
+			</p>
+
+			<div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
+						
+				<p class="leading-normal text-custom-green font-bold pb-8 lg:pb-6 text-center md:text-left fade-in">
+					<!-- Translation key: download_app -->
+				</p>
+			</div>
 			<div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
 				<img src="/media/App Store.svg" class="h-12 pr-4 bounce-top-icons">
 				<img src="media/Play Store.svg" class="h-12 bounce-top-icons">
@@ -101,6 +113,44 @@
   <!-- jQuery if you need it
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   -->
+  <script>
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('/service-worker.js')
+			.then(function(registration) {
+				console.log('Service Worker registered with scope:', registration.scope);
+			})
+			.catch(function(error) {
+				console.log('Service Worker registration failed:', error);
+			});
+	}
+
+	let translations = {};
+
+	async function loadTranslations(lang) {
+		try {
+			const response = await fetch(`/locales/${lang}.json`);
+			translations = await response.json();
+			updateTextContent();
+		} catch (error) {
+			console.error("Failed to load translations:", error);
+		}
+	}
+
+	function updateTextContent() {
+		document.querySelector("title").textContent = translations.app_landing_page;
+		document.querySelector("meta[name='description']").setAttribute("content", translations.meta_description);
+		document.querySelector("meta[name='keywords']").setAttribute("content", translations.meta_keywords);
+		document.querySelector("h1").textContent = translations.hero_message;
+		document.querySelector("p").textContent = translations.sub_hero_message;
+		document.querySelector("p[leading-normal]").textContent = translations.download_app;
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		const userLang = navigator.language || navigator.userLanguage;
+		const lang = userLang.startsWith("es") ? "es" : "en";
+		loadTranslations(lang);
+	});
+  </script>
 
 </body>
 

@@ -18,27 +18,7 @@ router.post('/register', async (req, res) => {
         });
 
         // Send verification email
-        const request = mailjet.post("send", { 'version': 'v3.1' }).request({
-            "Messages": [{
-                "From": {
-                    "Email": "chequeadoapp@gmail.com",
-                    "Name": "Chequeado"
-                },
-                "To": [{
-                    "Email": email,
-                    "Name": username
-                }],
-                "Subject": "Email Verification",
-                "TextPart": "Please verify your email by clicking the link below.",
-                "HTMLPart": `
-                    <div style="background-color: #1a2332; color: #d4dbdc; padding: 20px; font-family: Arial, sans-serif;">
-                        <h3 style="color: #00ff9c;">Dear ${username},</h3>
-                        <p>Please verify your email by clicking the link below:</p>
-                        <a href="http://localhost:5000/api/auth/verify?email=${email}" style="color: #00ff9c;">Verify Email</a>
-                        <p>Thank you!</p>
-                    </div>`
-            }]
-        });
+        sendVerificationEmail(email, username, email)
 
         request.then((result) => {
             console.log('Mailjet response:', result.body);

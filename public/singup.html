@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="output.css">
 </head>
 
 <body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
@@ -287,6 +289,16 @@
                 console.error('Notification permission denied');
             }
         });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
     </script>
 
     <style>

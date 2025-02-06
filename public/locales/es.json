@@ -44,5 +44,14 @@
   "no_goals_to_verify": "No hay metas para verificar.",
   "verification": "Verificación",
   "password_change_info_title": "Cambio de Contraseña Solicitado",
-  "password_change_info_message": "Se ha enviado un correo electrónico con instrucciones para cambiar su contraseña. Por favor, revise su correo."
+  "password_change_info_message": "Se ha enviado un correo electrónico con instrucciones para cambiar su contraseña. Por favor, revise su correo.",
+  "install_app": "Instalar Aplicación",
+  "install_reminder_message": "¡Instala nuestra aplicación para una mejor experiencia!",
+  "dismiss": "Descartar",
+  "username_change_success": "Nombre de Usuario Cambiado Exitosamente",
+  "confirm_deletion_title": "Confirmar Eliminación",
+  "confirm_deletion_message": "¿Estás seguro de que quieres eliminar esta meta?",
+  "add_new_goal_title": "Agregar Nueva Meta",
+  "submit_verification_evidence_title": "Enviar Evidencia de Verificación",
+  "install": "Instalar"
 }

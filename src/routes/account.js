@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const Mailjet = require('node-mailjet');
+const { sendVerificationEmail } = require('../utils/mailsender');
 
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
@@ -43,11 +44,14 @@ router.post('/change-email', async (req, res) => {
     const userId = req.user.id;
 
     try {
+        const token = crypto.randomBytes(32).toString('hex');
         const user = await prisma.user.update({
             where: { id: userId },
-            data: { email },
+            data: { email, verificationToken: token, verificationEmailSentAt: new Date() },
         });
-        res.status(200).json({ message: 'Email updated successfully', user });
+
+        await sendVerificationEmail(email, user.username, token);
+        res.status(200).json({ message: 'Email updated and verification email sent', user });
     } catch (err) {
         res.status(400).json({ error: 'Error updating email' });
     }
@@ -75,8 +79,8 @@ router.post('/request-password-change', async (req, res) => {
         const request = mailjet.post("send", { 'version': 'v3.1' }).request({
             "Messages": [{
                 "From": {
-                    "Email": "chequeadoapp@gmail.com",
-                    "Name": "Chequeado"
+                    "Email": "no-reply@tandemapp.xyz",
+                    "Name": "Nacho, Fundador de Tandem"
                 },
                 "To": [{
                     "Email": email,
@@ -186,6 +190,51 @@ router.get('/user-data', async (req, res) => {
         res.status(200).json(user);
     } catch (err) {
         res.status(400).json({ error: 'Error fetching user data' });
+    }
+});
+
+// Resend Verification Email
+router.post('/resend-verification-email', async (req, res) => {
+    const { identifier } = req.body;
+    let userId;
+
+    if (identifier.includes('@')) {
+        const user = await prisma.user.findUnique({ where: { email: identifier } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        userId = user.id;
+    } else {
+        const user = await prisma.user.findUnique({ where: { username: identifier } });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        userId = user.id;
+    }
+
+    try {
+        if (!user.isVerified) {
+            const user = await prisma.user.findUnique({ where: { id: userId } });
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const lastSent = user.verificationEmailSentAt;
+            const now = new Date();
+            if (lastSent && (now - lastSent) < 2 * 60 * 1000) {
+                return res.status(429).json({ message: 'Please wait before requesting another verification email' });
+            }
+
+            const token = crypto.randomBytes(32).toString('hex');
+            user.verificationEmailSentAt = now;
+
+            await sendVerificationEmail(user.email, user.username, user.email);
+            res.status(200).json({ message: 'Verification email sent.' });
+
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error resending verification email' });
     }
 });
 

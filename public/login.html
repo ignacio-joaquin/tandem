@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="output.css"> -->
   </head>
 
   <body class="flex justify-center h-screen bg-[#1a2332] font-roboto">
@@ -20,7 +21,7 @@
         id="login-title"
         class="text-2xl font-bold text-center mb-6 text-[#00ff9c]"
       >
-        Log In
+        <!-- Translation key: login -->
       </h1>
 
       <!-- Add the spinner modal here, hidden by default -->
@@ -38,6 +39,23 @@
         </div>
       </div>
 
+      <!-- Add modal for displaying messages -->
+      <div
+        id="modal"
+        class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <p id="modal-message" class="text-center text-black"></p>
+          <button
+            id="modal-close-button"
+            class="mt-4 w-full py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
+          >
+            <!-- Close button text -->
+            <span id="modal-close-text"><!-- Translation key: close --></span>
+          </button>
+        </div>
+      </div>
+
       <!-- Form -->
       <form id="login-form" method="POST" action="/login">
         <div class="mb-4 relative">
@@ -45,7 +63,7 @@
             id="username-email-label"
             for="usernameOrEmail"
             class="block text-sm font-medium text-[#d4dbdc] pb-3"
-            >Username or Email</label
+            ><!-- Translation key: username_or_email --></label
           >
           <div class="relative">
             <input
@@ -67,7 +85,7 @@
             id="password-label"
             for="password"
             class="block text-sm font-medium text-[#d4dbdc] pb-3"
-            >Password</label
+            ><!-- Translation key: password --></label
           >
           <div class="relative">
             <input
@@ -89,15 +107,21 @@
           type="submit"
           class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
         >
-          Log In
+          <!-- Translation key: login -->
         </button>
       </form>
 
       <p class="mt-4 text-center text-sm text-[#d4dbdc]">
-        <span id="dont-have-account"></span>
-        <a id="signup-link" href="singup.html" class="text-[#00ff9c]"></a>
+        <span id="dont-have-account"><!-- Translation key: dont_have_account --></span>
+        <a id="signup-link" href="singup.html" class="text-[#00ff9c]"><!-- Translation key: sign_up --></a>
       </p>
-      <p id="error-message" class="text-red-500 text-center mt-4 hidden"></p>
+
+      <p class="mt-2 text-center text-sm text-[#d4dbdc]">
+        <!-- Translation key: didnt_receive_email -->
+        <a id="resend-verification-button" href="#" class="text-[#00ff9c]"><!-- Translation key: resend_verification_email --></a>
+      </p>
+
+      <p id="error-message" class="text-red-500 text-center mt-4 hidden"><!-- Translation key: error_message --></p>
     </div>
 
     <script>
@@ -139,6 +163,42 @@
         }
       });
 
+      const resendButton = document.getElementById("resend-verification-button");
+
+      function showModal(message) {
+        const modal = document.getElementById("modal");
+        const modalMessage = document.getElementById("modal-message");
+        modalMessage.textContent = message;
+        modal.classList.remove("hidden");
+      }
+
+      const modalCloseButton = document.getElementById("modal-close-button");
+      modalCloseButton.addEventListener("click", () => {
+        const modal = document.getElementById("modal");
+        modal.classList.add("hidden");
+      });
+
+      resendButton.addEventListener("click", async (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        try {
+          const response = await fetch("/account/resend-verification-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ identifier: document.getElementById("email").value }),
+          });
+
+            if (response.ok) {
+            showModal("Verification email sent.");
+          } else {
+            const result = await response.json();
+            showModal(result.message || "Failed to resend verification email.");
+          }
+        } catch (error) {
+          showModal("An error occurred. Please try again.");
+        }
+      });
+
       let translations = {};
 
       async function loadTranslations(lang) {
@@ -165,31 +225,33 @@
           translations.sign_up;
         document.getElementById("error-message").textContent =
           translations.error_message;
+        document.getElementById("modal-close-text").textContent = translations.close;
       }
 
       async function regWorker() {
-        // (B1) YOUR PUBLIC KEY - CHANGE TO YOUR OWN!
         const publicKey =
           "BF23M7KJl7QwnifFtvFXOtVgeTCLw9ik0TiNuQk2FdCrhIWcVRAKHbW2W9OGcStipTNRm10gn38XtyaO7oJThzw";
 
         try {
-          // (B2) REGISTER SERVICE WORKER
           const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
           console.log('Service Worker registered with scope:', registration.scope);
 
-          // (B3) SUBSCRIBE TO PUSH SERVER
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: publicKey,
           });
           console.log('Push subscription:', subscription);
 
-          await fetch("/notifications/mypush", {
+          const response = await fetch("/notifications/mypush", {
             method: "POST",
             body: JSON.stringify(subscription),
             headers: { "content-type": "application/json" },
           });
-          console.log('Push subscription sent to server');
+          if (response.ok) {
+            console.log('Push subscription sent to server');
+          } else {
+            console.error('Failed to send push subscription to server:', await response.text());
+          }
         } catch (error) {
           console.error('Service Worker registration or push subscription failed:', error);
         }
@@ -211,13 +273,23 @@
         const lang = userLang.startsWith("es") ? "es" : "en";
         loadTranslations(lang);
         if ('serviceWorker' in navigator) {
-          regWorker();
+          regWorker().catch(error => console.error('Service Worker registration failed:', error));
         }
       });
     </script>
 
     <link rel="manifest" href="/manifest.json">
-  
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      }
+    </script>
 
     <style>
       /* Spinner styles */
