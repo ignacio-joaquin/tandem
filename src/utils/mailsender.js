@@ -18,7 +18,7 @@ async function sendVerificationEmail(email, username, email) {
                 <div style="background-color: #1a2332; color: #d4dbdc; padding: 20px; font-family: Arial, sans-serif;">
                     <h3 style="color: #00ff9c;">Dear ${username},</h3>
                     <p>Please verify your email by clicking the link below:</p>
-                    <a href="http://localhost:5000/api/auth/verify?email=${email}" style="color: #00ff9c;">Verify Email</a>
+                    <a href="http://tandemapp.xyz/api/auth/verify?email=${email}" style="color: #00ff9c;">Verify Email</a>
                     <p>Thank you!</p>
                 </div>`
         }]
