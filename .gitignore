@@ -10,3 +10,4 @@ uploads/**/*.jpeg
 uploads/*.json
 ecosystem.config.js
 .vscode
+app-mp2.json

@@ -223,16 +223,7 @@
         });
         console.log('Push subscription:', subscription);
 
-        const response = await fetch("/notifications/mypush", {
-          method: "POST",
-          body: JSON.stringify(subscription),
-          headers: { "content-type": "application/json" },
-        });
-        if (response.ok) {
-          console.log('Push subscription sent to server');
-        } else {
-          console.error('Failed to send push subscription to server:', await response.text());
-        }
+
       } catch (error) {
         console.error('Service Worker registration or push subscription failed:', error);
       }
