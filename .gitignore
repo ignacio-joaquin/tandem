@@ -8,3 +8,5 @@ uploads/**/*.png
 uploads/**/*.jpg
 uploads/**/*.jpeg
 uploads/*.json
+ecosystem.config.js
+.vscode
