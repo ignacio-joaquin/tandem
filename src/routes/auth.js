@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
         });
 
         // Send verification email
-        await sendVerificationEmail(email, username);
+        await sendVerificationEmail(email, username, email);
 
         res.status(201).json({ message: 'User created. Verification email sent.', user });
     } catch (err) {
