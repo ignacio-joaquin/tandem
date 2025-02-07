@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const prisma = require('../config/prismaClient');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const Mailjet = require('node-mailjet'); // Correct the import statement
+const { sendVerificationEmail } = require('../utils/mailsender');
 
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE); // Correct the connection method
 
@@ -14,21 +16,19 @@ router.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
-            data: { email, password: hashedPassword, username: username },
+            data: { email: email, password: hashedPassword, username: username },
         });
 
         // Send verification email
-        sendVerificationEmail(email, username, email)
-
-        request.then((result) => {
-            console.log('Mailjet response:', result.body);
-        }).catch((err) => {
-            console.error('Mailjet error:', err.statusCode, err.response.text);
-        });
+        await sendVerificationEmail(email, username);
 
         res.status(201).json({ message: 'User created. Verification email sent.', user });
     } catch (err) {
-        res.status(400).json({ error: 'Error during registration' });
+        if (err.code === 'P2002') {
+            res.status(400).json({ error: 'Email or username already in use' });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 });
 

@@ -431,6 +431,27 @@
       </div>
     </div>
 
+    <!-- Error Message Modal -->
+    <div
+      id="error-modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg w-80">
+        <h2 class="text-lg font-bold text-center mb-4 text-[#ff4c4c]">
+          <!-- Translation key: error -->
+        </h2>
+        <p id="error-message" class="text-sm text-center text-[#d4dbdc] mb-4"></p>
+        <div class="mt-4 flex justify-center">
+          <button
+            id="close-error-modal"
+            class="px-4 py-2 bg-[#ff4c4c] text-[#1a2332] rounded-lg hover:bg-[#ff3333]"
+          >
+            <!-- Translation key: close -->
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       let data; // Declare data as a public variable
 
@@ -510,6 +531,17 @@
             .classList.add("hidden");
         });
 
+      // Function to show error modal
+      function showErrorModal(message) {
+        document.getElementById("error-message").textContent = message;
+        document.getElementById("error-modal").classList.remove("hidden");
+      }
+
+      // Event listener to close error modal
+      document.getElementById("close-error-modal").addEventListener("click", () => {
+        document.getElementById("error-modal").classList.add("hidden");
+      });
+
       // Event listeners for submitting changes
       document
         .getElementById("submit-change-username")
@@ -525,15 +557,22 @@
               body: JSON.stringify({ username: newUsername }),
             });
 
-            if (!response.ok) throw new Error("Failed to change username");
-
-            document.getElementById("username").textContent = newUsername;
-            document
-              .getElementById("change-username-modal")
-              .classList.add("hidden");
-            document
-              .getElementById("username-change-success-modal")
-              .classList.remove("hidden");
+            if (!response.ok) {
+              const errorData = await response.json();
+              if (errorData.error === 'Email or username already in use') {
+                showErrorModal('Username already in use. Please choose a different username.');
+              } else {
+                throw new Error("Failed to change username");
+              }
+            } else {
+              document.getElementById("username").textContent = newUsername;
+              document
+                .getElementById("change-username-modal")
+                .classList.add("hidden");
+              document
+                .getElementById("username-change-success-modal")
+                .classList.remove("hidden");
+            }
           } catch (error) {
             console.error(error.message);
           } finally {
@@ -549,18 +588,25 @@
 
           showLoadingSpinner();
           try {
-            const response = await fetch("/change-email", {
+            const response = await fetch("/account/change-email", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ email: newEmail }),
             });
 
-            if (!response.ok) throw new Error("Failed to change email");
-
-            document.getElementById("email").textContent = newEmail;
-            document
-              .getElementById("change-email-modal")
-              .classList.add("hidden");
+            if (!response.ok) {
+              const errorData = await response.json();
+              if (errorData.error === 'Email or username already in use') {
+                showErrorModal('Email already in use. Please choose a different email.');
+              } else {
+                throw new Error("Failed to change email");
+              }
+            } else {
+              document.getElementById("email").textContent = newEmail;
+              document
+                .getElementById("change-email-modal")
+                .classList.add("hidden");
+            }
           } catch (error) {
             console.error(error.message);
           } finally {
