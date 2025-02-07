@@ -197,15 +197,16 @@ router.get('/user-data', async (req, res) => {
 router.post('/resend-verification-email', async (req, res) => {
     const { identifier } = req.body;
     let userId;
+    let user;
 
     if (identifier.includes('@')) {
-        const user = await prisma.user.findUnique({ where: { email: identifier } });
+        user = await prisma.user.findUnique({ where: { email: identifier } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
         userId = user.id;
     } else {
-        const user = await prisma.user.findUnique({ where: { username: identifier } });
+        user = await prisma.user.findUnique({ where: { username: identifier } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -214,7 +215,14 @@ router.post('/resend-verification-email', async (req, res) => {
 
     try {
         if (!user.isVerified) {
-            const user = await prisma.user.findUnique({ where: { id: userId } });
+            if (lastSent && (now - lastSent) < 2 * 60 * 1000) {
+                return res.status(429).json({ message: 'Please wait before requesting another verification email' });
+            }
+
+            user.verificationEmailSentAt = now;
+
+            await sendVerificationEmail(user.email, user.username, user.email);
+            res.status(200).json({ message: 'Verification email sent.' });
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
@@ -232,6 +240,7 @@ router.post('/resend-verification-email', async (req, res) => {
             res.status(200).json({ message: 'Verification email sent.' });
 
         }
+        res.status(400).json({ message: 'User already verified' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Error resending verification email' });
