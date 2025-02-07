@@ -2,6 +2,17 @@
 <html lang="en">
 
 <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GR7837KZMW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-GR7837KZMW');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="verification-panel-title">Verification Panel</title>
@@ -12,13 +23,14 @@
 
 <body class="flex justify-center bg-[#1a2332] min-h-screen flex-col font-roboto items-center mx-5">
     <div class="max-w-lg p-6 rounded-lg bg-[#2a3b4c] shadow-lg my-5 w-full">
-        <h1 id="verification-panel-header" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Verification Panel</h1>
-        
+        <h1 id="verification-panel-header" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">Verification Panel
+        </h1>
+
         <!-- Loading Spinner -->
         <div id="loading-spinner" class="flex justify-center items-center space-x-2 mb-4 hidden">
             <div class="w-8 h-8 border-t-4 border-b-4 border-[#00ff9c] rounded-full animate-spin"></div>
         </div>
-        
+
         <div id="goals-container" class="space-y-6"></div>
         <p id="no-goals-message" class="text-center text-[#d4dbdc] hidden">
             <!-- Translation key: no_goals_to_verify -->
@@ -190,10 +202,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
-                .then(function(registration) {
+                .then(function (registration) {
                     console.log('Service Worker registered with scope:', registration.scope);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log('Service Worker registration failed:', error);
                 });
         }
@@ -203,16 +215,20 @@
     <nav class="bg-[#2a3b4c] p-4 shadow-md fixed bottom-0 left-0 w-full">
         <div class="flex items-center justify-center w-full" style="gap: 25%;">
             <a href="amigo.html">
-                <img src="../media/friends-svgrepo-com.svg" alt="Friends" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+                <img src="../media/friends-svgrepo-com.svg" alt="Friends"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
             </a>
             <a href="goals.html">
-                <img src="../media/goal-svgrepo-com.svg" alt="Goals" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+                <img src="../media/goal-svgrepo-com.svg" alt="Goals"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
             </a>
             <a href="verificacion.html">
-                <img src="../media/verification-square-button-svgrepo-com.svg" alt="Verification" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+                <img src="../media/verification-square-button-svgrepo-com.svg" alt="Verification"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
             </a>
             <a href="account.html">
-                <img src="../media/user-circle-svgrepo-com.svg" alt="Account" class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
+                <img src="../media/user-circle-svgrepo-com.svg" alt="Account"
+                    class="w-8 h-8 hover:opacity-80 transition-all filter neon-green">
             </a>
         </div>
     </nav>

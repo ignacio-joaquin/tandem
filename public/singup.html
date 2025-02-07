@@ -2,6 +2,17 @@
 <html>
 
 <head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GR7837KZMW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-GR7837KZMW');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,27 +41,32 @@
         </div>
 
         <!-- Add the error modal here, hidden by default -->
-        <div id="error-modal" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+        <div id="error-modal"
+            class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
             <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg text-center">
                 <h2 class="text-xl font-bold text-[#ff4d4d] mb-4">Error</h2>
                 <p id="error-message" class="text-[#d4dbdc] mb-4"></p>
-                <button id="error-modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
+                <button id="error-modal-close"
+                    class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
             </div>
         </div>
 
         <!-- Add the success modal here, hidden by default -->
-        <div id="success-modal" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+        <div id="success-modal"
+            class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
             <div class="bg-[#2a3b4c] p-6 rounded-lg shadow-lg text-center">
                 <h2 class="text-xl font-bold text-[#00ff9c] mb-4">Success</h2>
                 <p id="success-message" class="text-[#d4dbdc] mb-4"></p>
-                <button id="success-modal-close" class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
+                <button id="success-modal-close"
+                    class="py-2 px-4 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">Close</button>
             </div>
         </div>
 
         <form id="sign-up-form">
             <!-- Full Name -->
             <div class="mb-4 relative">
-                <label id="username-label" for="name" class="block text-sm font-medium text-[#d4dbdc] pb-3">Username</label>
+                <label id="username-label" for="name"
+                    class="block text-sm font-medium text-[#d4dbdc] pb-3">Username</label>
                 <div class="relative">
                     <input type="text" id="name"
                         class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
@@ -72,7 +88,8 @@
 
             <!-- Password -->
             <div class="mb-4 relative">
-                <label id="password-label" for="password" class="block text-sm font-medium text-[#d4dbdc] pb-3">Password</label>
+                <label id="password-label" for="password"
+                    class="block text-sm font-medium text-[#d4dbdc] pb-3">Password</label>
                 <div class="relative">
                     <input type="password" id="password"
                         class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
@@ -83,7 +100,8 @@
 
             <!-- Confirm Password -->
             <div class="mb-6 relative">
-                <label id="confirm-password-label" for="confirm-password" class="block text-sm font-medium text-[#d4dbdc] pb-3">Confirm Password</label>
+                <label id="confirm-password-label" for="confirm-password"
+                    class="block text-sm font-medium text-[#d4dbdc] pb-3">Confirm Password</label>
                 <div class="relative">
                     <input type="password" id="confirm-password"
                         class="w-full p-3 pr-10 border-[#d4dbdc] rounded-lg focus:outline-none focus:ring bg-[#1a2332] text-white">
@@ -93,7 +111,8 @@
             </div>
 
             <!-- Submit Button -->
-            <button id="signup-button" type="submit" class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+            <button id="signup-button" type="submit"
+                class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
                 Sign Up
             </button>
         </form>
@@ -105,9 +124,9 @@
 
     <script>
         // Ensure the DOM is loaded before executing the script
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Replace with your actual URL
-            const url = "/api/auth/register"; 
+            const url = "/api/auth/register";
 
             const form = document.getElementById('sign-up-form');
             const spinner = document.getElementById('spinner'); // Spinner modal
@@ -215,87 +234,12 @@
             }
         }
 
-        // Function to request notification permission
-        function requestNotificationPermission() {
-            return new Promise(function(resolve, reject) {
-                const permissionResult = Notification.requestPermission(function(result) {
-                    resolve(result);
-                });
-
-                if (permissionResult) {
-                    permissionResult.then(resolve, reject);
-                }
-            });
-        }
-
-        async function savePushToken(token) {
-            try {
-                const response = await fetch('/notifications/save-token', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token }),
-                    credentials: 'include'
-                });
-                if (!response.ok) throw new Error('Failed to save token');
-            } catch (error) {
-                console.error('Error saving push token:', error);
-            }
-        }
-
-        async function subscribeToPushNotifications() {
-            if ('serviceWorker' in navigator && 'PushManager' in window) {
-                try {
-                    const registration = await navigator.serviceWorker.ready;
-                    const subscription = await registration.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: urlBase64ToUint8Array('BDxQ7x9yj-t4lzjYnMKGrPJjfK_6JiaZD-uBNISyezMge2c-sYG1pihBQWxnNzHpMhirSyJXSvDdy5vKRKSHBhM')
-                    });
-                    const token = subscription.endpoint.split('/').pop();
-                    await savePushToken(token);
-                } catch (error) {
-                    console.error('Push subscription failed:', error);
-                }
-            }
-        }
-
-        // Utility function to convert VAPID key
-        function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding)
-                .replace(/\-/g, '+')
-                .replace(/_/g, '/');
-
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-
-            for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            const userLang = navigator.language || navigator.userLanguage;
-            const lang = userLang.startsWith("es") ? "es" : "en";
-            loadTranslations(lang);
-            await registerServiceWorker();
-        });
-
-        document.getElementById('signup-button').addEventListener('click', async () => {
-            const permission = await requestNotificationPermission();
-            if (permission === 'granted') {
-                await subscribeToPushNotifications();
-            } else {
-                console.error('Notification permission denied');
-            }
-        });
-
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
-                .then(function(registration) {
+                .then(function (registration) {
                     console.log('Service Worker registered with scope:', registration.scope);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log('Service Worker registration failed:', error);
                 });
         }
@@ -309,6 +253,7 @@
             position: relative;
             animation: sk-chase 2.5s infinite linear both;
         }
+
         .sk-chase-dot {
             width: 100%;
             height: 100%;
@@ -317,6 +262,7 @@
             top: 0;
             animation: sk-chase-dot 2.0s infinite ease-in-out both;
         }
+
         .sk-chase-dot:before {
             content: '';
             display: block;
@@ -326,16 +272,55 @@
             border-radius: 100%;
             animation: sk-chase-dot-before 2.0s infinite ease-in-out both;
         }
-        .sk-chase-dot:nth-child(1) { animation-delay: -1.1s; }
-        .sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
-        .sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
-        .sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
-        .sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
-        .sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
 
-        @keyframes sk-chase { 100% { transform: rotate(360deg); } }
-        @keyframes sk-chase-dot { 80%, 100% { transform: rotate(360deg); } }
-        @keyframes sk-chase-dot-before { 50% { transform: scale(0.4); } 100%, 0% { transform: scale(1.0); } }
+        .sk-chase-dot:nth-child(1) {
+            animation-delay: -1.1s;
+        }
+
+        .sk-chase-dot:nth-child(2) {
+            animation-delay: -1.0s;
+        }
+
+        .sk-chase-dot:nth-child(3) {
+            animation-delay: -0.9s;
+        }
+
+        .sk-chase-dot:nth-child(4) {
+            animation-delay: -0.8s;
+        }
+
+        .sk-chase-dot:nth-child(5) {
+            animation-delay: -0.7s;
+        }
+
+        .sk-chase-dot:nth-child(6) {
+            animation-delay: -0.6s;
+        }
+
+        @keyframes sk-chase {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sk-chase-dot {
+
+            80%,
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sk-chase-dot-before {
+            50% {
+                transform: scale(0.4);
+            }
+
+            100%,
+            0% {
+                transform: scale(1.0);
+            }
+        }
     </style>
 </body>
 

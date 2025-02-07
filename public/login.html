@@ -1,362 +1,334 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="output.css"> -->
-  </head>
 
-  <body class="flex justify-center h-screen bg-[#1a2332] font-roboto">
-    <div class="max-w-sm mx-5 p-6 rounded-lg shadow-lg bg-[#2a3b4c] my-5">
-      <div class="w-full justify-center flex">
-        <img
-          src="media/user-circle-svgrepo-com.svg"
-          width="200"
-          class="filter neon-green"
-        />
-      </div>
+<head>
 
-      <h1
-        id="login-title"
-        class="text-2xl font-bold text-center mb-6 text-[#00ff9c]"
-      >
-        <!-- Translation key: login -->
-      </h1>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GR7837KZMW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-      <!-- Add the spinner modal here, hidden by default -->
-      <div
-        id="spinner"
-        class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50"
-      >
-        <div class="sk-chase">
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-        </div>
-      </div>
+    gtag('config', 'G-GR7837KZMW');
+  </script>
 
-      <!-- Add modal for displaying messages -->
-      <div
-        id="modal"
-        class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50"
-      >
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-          <p id="modal-message" class="text-center text-black"></p>
-          <button
-            id="modal-close-button"
-            class="mt-4 w-full py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
-          >
-            <!-- Close button text -->
-            <span id="modal-close-text"><!-- Translation key: close --></span>
-          </button>
-        </div>
-      </div>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <link rel="stylesheet" href="output.css"> -->
+</head>
 
-      <!-- Form -->
-      <form id="login-form" method="POST" action="/login">
-        <div class="mb-4 relative">
-          <label
-            id="username-email-label"
-            for="usernameOrEmail"
-            class="block text-sm font-medium text-[#d4dbdc] pb-3"
-            ><!-- Translation key: username_or_email --></label
-          >
-          <div class="relative">
-            <input
-              type="text"
-              name="email"
-              id="email"
-              required
-              class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2"
-            />
-            <img
-              src="media/email-svgrepo-com.svg"
-              alt="Username or Email Icon"
-              class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green"
-            />
-          </div>
-        </div>
-        <div class="mb-6 relative">
-          <label
-            id="password-label"
-            for="password"
-            class="block text-sm font-medium text-[#d4dbdc] pb-3"
-            ><!-- Translation key: password --></label
-          >
-          <div class="relative">
-            <input
-              type="password"
-              name="password"
-              id="password"
-              required
-              class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2"
-            />
-            <img
-              src="media/password-svgrepo-com.svg"
-              alt="Password Icon"
-              class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green"
-            />
-          </div>
-        </div>
-        <button
-          id="login-button"
-          type="submit"
-          class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]"
-        >
-          <!-- Translation key: login -->
-        </button>
-      </form>
-
-      <p class="mt-4 text-center text-sm text-[#d4dbdc]">
-        <span id="dont-have-account"><!-- Translation key: dont_have_account --></span>
-        <a id="signup-link" href="singup.html" class="text-[#00ff9c]"><!-- Translation key: sign_up --></a>
-      </p>
-
-      <p class="mt-2 text-center text-sm text-[#d4dbdc]">
-        <span id="didnt-receive-email"><!-- Translation key: didnt_receive_email --></span>
-        <a id="resend-verification-button" href="#" class="text-[#00ff9c]"><!-- Translation key: resend_verification_email --></a>
-      </p>
-
-      <p id="error-message" class="text-red-500 text-center mt-4 hidden"><!-- Translation key: error_message --></p>
+<body class="flex justify-center h-screen bg-[#1a2332] font-roboto">
+  <div class="max-w-sm mx-5 p-6 rounded-lg shadow-lg bg-[#2a3b4c] my-5">
+    <div class="w-full justify-center flex">
+      <img src="media/user-circle-svgrepo-com.svg" width="200" class="filter neon-green" />
     </div>
 
-    <script>
-      // Handle the login process with fetch for better UX (optional)
-      const form = document.getElementById("login-form");
-      const errorMessage = document.getElementById("error-message");
-      const spinner = document.getElementById("spinner"); // Spinner modal
+    <h1 id="login-title" class="text-2xl font-bold text-center mb-6 text-[#00ff9c]">
+      <!-- Translation key: login -->
+    </h1>
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault(); // Prevent default form submission
+    <!-- Add the spinner modal here, hidden by default -->
+    <div id="spinner" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+      <div class="sk-chase">
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+      </div>
+    </div>
 
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+    <!-- Add modal for displaying messages -->
+    <div id="modal" class="hidden fixed inset-0 bg-[#1a2332] bg-opacity-50 flex justify-center items-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+        <p id="modal-message" class="text-center text-black"></p>
+        <button id="modal-close-button"
+          class="mt-4 w-full py-2 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+          <!-- Close button text -->
+          <span id="modal-close-text"><!-- Translation key: close --></span>
+        </button>
+      </div>
+    </div>
 
-        spinner.classList.remove("hidden"); // Show the spinner modal while waiting for response
+    <!-- Form -->
+    <form id="login-form" method="POST" action="/login">
+      <div class="mb-4 relative">
+        <label id="username-email-label" for="usernameOrEmail"
+          class="block text-sm font-medium text-[#d4dbdc] pb-3"><!-- Translation key: username_or_email --></label>
+        <div class="relative">
+          <input type="text" name="email" id="email" required
+            class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2" />
+          <img src="media/email-svgrepo-com.svg" alt="Username or Email Icon"
+            class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green" />
+        </div>
+      </div>
+      <div class="mb-6 relative">
+        <label id="password-label" for="password"
+          class="block text-sm font-medium text-[#d4dbdc] pb-3"><!-- Translation key: password --></label>
+        <div class="relative">
+          <input type="password" name="password" id="password" required
+            class="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-500 bg-[#2a3b4c] text-white shadow-sm py-2" />
+          <img src="media/password-svgrepo-com.svg" alt="Password Icon"
+            class="absolute inset-y-0 right-3 w-5 h-5 my-auto pointer-events-none filter neon-green" />
+        </div>
+      </div>
+      <button id="login-button" type="submit"
+        class="w-full py-3 bg-[#00ff9c] text-[#1a2332] rounded-lg hover:bg-[#00e68a]">
+        <!-- Translation key: login -->
+      </button>
+    </form>
 
-        try {
-          const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-            credentials: "include",
-          });
+    <p class="mt-4 text-center text-sm text-[#d4dbdc]">
+      <span id="dont-have-account"><!-- Translation key: dont_have_account --></span>
+      <a id="signup-link" href="singup.html" class="text-[#00ff9c]"><!-- Translation key: sign_up --></a>
+    </p>
 
-          if (response.ok) {
-            await requestNotificationPermission(); // Request notification permission
-            await regWorker(); // Register service worker and send push token
-            window.location.href = "/protected/goals.html";
-          } else {
-            const result = await response.json();
-            errorMessage.textContent = result.message || "Login failed";
-            errorMessage.classList.remove("hidden");
-          }
-        } catch (error) {
-          errorMessage.textContent = "An error occurred. Please try again.";
+    <p class="mt-2 text-center text-sm text-[#d4dbdc]">
+      <span id="didnt-receive-email"><!-- Translation key: didnt_receive_email --></span>
+      <a id="resend-verification-button" href="#"
+        class="text-[#00ff9c]"><!-- Translation key: resend_verification_email --></a>
+    </p>
+
+    <p id="error-message" class="text-red-500 text-center mt-4 hidden"><!-- Translation key: error_message --></p>
+  </div>
+
+  <script>
+    // Handle the login process with fetch for better UX (optional)
+    const form = document.getElementById("login-form");
+    const errorMessage = document.getElementById("error-message");
+    const spinner = document.getElementById("spinner"); // Spinner modal
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Prevent default form submission
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      spinner.classList.remove("hidden"); // Show the spinner modal while waiting for response
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          await regWorker(); // Register service worker and send push token
+          window.location.href = "/protected/goals.html";
+        } else {
+          const result = await response.json();
+          errorMessage.textContent = result.message || "Login failed";
           errorMessage.classList.remove("hidden");
-        } finally {
-          spinner.classList.add("hidden"); // Hide the spinner modal after the response
         }
-      });
-
-      const resendButton = document.getElementById("resend-verification-button");
-
-      function showModal(message) {
-        const modal = document.getElementById("modal");
-        const modalMessage = document.getElementById("modal-message");
-        modalMessage.textContent = message;
-        modal.classList.remove("hidden");
+      } catch (error) {
+        errorMessage.textContent = "An error occurred. Please try again.";
+        errorMessage.classList.remove("hidden");
+      } finally {
+        spinner.classList.add("hidden"); // Hide the spinner modal after the response
       }
+    });
 
-      const modalCloseButton = document.getElementById("modal-close-button");
-      modalCloseButton.addEventListener("click", () => {
-        const modal = document.getElementById("modal");
-        modal.classList.add("hidden");
-      });
+    const resendButton = document.getElementById("resend-verification-button");
 
-      resendButton.addEventListener("click", async (e) => {
-        e.preventDefault(); // Prevent default link behavior
-        try {
-          const response = await fetch("/account/resend-verification-email", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ identifier: document.getElementById("email").value }),
-          });
+    function showModal(message) {
+      const modal = document.getElementById("modal");
+      const modalMessage = document.getElementById("modal-message");
+      modalMessage.textContent = message;
+      modal.classList.remove("hidden");
+    }
 
-            if (response.ok) {
-            showModal("Verification email sent.");
-          } else {
-            const result = await response.json();
-            showModal(result.message || "Failed to resend verification email.");
-          }
-        } catch (error) {
-          showModal("An error occurred. Please try again.");
+    const modalCloseButton = document.getElementById("modal-close-button");
+    modalCloseButton.addEventListener("click", () => {
+      const modal = document.getElementById("modal");
+      modal.classList.add("hidden");
+    });
+
+    resendButton.addEventListener("click", async (e) => {
+      e.preventDefault(); // Prevent default link behavior
+      try {
+        const response = await fetch("/account/resend-verification-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ identifier: document.getElementById("email").value }),
+        });
+
+        if (response.ok) {
+          showModal("Verification email sent.");
+        } else {
+          const result = await response.json();
+          showModal(result.message || "Failed to resend verification email.");
         }
-      });
-
-      let translations = {};
-
-      async function loadTranslations(lang) {
-        try {
-          const response = await fetch(`/locales/${lang}.json`);
-          translations = await response.json();
-          updateTextContent();
-        } catch (error) {
-          console.error("Failed to load translations:", error);
-        }
+      } catch (error) {
+        showModal("An error occurred. Please try again.");
       }
+    });
 
-      function updateTextContent() {
-        document.getElementById("login-title").textContent = translations.login;
-        document.getElementById("username-email-label").textContent =
-          translations.username_or_email;
-        document.getElementById("password-label").textContent =
-          translations.password;
-        document.getElementById("login-button").textContent =
-          translations.login;
-        document.getElementById("dont-have-account").textContent =
-          translations.dont_have_account;
-        document.getElementById("signup-link").textContent =
-          translations.sign_up;
-        document.getElementById("error-message").textContent =
-          translations.error_message;
-        document.getElementById("modal-close-text").textContent = translations.close;
-        document.getElementById("didnt-receive-email").textContent = translations.didnt_receive_email;
-        document.getElementById("resend-verification-button").textContent = translations.resend_verification_email;
+    let translations = {};
+
+    async function loadTranslations(lang) {
+      try {
+        const response = await fetch(`/locales/${lang}.json`);
+        translations = await response.json();
+        updateTextContent();
+      } catch (error) {
+        console.error("Failed to load translations:", error);
       }
+    }
 
-      async function regWorker() {
-        const publicKey =
-          "BF23M7KJl7QwnifFtvFXOtVgeTCLw9ik0TiNuQk2FdCrhIWcVRAKHbW2W9OGcStipTNRm10gn38XtyaO7oJThzw";
+    function updateTextContent() {
+      document.getElementById("login-title").textContent = translations.login;
+      document.getElementById("username-email-label").textContent =
+        translations.username_or_email;
+      document.getElementById("password-label").textContent =
+        translations.password;
+      document.getElementById("login-button").textContent =
+        translations.login;
+      document.getElementById("dont-have-account").textContent =
+        translations.dont_have_account;
+      document.getElementById("signup-link").textContent =
+        translations.sign_up;
+      document.getElementById("error-message").textContent =
+        translations.error_message;
+      document.getElementById("modal-close-text").textContent = translations.close;
+      document.getElementById("didnt-receive-email").textContent = translations.didnt_receive_email;
+      document.getElementById("resend-verification-button").textContent = translations.resend_verification_email;
+    }
 
-        try {
-          const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
-          console.log('Service Worker registered with scope:', registration.scope);
-
-          const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: publicKey,
-          });
-          console.log('Push subscription:', subscription);
-
-          const response = await fetch("/notifications/mypush", {
-            method: "POST",
-            body: JSON.stringify(subscription),
-            headers: { "content-type": "application/json" },
-          });
-          if (response.ok) {
-            console.log('Push subscription sent to server');
-          } else {
-            console.error('Failed to send push subscription to server:', await response.text());
-          }
-        } catch (error) {
-          console.error('Service Worker registration or push subscription failed:', error);
-        }
-      }
-
-      async function requestNotificationPermission() {
-        try {
-          const permission = await Notification.requestPermission();
-          if (permission !== "granted") {
-            throw new Error("Notification permission denied");
-          }
-        } catch (error) {
-          console.error("Failed to request notification permission:", error);
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", async () => {
-        const userLang = navigator.language || navigator.userLanguage;
-        const lang = userLang.startsWith("es") ? "es" : "en";
-        loadTranslations(lang);
-        if ('serviceWorker' in navigator) {
-          regWorker().catch(error => console.error('Service Worker registration failed:', error));
-        }
-      });
-    </script>
-
-    <link rel="manifest" href="/manifest.json">
-    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const userLang = navigator.language || navigator.userLanguage;
+      const lang = userLang.startsWith("es") ? "es" : "en";
+      loadTranslations(lang);
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(function(registration) {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch(function(error) {
-            console.log('Service Worker registration failed:', error);
-          });
+        regWorker().catch(error => console.error('Service Worker registration failed:', error));
       }
-    </script>
+    });
 
-    <style>
-      /* Spinner styles */
-      .sk-chase {
-        width: 40px;
-        height: 40px;
-        position: relative;
-        animation: sk-chase 2.5s infinite linear both;
+    async function regWorker() {
+      const publicKey =
+        "BF23M7KJl7QwnifFtvFXOtVgeTCLw9ik0TiNuQk2FdCrhIWcVRAKHbW2W9OGcStipTNRm10gn38XtyaO7oJThzw";
+
+      try {
+        const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
+        console.log('Service Worker registered with scope:', registration.scope);
+
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKey,
+        });
+        console.log('Push subscription:', subscription);
+
+        const response = await fetch("/notifications/mypush", {
+          method: "POST",
+          body: JSON.stringify(subscription),
+          headers: { "content-type": "application/json" },
+        });
+        if (response.ok) {
+          console.log('Push subscription sent to server');
+        } else {
+          console.error('Failed to send push subscription to server:', await response.text());
+        }
+      } catch (error) {
+        console.error('Service Worker registration or push subscription failed:', error);
       }
-      .sk-chase-dot {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        animation: sk-chase-dot 2s infinite ease-in-out both;
+    }
+  </script>
+
+  <link rel="manifest" href="/manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function (registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function (error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+
+  <style>
+    /* Spinner styles */
+    .sk-chase {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      animation: sk-chase 2.5s infinite linear both;
+    }
+
+    .sk-chase-dot {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: sk-chase-dot 2s infinite ease-in-out both;
+    }
+
+    .sk-chase-dot:before {
+      content: "";
+      display: block;
+      width: 25%;
+      height: 25%;
+      background-color: #fff;
+      border-radius: 100%;
+      animation: sk-chase-dot-before 2s infinite ease-in-out both;
+    }
+
+    .sk-chase-dot:nth-child(1) {
+      animation-delay: -1.1s;
+    }
+
+    .sk-chase-dot:nth-child(2) {
+      animation-delay: -1s;
+    }
+
+    .sk-chase-dot:nth-child(3) {
+      animation-delay: -0.9s;
+    }
+
+    .sk-chase-dot:nth-child(4) {
+      animation-delay: -0.8s;
+    }
+
+    .sk-chase-dot:nth-child(5) {
+      animation-delay: -0.7s;
+    }
+
+    .sk-chase-dot:nth-child(6) {
+      animation-delay: -0.6s;
+    }
+
+    @keyframes sk-chase {
+      100% {
+        transform: rotate(360deg);
       }
-      .sk-chase-dot:before {
-        content: "";
-        display: block;
-        width: 25%;
-        height: 25%;
-        background-color: #fff;
-        border-radius: 100%;
-        animation: sk-chase-dot-before 2s infinite ease-in-out both;
+    }
+
+    @keyframes sk-chase-dot {
+
+      80%,
+      100% {
+        transform: rotate(360deg);
       }
-      .sk-chase-dot:nth-child(1) {
-        animation-delay: -1.1s;
-      }
-      .sk-chase-dot:nth-child(2) {
-        animation-delay: -1s;
-      }
-      .sk-chase-dot:nth-child(3) {
-        animation-delay: -0.9s;
-      }
-      .sk-chase-dot:nth-child(4) {
-        animation-delay: -0.8s;
-      }
-      .sk-chase-dot:nth-child(5) {
-        animation-delay: -0.7s;
-      }
-      .sk-chase-dot:nth-child(6) {
-        animation-delay: -0.6s;
+    }
+
+    @keyframes sk-chase-dot-before {
+      50% {
+        transform: scale(0.4);
       }
 
-      @keyframes sk-chase {
-        100% {
-          transform: rotate(360deg);
-        }
+      100%,
+      0% {
+        transform: scale(1);
       }
-      @keyframes sk-chase-dot {
-        80%,
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes sk-chase-dot-before {
-        50% {
-          transform: scale(0.4);
-        }
-        100%,
-        0% {
-          transform: scale(1);
-        }
-      }
-    </style>
-  </body>
+    }
+  </style>
+</body>
+
 </html>
