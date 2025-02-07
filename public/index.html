@@ -5,11 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>
-		<!-- Translation key: app_landing_page -->
+	<title id="app-landing-page-title">
 	</title>
-	<meta name="description" content="<!-- Translation key: meta_description -->">
-	<meta name="keywords" content="<!-- Translation key: meta_keywords -->">
+	<meta name="description" content="" id="meta-description">
+	<meta name="keywords" content="" id="meta-keywords">
 	
     <!-- Font Awesome if you need it
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
@@ -20,7 +19,6 @@
 
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 	<link rel="manifest" href="/manifest.json">
-	<link rel="stylesheet" href="output.css">
 
 	<!-- Animation CSS-->
 	<style>		
@@ -51,7 +49,10 @@
 		.hover-bg-custom-green:hover {
 			background-color: #00e68a;
 		}
-				
+			
+		.boton {
+			background-color: #2A3B4C;
+		}
 	</style>
 
 </head>
@@ -82,27 +83,25 @@
 	</div>
 
 	<!--Main-->
-	<div class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center >
+	<div class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center">
 		
 		<!--Left Col-->
 		<div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
 				
-			<h1 class="my-4 text-3xl md:text-5xl text-[#00e68a] font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
-				<!-- Translation key: hero_message -->
+			<h1 id="hero-message" class="my-4 text-3xl md:text-5xl text-[#00e68a] font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
 			</h1>
-			<p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">
-				<!-- Translation key: sub_hero_message -->
+			<p id="sub-hero-message" class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">
 			</p>
 
 			<div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
 						
-				<p class="leading-normal text-custom-green font-bold pb-8 lg:pb-6 text-center md:text-left fade-in">
-					<!-- Translation key: download_app -->
+				<p id="download-app" class="leading-normal text-custom-green font-bold pb-8 lg:pb-6 text-center md:text-left fade-in">
 				</p>
 			</div>
 			<div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
-				<img src="/media/App Store.svg" class="h-12 pr-4 bounce-top-icons">
-				<img src="media/Play Store.svg" class="h-12 bounce-top-icons">
+				<a href="/protected/goals.html" class="boton px-8 py-4  text-custom-green rounded-full hover:bg-[#00e68a] text-lg font-bold transition-all duration-300 ease-in-out shadow-lg transform hover:scale-105">
+					<!-- Translation key: my_goals -->
+				</a>
 			</div>
 
 		</div>
@@ -137,12 +136,13 @@
 	}
 
 	function updateTextContent() {
-		document.querySelector("title").textContent = translations.app_landing_page;
-		document.querySelector("meta[name='description']").setAttribute("content", translations.meta_description);
-		document.querySelector("meta[name='keywords']").setAttribute("content", translations.meta_keywords);
-		document.querySelector("h1").textContent = translations.hero_message;
-		document.querySelector("p").textContent = translations.sub_hero_message;
-		document.querySelector("p[leading-normal]").textContent = translations.download_app;
+		document.getElementById("app-landing-page-title").textContent = translations.app_landing_page;
+		document.getElementById("meta-description").setAttribute("content", translations.meta_description);
+		document.getElementById("meta-keywords").setAttribute("content", translations.meta_keywords);
+		document.getElementById("hero-message").textContent = translations.hero_message;
+		document.getElementById("sub-hero-message").textContent = translations.sub_hero_message;
+		document.getElementById("download-app").textContent = translations.download_app;
+		document.querySelector("a[href='/protected/goals.html']").textContent = translations.my_goals;
 	}
 
 	document.addEventListener("DOMContentLoaded", () => {
