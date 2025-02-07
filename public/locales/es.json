@@ -56,5 +56,7 @@
   "install": "Instalar",
   "current_password": "Contraseña Actual",
   "hero_message": "🤝 Alcanza tus metas junto a tus amigos.",
-  "sub_hero_message": "Comparte tus objetivos, verifica tu progreso con fotos y deja que tus amigos te motiven en cada paso."
+  "sub_hero_message": "Comparte tus objetivos, verifica tu progreso con fotos y deja que tus amigos te motiven en cada paso.",
+  "didnt_receive_email": "¿No recibiste el correo?",
+  "resend_verification_email": "Reenviar correo de verificación"
 }

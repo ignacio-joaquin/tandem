@@ -53,5 +53,7 @@
   "install": "Install",
   "current_password": "Current Password",
   "hero_message": "🤝 Achieve your goals with your friends.",
-  "sub_hero_message": "Share your goals, verify your progress with photos, and let your friends motivate you every step of the way."
+  "sub_hero_message": "Share your goals, verify your progress with photos, and let your friends motivate you every step of the way.",
+  "didnt_receive_email": "Didn't receive the email?",
+  "resend_verification_email": "Resend verification email"
 }

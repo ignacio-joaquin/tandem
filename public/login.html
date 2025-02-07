@@ -117,7 +117,7 @@
       </p>
 
       <p class="mt-2 text-center text-sm text-[#d4dbdc]">
-        <!-- Translation key: didnt_receive_email -->
+        <span id="didnt-receive-email"><!-- Translation key: didnt_receive_email --></span>
         <a id="resend-verification-button" href="#" class="text-[#00ff9c]"><!-- Translation key: resend_verification_email --></a>
       </p>
 
@@ -226,6 +226,8 @@
         document.getElementById("error-message").textContent =
           translations.error_message;
         document.getElementById("modal-close-text").textContent = translations.close;
+        document.getElementById("didnt-receive-email").textContent = translations.didnt_receive_email;
+        document.getElementById("resend-verification-button").textContent = translations.resend_verification_email;
       }
 
       async function regWorker() {
