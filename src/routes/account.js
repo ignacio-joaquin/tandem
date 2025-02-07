@@ -215,32 +215,18 @@ router.post('/resend-verification-email', async (req, res) => {
 
     try {
         if (!user.isVerified) {
-            if (lastSent && (now - lastSent) < 2 * 60 * 1000) {
-                return res.status(429).json({ message: 'Please wait before requesting another verification email' });
-            }
-
-            user.verificationEmailSentAt = now;
-
-            await sendVerificationEmail(user.email, user.username, user.email);
-            res.status(200).json({ message: 'Verification email sent.' });
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
             const lastSent = user.verificationEmailSentAt;
             const now = new Date();
             if (lastSent && (now - lastSent) < 2 * 60 * 1000) {
                 return res.status(429).json({ message: 'Please wait before requesting another verification email' });
             }
-
-            const token = crypto.randomBytes(32).toString('hex');
             user.verificationEmailSentAt = now;
 
             await sendVerificationEmail(user.email, user.username, user.email);
             res.status(200).json({ message: 'Verification email sent.' });
-
+        } else {
+            res.status(400).json({ message: 'User already verified' });
         }
-        res.status(400).json({ message: 'User already verified' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Error resending verification email' });
